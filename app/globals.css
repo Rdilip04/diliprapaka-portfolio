@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
+/* Enable class-based dark variant (used to force the loader's dark look). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Slate & Signal palette */
+  --color-ink: #14181f;
+  --color-paper: #f7f8fa;
+  --color-surface: #edeff3;
+  --color-slate: #5b6572;
+  --color-signal: #3d5afe;
+  --color-signal-soft: #8da0ff;
+
+  /* Cosmic orange — hero accent */
+  --color-cosmic: #ff6b35;
+  --color-cosmic-soft: #ff8a5c;
+  --color-cosmic-ink: #c2410c; /* darker variant: passes 4.5:1 as text on light */
+
+  /* Type */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-signature: var(--font-signature-src), "Brush Script MT", cursive;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Respect users who prefer reduced motion: neutralise all animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible, on-brand focus ring for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
