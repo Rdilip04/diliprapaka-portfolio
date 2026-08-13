@@ -7,6 +7,13 @@
       "runtimeArgs": ["run", "dev"],
       "port": 3210,
       "autoPort": true
+    },
+    {
+      "name": "portfolio-skills-3311",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "3311"],
+      "port": 3311,
+      "autoPort": false
     }
   ]
 }

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, Dancing_Script } from "next/font/google";
+import { Inter, Martian_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
-import LoadingScreen from "@/components/LoadingScreen";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -9,24 +8,53 @@ const inter = Inter({
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const mono = Martian_Mono({
+  variable: "--font-mono-src",
   subsets: ["latin"],
   display: "swap",
-  axes: ["opsz"],
 });
 
-const signature = Dancing_Script({
-  variable: "--font-signature-src",
+// Editorial display serif — the contrast axis against the grotesk/mono.
+const serif = Instrument_Serif({
+  variable: "--font-serif-src",
   subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
   display: "swap",
-  weight: ["600", "700"],
 });
+
+const DESCRIPTION =
+  "Dilip Rapaka is a UX & product designer in the UK, designing simple, thoughtful digital experiences for healthcare and everyday complexity. Open to junior UX & product roles.";
 
 export const metadata: Metadata = {
-  title: "Dilip Rapaka — UX/UI Designer",
-  description:
-    "Product designer working on calm, usable interfaces for healthcare and public services, including the NHS. Based in the UK.",
+  metadataBase: new URL("https://diliprapaka.vercel.app"),
+  title: {
+    default: "Dilip Rapaka — Product Designer",
+    template: "%s · Dilip Rapaka",
+  },
+  description: DESCRIPTION,
+  keywords: [
+    "Dilip Rapaka",
+    "UX Designer",
+    "Product Designer",
+    "UI/UX",
+    "Healthcare design",
+    "UK",
+    "Portfolio",
+  ],
+  authors: [{ name: "Dilip Rapaka" }],
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Dilip Rapaka",
+    title: "Dilip Rapaka — Product Designer",
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dilip Rapaka — Product Designer",
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({
@@ -37,12 +65,23 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${fraunces.variable} ${signature.variable}`}
+      className={`${inter.variable} ${mono.variable} ${serif.variable}`}
+      suppressHydrationWarning
     >
-      <body>
-        <LoadingScreen />
-        {children}
-      </body>
+      <head>
+        {/* Every load starts at the top of the homepage in the light editorial
+            design — that is the primary design, so nothing is restored from a
+            previous visit (no saved theme, no anchor, no scroll position).
+            Must stay inline and synchronous: dropping the hash here happens
+            before the browser jumps to the anchor, so there is no visible
+            scroll lurch to undo afterwards. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if('scrollRestoration' in history)history.scrollRestoration='manual';if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}`,
+          }}
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }

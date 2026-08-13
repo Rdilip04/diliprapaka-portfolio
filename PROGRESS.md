@@ -2,140 +2,195 @@
 
 Working doc for **Dilip Rapaka's UX / Product Designer portfolio**. Hand this to a new chat to continue the work.
 
-Last updated: 2026-07-14
+Last updated: 2026-08-13 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 72/72 · build green**
 
 ---
 
 ## 1. What this is
 
-A personal portfolio site for a junior UX/Product Designer targeting UK roles. Design-led, motion-forward, built to prove design skill through the site itself. Follows a 7-block coaching framework (Hero → Selected Work → Case studies → Site craft → Personality → About → Contact).
+A personal portfolio for a **junior UX / Product Designer** targeting **UK** roles. Editorial, typographic, restrained — built so the site itself is the work sample.
 
 - **Location:** `C:\Users\rapak\portfolio`
-- **Dev server:** `npm run dev` → runs on **port 3311** in this setup (`PORT=3311 npm run dev`; port 3000 is taken by another project). Production build: `npm run build`.
-- **Owner contact:** dilipuxdesigner04@gmail.com · LinkedIn `linkedin.com/in/diliprapaka`
+- **Run:** `PORT=3311 npm run dev` → http://localhost:3311 (port 3000 is another project in this setup)
+- **Owner:** Dilip Rapaka · `dilipuxdesigner04@gmail.com` · `linkedin.com/in/diliprapaka` · +44 7553409884
+- **Facts:** MSc UX Design, Birmingham City University. Previously UI/UX designer at **Rapshift** (e-commerce, ~1 yr). **1st Place — BCU Innovation Fest 2025** (NextStep). Tools: Figma, FigJam, Miro, Framer, Illustrator, Jira, Claude Code, Cursor.
+- **Brand mark:** **DUX** (nav wordmark + favicon).
+- ⚠️ **Rapshift work is under NDA — never publish it as a case study.**
 
-## 2. Tech stack
+## 2. History — read before changing anything
 
-- **Next.js 16.2.1** (App Router, Turbopack). ⚠️ This Next version has breaking changes — check `node_modules/next/dist/docs/` before using unfamiliar APIs (see `AGENTS.md`).
-- **React 19.2**
-- **Tailwind CSS v4** (CSS-first config via `@theme` in `app/globals.css`; class-based dark variant enabled with `@custom-variant`)
-- **Motion v12** (`motion/react` — the framer-motion successor)
-- **Lenis** (smooth scroll, used by the ScrollStack)
-- **TypeScript strict**
+The site was originally a dark, WebGL-heavy "React-Bits template" (cosmic orange `#ff6b35` on black, LiquidEther fluid, TiltedCard, Tetris loader, a mono eyebrow on every section). Dilip judged it **generic / AI-looking** and it was fully rebuilt into the current light editorial system.
 
-## 3. Design system (LOCKED)
+**Do NOT reintroduce:** LiquidEther, cosmic orange, dark-hero fluid, the Tetris loader, or a mono eyebrow above every section.
 
-### Colors (`app/globals.css` `@theme`)
-- **Primary accent = cosmic orange:**
-  - `--color-cosmic: #ff6b35` (accent on dark)
-  - `--color-cosmic-ink: #c2410c` (accent as **text on light** — passes AA 4.9:1; use this for links/text on Paper)
-  - `--color-cosmic-soft: #ff8a5c`
-- **Neutrals (Slate & Signal base):** `--color-ink #14181f`, `--color-paper #f7f8fa`, `--color-surface #edeff3`, `--color-slate #5b6572`. (Blue `--color-signal #3d5afe` / `--color-signal-soft #8da0ff` exist but are mostly superseded by cosmic — cosmic is the site accent now.)
+Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (Story Spine, 3-Lever Polish, POV Stack, 3-Click path, Squint Test) and **The Portfolio Blueprint** (7 blocks). Strong on positioning, "site is the sample", about/photo, CTA. **Weak only on volume of real projects** — content-gated, not design-gated.
 
-### Fonts (`app/layout.tsx`, via `next/font/google`)
-- **Fraunces** → display/headings (`font-display`)
-- **Inter** → body/UI (`font-sans`)
-- **Dancing Script** → the signature name (`font-signature`)
+## 3. Tech stack
 
-### Rules
-- Mobile-responsive, 8pt spacing rhythm, min 4.5:1 contrast.
-- Motion is deliberate; everything respects `prefers-reduced-motion`.
-- Dark hero → light content rhythm.
+- **Next.js 16.2.1** (App Router, Turbopack). ⚠️ Breaking changes vs. training data — check `node_modules/next/dist/docs/` before using unfamiliar APIs (see `AGENTS.md`).
+- **React 19.2.4** — React-19 lint rules bite (no sync `setState` in effects, no inline component declarations in render).
+- **Tailwind CSS v4** (CSS-first via `@theme` in `app/globals.css`).
+- **Motion v12** (`motion/react`) — this IS Framer Motion, renamed. **Do not `npm i framer-motion`.**
+- **anime.js v4.5.0** — second animation library, see §7.
+- **Runtime deps (5):** `animejs`, `motion`, `next`, `react`, `react-dom`. `three` / `ogl` / `lenis` were removed in cleanup.
+- **Verify with local binaries:** `./node_modules/.bin/tsc --noEmit` and `./node_modules/.bin/eslint .` — a bare `npx tsc` grabs a bogus global package.
+- ⚠️ `npm audit` reports 3 production advisories inherited from `next@16.2.1`. Pre-existing. `npm audit fix --force` would bump Next's major — treat as a deliberate upgrade task.
 
-## 4. What's built (current state)
+## 4. Design system (LOCKED)
 
-**Build is green:** `npm run build` passes, `npx tsc --noEmit` clean.
+### Colour tokens (`app/globals.css` `@theme`)
 
-Page composition (`app/page.tsx`): `<Nav />` + `<main>` containing `<HeroExpansion />` and `<SelectedWork />`. Global `<LoadingScreen />` mounted in `app/layout.tsx`.
+| token | light | role |
+|---|---|---|
+| `--color-ink` | `#14181f` | primary text |
+| `--color-paper` | `#f7f8fa` | page background |
+| `--color-canvas` | `#f4f4f2` | section surface (neutral off-white, **not** warm cream) |
+| `--color-mist` | `#e8e8e4` | muted panel — the darkest light surface |
+| `--color-cobalt` | `#2f2be6` | accent marks / large graphics |
+| `--color-cobalt-ink` | `#2521b0` | accent **text** on light (9.9:1) |
+| `--color-cobalt-lite` | `#9c99ff` | accent on dark surfaces |
+| `--color-shell` / `-fg` | `#14181f` / `#f7f8fa` | footer — stays dark in **both** themes |
 
-### Loading screen — DONE
-- `components/LoadingScreen.tsx` + `components/ui/tetris-loading.tsx`
-- Tetris animation for **3 seconds**, black background + white pieces (forced dark variant), then fades out. Locks scroll while visible. `prefers-reduced-motion` skips it. `z-[1000]`.
+**One accent, used sparingly.** On light use `text-cobalt-ink` for text and `bg-cobalt` for marks; on dark surfaces use `text-cobalt-lite`.
 
-### Nav — DONE
-- `components/Nav.tsx`
-- Centered **floating glass pill**, fixed top. Links: Work · About · Contact (no wordmark, by request).
-- **Pixel-hover** on each link (cosmic pixels via `PixelCanvas`) — the shared "hover theme".
-- Scroll-aware: transparent over the dark hero → Paper-tinted glass once scrolled. Skip-link + `aria-label="Primary"`. `z-50`.
+### Dark mode
 
-### Hero — DONE (iterated heavily; see §6)
-- `components/HeroExpansion.tsx` (content) wraps `components/blocks/scroll-expansion-hero.tsx` (mechanic).
-- **Scroll-linked expanding media** (reworked from an earlier scroll-jacking version — see §6). A tall `250vh` section with a sticky inner; the **Vignette Bloom video** expands as you scroll.
-- Overlay content (grouped, centered): **Dilip / Rapaka** (Dancing Script, cosmic) splits apart + fades slowly; **Product Designer** (cosmic eyebrow) slides left + fades fast; **tagline** slides right + fades fast.
-- **Pixel starfield** backdrop (`components/ui/star-field.tsx`) — small cosmic/white pixels, fades out on scroll.
-- **Availability chip** bottom-right: "Open to junior UX & product roles · UK".
-- Content: eyebrow `Product Designer`; tagline `I care about impact more than my identity as a designer.` (positioning/NHS copy lives only in SEO `<meta>`, by choice).
-- Reduced-motion branch renders a static, fully-legible hero.
+**Every load starts light.** `prefers-color-scheme` is ignored *and* the choice is **not persisted** — light is the primary design; dark is a per-visit preference that resets on refresh. Nothing is written to `localStorage`.
 
-### Selected Work — DONE (mechanic), copy is PLACEHOLDER
-- `components/SelectedWork.tsx` + `components/ui/scroll-stack.tsx` (+ `.css`)
-- **ScrollStack** = faithful TypeScript port of the **React Bits ScrollStack** (Lenis smooth scroll, `translate3d` pin + scale, `hasChanged` optimization). Runs in `useWindowScroll` mode. One fix vs. reference: card position measured via layout offset (transform-independent) to prevent pinning feedback/jitter.
-- Cards alternate **black / white**, with **cosmic** accents (three-color scheme requested). Each card: index, title, description, "Why it's here", tag pills, and a **glassmorphic "Read case study" button** with the cosmic **pixel-hover**.
-- Sticky "Selected work" header so it stays visible while scrolling the stack.
-- 3 cards (2 was too subtle for the stack effect).
+- **It is a token re-map, not a `dark:` sweep.** `.dark` reassigns the same custom properties, so **no component needs a `dark:` class** and every ink/paper pair keeps its contrast by construction.
+- **The footer opts out** via `--color-shell` — without it the ink/paper swap turns the footer into a blinding white slab. **Never put `bg-ink` back in `Footer.tsx`.**
+- `ThemeToggle` uses **`useSyncExternalStore`**, not `useState` + effect (React 19 rejects sync `setState` in an effect, and the theme genuinely lives on `<html>`, outside React).
+- ⚠️ **The swap must stay instant.** Cross-fading surfaces while text flips measured **1.08:1** for ~300ms.
+- ⚠️⚠️ **The swap injects a `<style>` tag that kills all transitions for one frame. Do not remove it.** Chrome does not re-resolve `var()` for a property that is mid-transition, so every element with `transition-colors` kept the *previous* theme's colour permanently — **15 elements**, including "Let's talk" at **1:1 contrast, invisible** on the dark hero. A `.theme-swapping` CSS class in `globals.css` was tried first and **could not win the cascade against Tailwind's utilities** (verified: `transition-duration` stayed `0.15s`). The injected style + forced reflow is the working fix. A test pins it.
 
-### Supporting UI components
-- `components/ui/pixel-canvas.tsx` — 21.dev "Pixel Canvas" web component (registered client-side only to avoid SSR `HTMLElement` crash). Used by nav + card buttons.
-- `components/ui/vignette-bloom.tsx` — exported constants for the 21.dev "Vignette Bloom" hosted video/poster (the hero media).
-- `components/ui/star-field.tsx` — pixel starfield canvas.
+### Fonts (`next/font/google`) — 2 families + 1 mono
 
-### Data
-- `lib/projects.ts` — `PROJECTS` array:
-  - **01 NextStep** — real: `why` = "1st Place — BCU Innovation Fest 2025. Recognised for innovation and impact in healthcare design." Description is a reasonable placeholder ("stroke-rehab app for the NHS…").
-  - **02 Project Two**, **03 Project Three** — full placeholders (`[bracketed]` copy, "Add Your Tags").
+- **Instrument Serif** → display (`font-serif`)
+- **Inter** → body / workhorse (`font-sans`)
+- **Martian Mono** → labels, eyebrows, meta (`font-mono`)
+- ~~Familjen Grotesk~~ removed (mentor's "2 typefaces max"). Don't add a second sans.
 
-## 5. Removed / dead code
-- Deleted this session: old `Hero.tsx`, `horizon-backdrop.tsx`, `CustomCursor.tsx` (custom cursor was tried then removed — back to the default system cursor).
-- Still present but **unused** (old generic template, not imported anywhere): `components/About.tsx`, `components/Contact.tsx`, `components/Work.tsx`. Safe to delete or repurpose when building Blocks 6/7.
+### Motifs
 
-## 6. Important history / gotchas (read before touching the hero or stack)
+- **Hairlines** (`border-ink/12`) are the structural grid language.
+- **One radius:** `rounded-lg` (8px). `rounded-full` only for genuine pills/dots.
+- **Focus ring:** cobalt, via `:focus-visible` in globals.
+- Everything respects `prefers-reduced-motion`.
 
-- **The hero used to scroll-jack** (hijacked the wheel, forced `scrollTo(0,0)` until the media expanded). This conflicted with Lenis (two things can't own the window scroll) and blocked verification. **Decision: reworked the hero to scroll-linked** (media expands on natural scroll) so Lenis owns the page and the card stack works. The hero *look/transition* was then restored to match the original (name split + Product Designer/tagline slide-apart). If asked to change the hero's scroll feel again, remember this constraint.
-- **21.dev free tier = 2 component pulls/day.** "Story scroll" (id 12461) was the user's first choice but got paywalled; we used the React Bits ScrollStack instead (user shared its source).
-- **Preview limitation in this environment:** the preview/browser tool binds to *another* chat's project on port 3000, so our app at 3311 can't be screenshotted here. Verification is via `curl` + `tsc` + `npm run build` + the user viewing `http://localhost:3311`. After HMR changes to deps arrays, **hard-refresh (Ctrl+Shift+R)** to clear stale modules.
-- **Stray lockfile:** there's a `package-lock.json` at `C:\Users\rapak` causing a Next "inferred workspace root" warning. Clean it (or set `turbopack.root`) before deploying.
+## 5. Accessibility — measured, not assumed
 
-## 7. Remaining work (next steps)
+**All 8 route × viewport × theme combinations pass WCAG AA.** `e2e/a11y.spec.ts` enforces it.
 
-Ordered roughly by the 7-block plan:
+### The alpha floor (computed from the real tokens)
 
-1. **Real copy** — replace placeholders in `lib/projects.ts`: NextStep one-line description; Project Two & Three title/description/why/tags.
-2. **Block 5 — Personality hook** — one memorable line / micro-interaction / empty state. Human, not template.
-3. **Block 6 — About** — real person + point of view, MSc UX Design (Birmingham City University), one glimpse outside work, **photo slot** (user wanted a photo — needs a headshot asset). Section id `#about`.
-4. **Block 7 — Contact** — single obvious action: email link (`dilipuxdesigner04@gmail.com`). Footer with LinkedIn. Section id `#contact`. (Nav links `#work`/`#about`/`#contact` already point here.)
-5. **Block 3 — Case study pages** — `/work/nextstep`, `/work/project-two`, `/work/project-three`. Structure: **outcome first → problem → decisions → what changed**, written so a non-designer follows it. Cards already link to these routes.
-6. **Polish & deploy** — accessibility/contrast pass, responsive check (375px + landscape), reduced-motion check, then **Vercel deploy** + instructions. Clean the stray lockfile first.
+| surface | `/55` | `/60` | `/65` | `/70` |
+|---|---|---|---|---|
+| ink on paper | 3.90 ✗ | 4.57 ✓ | 5.39 ✓ | 6.39 ✓ |
+| ink on canvas | 3.86 ✗ | 4.51 ✓ | 5.31 ✓ | 6.29 ✓ |
+| **ink on mist** | 3.74 ✗ | **4.35 ✗** | 5.08 ✓ | 5.97 ✓ |
+| shell-fg on shell | 5.79 ✓ | 6.66 ✓ | — | — |
 
-## 8. Component map (quick reference)
+⚠️ **`text-ink/70` is the standard for secondary text.** An earlier version of this doc claimed "`/55`+ clears AA" — **that was wrong on every surface**, and even `/60` fails on `mist`. `/70` is the only value safe everywhere.
 
-```
-app/
-  layout.tsx        # fonts, metadata, <LoadingScreen/>, globals
-  page.tsx          # <Nav/> + <main>{<HeroExpansion/> <SelectedWork/>}</main>
-  globals.css       # @theme tokens, dark variant, reduced-motion, focus ring
-components/
-  Nav.tsx                     # glass pill nav + pixel hover
-  HeroExpansion.tsx           # hero content (name/eyebrow/tagline/chip)
-  SelectedWork.tsx            # cards + ScrollStack
-  LoadingScreen.tsx           # 3s tetris loader wrapper
-  blocks/
-    scroll-expansion-hero.tsx # scroll-linked expanding-media mechanic
-  ui/
-    scroll-stack.tsx / .css   # React Bits ScrollStack (Lenis)
-    pixel-canvas.tsx          # 21.dev pixel hover web component
-    star-field.tsx            # hero pixel starfield
-    tetris-loading.tsx        # tetris game loader
-    vignette-bloom.tsx        # hero video/poster URLs
-  About.tsx Contact.tsx Work.tsx  # OLD/unused template files
-lib/
-  projects.ts       # PROJECTS data (NextStep real-ish, 2 & 3 placeholder)
-```
+**Hierarchy comes from size and weight, not from dimming below the floor.** Nav links are `/85`, the clock `/70`.
 
-## 9. How to run / verify
+### Other guarantees, all test-enforced
+
+- **Tap targets ≥ 24×24** (WCAG 2.2 AA 2.5.8); most are `min-h-11` (44px, Apple HIG). `SwapLink` moved its `overflow-hidden` to an inner span so the anchor can carry padding without breaking the hover swap.
+- **Exactly one `h1` per page**, zero skipped heading levels, zero images without `alt`, zero horizontal overflow at 390px.
+- Skip link, `aria-current="location"` on the active nav item, `aria-hidden` on decorative icons.
+- ⚠️ The Hero `h1` is tokenised per word for the hover effect — the words are separated by a **real space**, not a margin. Without it the heading serialises as `"Iturnhardproblems…"` for screen readers and copy-paste.
+
+## 6. Page composition
+
+`app/page.tsx`: `<Nav/>` + `<main id="main">{ Hero · Recognition · CaseStudies · About · Approach }</main>` + `<Footer/>`
+`app/work/nextstep/page.tsx`: the case study.
+
+### Hero
+
+- **H1:** *"Hi, I'm Dilip Rapaka. I turn hard problems into products people can actually use."* — italic on *hard*.
+- ⚠️ **The greeting is Dilip's explicit call.** I argued against it (display type spent on low-value words, template-ish) and was overruled twice. **Don't re-litigate.** Because the name is in the H1, the eyebrow is just `Product Designer` — don't add the name there too.
+- **Sub-line:** *"A product designer based in the UK. I keep things **simple and easy to use**. Currently open to junior roles."* (`simple and easy to use` in cobalt — the hero's only accent).
+- ⚠️ **"healthcare and accessibility" was deliberately removed from the hero** (it was in the H1, then the sub-line, then cut). The specialism first appears below the fold. **Don't restore it.** Known trade-off: nothing above the fold names a sector.
+- A test caps the H1 at 16 words and pins the CTA above the fold at 375px and 1280×720.
+
+### Selected work (`CaseStudies.tsx`)
+
+Hover-expand row list. NextStep + three "Coming soon" rows.
+
+- ⚠️ **A full-width "featured card" rewrite was built and then reverted at Dilip's request.** Don't rebuild it without asking.
+- Card is on a **content diet**: industry and year appear **once** (in the outcome line). The floating `HEALTHCARE / 2025` corner label was deleted; header reads `01 live` (`· 4 planned` was cut — it told a recruiter the portfolio was 80% empty).
+- Meta row is `role · duration`. **Tags are deliverables only** (`Mobile App` · `Usability Testing` · `NHS`) — never role or industry, which the copy already states. `category` and `year` were removed from the `Project` type.
+- Thumbnail is **`nextstep-thumb.webp`, not the case-study hero** — composed from two real screens on the hero's exact background (`#d9d2f0`), deliberately **text-free**. The hero image carries a "Nextstep" wordmark and a tagline that clashed with the site's typography and repeated the heading beside it. Built 1600×1000 (1.600) to match the expanded thumb box (300×188 = 1.596).
+
+### About
+
+- **CV link ends the reading path**, under "Beyond work" in the content column. It briefly lived in the left rail; that forced the eye back across the page after reading.
+- ⚠️ **Content column starts at grid column 4, not 5.** `col-start-5` left **column 4 completely empty** — a measured **137px** dead band that made the two halves read as unrelated. Now 32px. The label→text gap was never the problem (43px, correct).
+- Background copy says **"specialising in complex, data-rich digital environments"** — deliberately not "healthcare", matching the broader hero. A test asserts `/healthcare/i` never appears in About.
+- Spacing verified on the 8pt grid: section 128px, rows 32px, label track 112 + 24.
+
+## 7. Motion
+
+- **Motion v12** does all component entrance/exit: CSS `.anim-fade-up` / `.anim-rise` above the fold (they run at first paint so they cannot ship blank), `whileInView` below it, magnetic links, hero cursor-glow + parallax, per-word H1 hover.
+- **anime.js v4** (added at Dilip's request) is scoped to two moments only:
+  1. `components/ui/draw-rule.tsx` — section hairlines draw in on scroll
+  2. SUS bars in `sus-scores.tsx` — stagger-fill
+- ⚠️ **This is a deliberate exception to the minimal-deps rule. Don't migrate Motion work to it, and don't add a third library.**
+- v4 API: `import { animate, stagger } from "animejs"` — **no default export** (that's v3). Ease names are strings like `outQuart`.
+- Both animate **`scaleX` with `origin-left`**, never `width` — transform is composited, width triggers layout.
+- ⚠️ **Both must fail safe.** The collapse to `scaleX(0)` happens *only inside the effect*, so with JS off or reduced motion the content renders full-size. **Never move the collapsed state into markup or CSS** — that ships the section blank if the observer doesn't fire.
+- Uses an isomorphic layout effect; a plain `useEffect` shows the element full-width for one frame then snaps to zero.
+
+## 8. Case study — `/work/nextstep`
+
+Server component; only `Reveal` and `SusScores` are client islands. Primitives in `components/case-study/`.
+
+**Eight numbered sections:** 01 Problem + Constraints · 02 My contribution · 03 Research · 04 Framing/HMW · 05 Design evolution · 06 Visual system · 07 Usability testing · 08 Outcome. A test asserts the numbers run `[1..8]` unbroken.
+
+### Content decisions that must not be "cleaned up"
+
+- **HMW sits *after* research**, not before — it's a synthesis output. Each HMW carries a `From — <finding>` label, and **a test asserts every one matches a finding actually rendered in §03**.
+- **Three flows get a deep-dive** (Homepage, Exercises, Community — the ones with real UX problems). Notifications and Profile get one row and a single line.
+- **Each core flow names an alternative that was considered and rejected** (streak counter demoted; Tinder-style card swipe rejected; broad-vs-condition-specific categories flagged). These turn a layout walkthrough into a design decision. ⚠️ They came from Dilip's recall and are **not verifiable from the repo** — confirm before publishing.
+- ⚠️ **Three honest caveats are deliberate:** §07 concedes the comprehension finding was never directly addressed; that three of five round-2 participants were clinicians, not patients; and that community onboarding never got a dedicated fix. They pre-empt the first questions an interviewer asks. Tests assert two of the strings are present.
+- **SUS is reported as a score, never a percentage.** "84.5%" / "68%" is a technical error — SUS runs 0–100 but is not a percentage. A test fails if `%` returns.
+- The community insight sits at the top of §08, **once**. A test pins the count.
+- Copy deliberately **omits** the unsourced "50% of patients" stat, personas, empathy maps, the IA diagram, and the appointment-booking flow (a teammate's work). A Figma template wanted several back — they stay out.
+- **UK English only.** A test scans rendered text for `utiliz`, `organiz`, `recogniz`, `analyz`, `specializ`, `color`, `behavior`, bare `toward`.
+
+### Images
+
+14 images in `public/nextstep/*.webp` (916KB total), all wired. Prototype link is live via `PROTOTYPE_URL` in `nextstep-screens.tsx`.
+
+- ⚠️ **Slot ratios match the real exports, not idealised device sizes** — `phone` is `aspect-[830/1686]` and `wide` is `16/9`. Changing them to "clean" numbers like `9/19.5` will start cropping the screens.
+- Converted PNG → WebP with sharp: **5.88MB → 0.82MB (−86%)**, style guide downscaled to 2400px. These are plain `<img>` tags with **no automatic optimisation**, so re-uploading raw PNGs puts ~6MB back on the page.
+- ⚠️ **A filled `<Figure>` drops its label on purpose** (the image replaces it). Any test asserting "every figure contains text" breaks on the first upload — the figure test checks *filled → non-empty `alt`, empty → non-empty label*.
+- `IMAGES.md` (repo root) is the step-by-step Figma export guide — export ratios, filenames, the one-line edit per slot. It describes the **original** workflow (PNG, a combined Notifications+Profile collage); the shipped setup differs. Treat it as the guide for *future* case studies.
+
+## 9. Testing
 
 ```bash
-cd C:\Users\rapak\portfolio
-PORT=3311 npm run dev      # dev at http://localhost:3311
-npm run build              # production build (must pass before deploy)
-npx tsc --noEmit           # type check
+npm run test        # vitest — 21 unit tests
+npm run test:e2e    # playwright — 72 tests, 7 files
+npm run test:all
 ```
+
+`e2e/`: `a11y` · `about` · `case-study` · `hero` · `motion` · `nav` · `theme` · plus `About.test.tsx` and `lib/contrast.test.ts`.
+
+### Gotchas that cost real time — don't rediscover them
+
+1. **`test.use({ reducedMotion: "reduce" })` does not reach `matchMedia`** in this config (verified: the page kept reporting `false`). Use `page.emulateMedia({ reducedMotion: "reduce" })` in `beforeEach`, **before** `goto`.
+2. **Playwright's `scrollIntoViewIfNeeded` throws "Element is not attached to the DOM"** here, and a fixed `waitForTimeout` is unreliable: the `whileInView` reveals expand as they fire and move the target by **thousands of pixels** (measured: 11434 → 350 over ~1.6s). **Scroll from inside the page, twice, then poll with `waitForFunction`.**
+3. **Never parse colours with regex.** Tailwind emits `oklab(… / .7)`; composite through a 1×1 canvas and read the pixel.
+4. **HMM/Fast-Refresh during a test run produces phantom failures** — hydration errors, detached elements. Re-run on a stable tree before believing a failure.
+5. **The in-app browser preview is flaky** — verify in real Chrome. `whileInView` sections look blank mid-scroll until settled, so screenshots taken right after a programmatic scroll catch them faded.
+6. ⚠️ **`preview_start` reads `C:\Users\rapak\.claude\launch.json`, where the config named `portfolio-dev` points at a *different* project** (`portfolio-website`, port 3000). Use the config named **`portfolio`** (port 3311).
+
+## 10. Open items
+
+1. **More real projects.** The single biggest lever. Add to `PROJECTS` in `lib/projects.ts` — bracketed placeholders render as "Coming soon" rows.
+2. **Consider `next/image`.** Images are plain `<img>` with no srcset or automatic format negotiation.
+3. **Deploy to Vercel** and update `metadataBase` in `app/layout.tsx`.
+4. **Aesthetic-lane question (strategic, Dilip's call).** An `/impeccable` audit scored **14/20** and flagged that the site sits in the currently-saturated "editorial-typographic" lane (display serif + mono labels + ruled separators + monochrome), and that both typefaces are on its reflex-reject list. Identity-preservation says leave committed choices alone, and the slop detector returns clean — but it's worth knowing the first build was rejected as generic and this lane has since become the *next* generic.
+5. Minor: `home-1-sketch.webp` is 874×1704 while the other twelve are 830×1686, so it crops ~4.5%. Invisible on a sketch.

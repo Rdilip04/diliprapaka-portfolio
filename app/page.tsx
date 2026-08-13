@@ -1,15 +1,23 @@
 import Nav from "@/components/Nav";
-import HeroExpansion from "@/components/HeroExpansion";
-import SelectedWork from "@/components/SelectedWork";
+import Hero from "@/components/Hero";
+import Recognition from "@/components/Recognition";
+import CaseStudies from "@/components/CaseStudies";
+import About from "@/components/About";
+import Approach from "@/components/Approach";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
     <>
       <Nav />
       <main id="main">
-        <HeroExpansion />
-        <SelectedWork />
+        <Hero />
+        <Recognition />
+        <CaseStudies />
+        <About />
+        <Approach />
       </main>
+      <Footer />
     </>
   );
 }

@@ -4,28 +4,63 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Slate & Signal palette */
+  /* Neutrals */
   --color-ink: #14181f;
   --color-paper: #f7f8fa;
-  --color-surface: #edeff3;
   --color-slate: #5b6572;
-  --color-signal: #3d5afe;
-  --color-signal-soft: #8da0ff;
 
-  /* Cosmic orange — hero accent */
-  --color-cosmic: #ff6b35;
-  --color-cosmic-soft: #ff8a5c;
-  --color-cosmic-ink: #c2410c; /* darker variant: passes 4.5:1 as text on light */
+  /* Editorial palette — light canvas + a single disciplined cobalt accent */
+  --color-canvas: #f4f4f2; /* neutral off-white (chroma ~0, not warm-cream) */
+  --color-mist: #e8e8e4; /* muted panel / hairline surface */
+  --color-cobalt: #2f2be6; /* accent — large text / graphics */
+  --color-cobalt-ink: #2521b0; /* accent text on light — passes 4.5:1 */
+  --color-cobalt-lite: #9c99ff; /* accent on dark surfaces — passes 4.5:1 on ink */
+
+  /* Footer shell — the one inverted bookend. Stays dark in BOTH themes, so
+     `ink`/`paper` can swap for dark mode without flipping the footer white. */
+  --color-shell: #14181f;
+  --color-shell-fg: #f7f8fa;
 
   /* Type */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-signature: var(--font-signature-src), "Brush Script MT", cursive;
+  --font-serif: var(--font-serif-src), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-mono-src), ui-monospace, "SFMono-Regular", monospace;
 }
 
 :root {
   color-scheme: light;
 }
+
+/* Dark theme = tonal re-mapping of the same tokens, not an inversion filter.
+   `ink` and `paper` swap roles so every existing ink/paper pair keeps its
+   contrast relationship by construction; only the footer opts out via `shell`.
+   Ratios verified against the canvas: ink 15.0:1, cobalt-ink 8.1:1. Alphas at
+   /55 and above clear AA; below that is decorative only, same as in light. */
+.dark {
+  color-scheme: dark;
+
+  --color-ink: #e9ecf1; /* primary text */
+  --color-paper: #0f1319; /* page bg, and text on inverted surfaces */
+  --color-canvas: #14181f; /* section surface */
+  --color-mist: #1b2028; /* muted panel */
+  --color-slate: #99a2b0;
+
+  --color-cobalt: #6f6bff; /* accent mark on dark */
+  --color-cobalt-ink: #a9a6ff; /* accent text on dark — 8.1:1 on canvas */
+
+  --color-shell: #0b0e14; /* footer sinks deeper so it still reads as a bookend */
+}
+
+/* Deliberately NO transition on the theme swap. Cross-fading surfaces while
+   text colour flips instantly leaves ~300ms of light-on-light (measured at
+   1.08:1); transitioning both just moves the problem to a grey-on-grey
+   midpoint. An instant swap is the only variant that stays legible throughout.
+
+   ⚠️ The swap ALSO has to suppress every element's own `transition-colors` for
+   one frame, or Chrome never re-resolves `var(--color-ink)` and 15 elements keep
+   the previous theme's colour permanently. That is done by injecting a style tag
+   in `ThemeToggle` — a rule here could not win the cascade against Tailwind's
+   utilities. See the comment there before changing either. */
 
 html {
   scroll-behavior: smooth;
@@ -53,7 +88,44 @@ body {
 
 /* Visible, on-brand focus ring for keyboard users. */
 :focus-visible {
-  outline: 2px solid var(--color-signal);
+  outline: 2px solid var(--color-cobalt);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* Entrance reveals — CSS-driven so they run at first paint (no JS/hydration
+   gate) and can never ship the content blank. Reduced-motion is handled by the
+   global rule above, which collapses the duration so content snaps in visible. */
+@keyframes rise-in {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.anim-rise {
+  animation: rise-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.anim-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Subtle noise/grain texture layered over light surfaces so they read
+   as textured "glass" rather than flat white. Sits in the background
+   layer (behind content), on top of the surface's background-color. */
+.grain-bg {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  background-repeat: repeat;
 }

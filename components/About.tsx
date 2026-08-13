@@ -1,69 +1,123 @@
-const skills = [
-  "User Research",
-  "Wireframing",
-  "Prototyping",
-  "Design Systems",
-  "Figma",
-  "Usability Testing",
-  "Information Architecture",
-  "Interaction Design",
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+import TiltedCard from "@/components/ui/tilted-card";
+import { DrawRule } from "@/components/ui/draw-rule";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const BLOCKS = [
+  {
+    heading: "Background",
+    body: "MSc UX Design, Birmingham City University. Previously a UI/UX designer at Rapshift, working on real products before specialising in complex, data-rich digital environments.",
+  },
+  {
+    heading: "Beyond work",
+    body: "I enjoy walking through cities, trying new places, and understanding how things work — whether it's a product, a system, or the people around me.",
+  },
 ];
 
 export default function About() {
+  const reduce = useReducedMotion();
+
+  const reveal = (delay: number) =>
+    reduce
+      ? { initial: { opacity: 0 }, whileInView: { opacity: 1 } }
+      : {
+          initial: { opacity: 0, y: 20 },
+          whileInView: { opacity: 1, y: 0 },
+          transition: { duration: 0.7, ease: EASE, delay },
+        };
+
   return (
-    <section id="about" className="max-w-5xl mx-auto px-6 py-28 border-t border-neutral-100">
-      <div className="grid sm:grid-cols-2 gap-16">
-        <div>
-          <p className="text-sm text-neutral-400 tracking-widest uppercase mb-3">
-            About
-          </p>
-          <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 mb-6">
-            A little about me
-          </h2>
-          <div className="space-y-4 text-neutral-500 leading-relaxed text-sm">
-            <p>
-              I'm Dilip Rapaka, a product designer with a passion for crafting
-              experiences that feel effortless. I believe great design is
-              invisible — it just works.
+    <section id="about" className="border-t border-ink/10 bg-canvas text-ink">
+      <div className="mx-auto w-full max-w-7xl px-6 py-24 md:py-32">
+        <div className="grid gap-12 md:grid-cols-12 md:gap-8">
+          {/* Label column */}
+          <motion.div
+            {...reveal(0)}
+            viewport={{ once: true, margin: "-12%" }}
+            className="md:col-span-3"
+          >
+            <h2 className="font-serif text-3xl font-normal tracking-[-0.01em]">
+              About
+            </h2>
+            <p className="mt-4 font-mono text-[11px] uppercase leading-relaxed tracking-[0.16em] text-ink/70">
+              Dilip Rapaka
+              <br />
+              Product Designer, UK
             </p>
-            <p>
-              My process starts with understanding people: their goals,
-              frustrations, and the context in which they use a product. From
-              there, I move from rough sketches to polished interfaces, always
-              testing and iterating.
-            </p>
-            <p>
-              When I'm not designing, you'll find me exploring new tools,
-              reading about psychology and design, or looking for what makes
-              everyday interactions delightful.
-            </p>
-          </div>
-        </div>
 
-        <div>
-          <p className="text-sm text-neutral-400 tracking-widest uppercase mb-6 mt-9 sm:mt-9">
-            Skills & Tools
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <span
-                key={skill}
-                className="text-sm text-neutral-600 bg-neutral-50 border border-neutral-200 rounded-full px-4 py-1.5"
+            <div className="mt-8">
+              <TiltedCard
+                imageSrc="/dilip-about.jpg"
+                altText="Dilip Rapaka, product designer"
+                captionText="Dilip Rapaka"
+                containerWidth="220px"
+                containerHeight="280px"
+                imageWidth="220px"
+                imageHeight="280px"
+                rotateAmplitude={8}
+                scaleOnHover={1.03}
+                showMobileWarning={false}
+                showTooltip
+              />
+            </div>
+          </motion.div>
+
+          {/* Content column. Starts at column 4, not 5 — leaving column 4 empty
+              put 137px of dead space across the middle of the section and made
+              the two halves read as unrelated. */}
+          <div className="md:col-span-9 md:col-start-4">
+            <motion.p
+              {...reveal(0.05)}
+              viewport={{ once: true, margin: "-12%" }}
+              className="max-w-3xl text-pretty font-serif text-[clamp(1.5rem,2.8vw,2.35rem)] font-normal leading-[1.28] tracking-[-0.01em] text-ink"
+            >
+              I craft{" "}
+              <span className="text-cobalt-ink">
+                simple, thoughtful digital experiences
+              </span>{" "}
+              with a strong focus on clarity, usability, and long-term value
+              across mobile and web.
+            </motion.p>
+
+            <DrawRule className="mt-20" />
+
+            <dl>
+              {BLOCKS.map((block, i) => (
+                <motion.div
+                  key={block.heading}
+                  {...reveal(0.1 + i * 0.08)}
+                  viewport={{ once: true, margin: "-8%" }}
+                  className="grid gap-2 border-b border-ink/12 py-8 md:grid-cols-[7rem_1fr] md:gap-6"
+                >
+                  <dt className="font-sans text-base font-semibold text-ink">
+                    {block.heading}
+                  </dt>
+                  <dd className="max-w-xl font-sans text-[15px] leading-relaxed text-ink/75">
+                    {block.body}
+                  </dd>
+                </motion.div>
+              ))}
+            </dl>
+
+            {/* End of the reading path: the eye finishes "Beyond work" and the
+                next thing it meets is the action. Sending it back across to the
+                left rail was avoidable friction. */}
+            <motion.div
+              {...reveal(0.3)}
+              viewport={{ once: true, margin: "-8%" }}
+            >
+              <a
+                href="/Dilip-Rapaka-CV.pdf"
+                download
+                className="mt-8 inline-flex min-h-11 w-fit items-center gap-2 font-sans text-[15px] font-medium text-cobalt-ink transition-opacity hover:opacity-70"
               >
-                {skill}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-10 space-y-4">
-            <p className="text-sm text-neutral-400 tracking-widest uppercase">
-              Currently
-            </p>
-            <p className="text-sm text-neutral-500 leading-relaxed">
-              Open to full-time roles and select freelance projects. I'm
-              especially interested in B2B SaaS, developer tools, and products
-              with real user impact.
-            </p>
+                Download Resume (PDF)
+                <span aria-hidden="true">↓</span>
+              </a>
+            </motion.div>
           </div>
         </div>
       </div>
