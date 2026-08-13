@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 // Ratios match the real exports rather than idealised device sizes, so nothing
 // is cropped: the screens ship at 830x1686 and the style-guide board at 16:9.
 const RATIO = {
@@ -6,6 +8,16 @@ const RATIO = {
   // than the viewport at full container width.
   banner: "aspect-[12/5]",
   wide: "aspect-[16/9]",
+} as const;
+
+// Rendered width per slot, so the browser can pick a candidate from the srcset
+// instead of assuming 100vw. Phones cap at ~184px (a max-w-sm/max-w-3xl grid
+// column); banner and wide run the full max-w-6xl reading container, 1104px
+// once its px-6 padding is removed.
+const SIZES = {
+  phone: "200px",
+  banner: "(min-width: 1152px) 1104px, calc(100vw - 48px)",
+  wide: "(min-width: 1152px) 1104px, calc(100vw - 48px)",
 } as const;
 
 type Ratio = keyof typeof RATIO;
@@ -41,27 +53,31 @@ export function Figure({
   label,
   caption,
   ratio = "wide",
+  eager = false,
 }: {
   src?: string;
   alt: string;
   label: string;
   caption?: string;
   ratio?: Ratio;
+  // Set on the one figure above the fold. Everything else stays lazy.
+  eager?: boolean;
 }) {
   return (
     <figure>
       <div
-        className={`${RATIO[ratio]} overflow-hidden rounded-lg ${
+        className={`relative ${RATIO[ratio]} overflow-hidden rounded-lg ${
           src ? "border border-ink/10" : "border border-dashed border-ink/25 bg-mist"
         }`}
       >
         {src ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={src}
             alt={alt}
-            loading="lazy"
-            className="h-full w-full object-cover"
+            fill
+            sizes={SIZES[ratio]}
+            loading={eager ? "eager" : "lazy"}
+            className="object-cover"
           />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-4 text-center text-ink/70">

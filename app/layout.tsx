@@ -26,8 +26,13 @@ const serif = Instrument_Serif({
 const DESCRIPTION =
   "Dilip Rapaka is a UX & product designer in the UK, designing simple, thoughtful digital experiences for healthcare and everyday complexity. Open to junior UX & product roles.";
 
+// The OG and Twitter cards need absolute URLs, so this has to be the real
+// production origin. Set NEXT_PUBLIC_SITE_URL in the Vercel project once the
+// final domain is known; the fallback is the default Vercel subdomain.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://diliprapaka.vercel.app";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://diliprapaka.vercel.app"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Dilip Rapaka — Product Designer",
     template: "%s · Dilip Rapaka",

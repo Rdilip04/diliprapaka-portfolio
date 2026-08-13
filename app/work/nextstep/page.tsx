@@ -282,6 +282,7 @@ export default function NextStepCaseStudy() {
             <div className="anim-fade-up mt-14" style={{ animationDelay: "200ms" }}>
               <Figure
                 ratio="banner"
+                eager
                 src="/nextstep/hero.webp"
                 label="Hero — key app screens"
                 alt="NextStep app key screens"

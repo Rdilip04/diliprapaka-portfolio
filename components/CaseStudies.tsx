@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { DrawRule } from "@/components/ui/draw-rule";
@@ -14,11 +15,13 @@ const isPlaceholder = (p: Project) => p.title.startsWith("[");
 function Thumb({ project }: { project: Project }) {
   if (project.image) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
+      <Image
         src={project.image}
         alt={`${project.title} — preview`}
-        className="h-full w-full object-cover"
+        fill
+        // 300px is the expanded width; the row never renders it larger.
+        sizes="300px"
+        className="object-cover"
       />
     );
   }
@@ -72,7 +75,7 @@ function ComingSoonRow({ project }: { project: Project }) {
         <span className="hidden w-6 shrink-0 font-mono text-xs tabular-nums text-ink/70 sm:block">
           {project.index}
         </span>
-        <div className="h-14 w-[76px] shrink-0 overflow-hidden rounded-lg border border-ink/10 opacity-60">
+        <div className="relative h-14 w-[76px] shrink-0 overflow-hidden rounded-lg border border-ink/10 opacity-60">
           <Thumb project={project} />
         </div>
         <div className="flex min-w-0 flex-1 items-baseline justify-between gap-4">

@@ -223,6 +223,7 @@ export default function Hero() {
                 imageHeight="350px"
                 rotateAmplitude={9}
                 scaleOnHover={1.04}
+                eager
                 showMobileWarning={false}
                 showTooltip
               />

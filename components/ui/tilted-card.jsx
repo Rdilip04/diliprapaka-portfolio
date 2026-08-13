@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { getImageProps } from 'next/image';
 import { motion, useMotionValue, useSpring } from 'motion/react';
 import './tilted-card.css';
 
@@ -23,9 +24,20 @@ export default function TiltedCard({
   showMobileWarning = true,
   showTooltip = true,
   overlayContent = null,
-  displayOverlayContent = false
+  displayOverlayContent = false,
+  eager = false
 }) {
   const ref = useRef(null);
+
+  // The image has to stay a motion.img for the tilt, so the optimised src and
+  // srcset are pulled off next/image rather than rendering <Image> itself.
+  const { props: imageProps } = getImageProps({
+    src: imageSrc,
+    alt: altText,
+    width: parseInt(imageWidth, 10),
+    height: parseInt(imageHeight, 10),
+    loading: eager ? 'eager' : 'lazy'
+  });
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -102,8 +114,7 @@ export default function TiltedCard({
         }}
       >
         <motion.img
-          src={imageSrc}
-          alt={altText}
+          {...imageProps}
           className="tilted-card-img"
           style={{
             width: imageWidth,

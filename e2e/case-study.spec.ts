@@ -260,6 +260,35 @@ test.describe("NextStep case study — image placeholders", () => {
     }
   });
 
+  test("serves every screen through the image optimiser, not at source size", async ({
+    page,
+  }) => {
+    // The screens ship at 830x1686 and the boards at 2400px wide, but render a
+    // few hundred pixels across. A plain <img> hands the browser the full file,
+    // so this pins the srcset and the sizes hint that make it pick a candidate.
+    const images = await page.evaluate(() =>
+      [...document.querySelectorAll("figure img")].map((i) => {
+        const img = i as HTMLImageElement;
+        return {
+          alt: img.alt,
+          srcset: img.srcset,
+          sizes: img.sizes,
+          // The attribute, not currentSrc: these are lazy and below the fold,
+          // so nothing has resolved a candidate yet when the test runs.
+          optimised: (img.getAttribute("src") ?? "").includes("/_next/image"),
+        };
+      }),
+    );
+
+    expect(images.length).toBeGreaterThan(5);
+    for (const img of images) {
+      expect(img.optimised, `${img.alt} bypasses the optimiser`).toBe(true);
+      expect(img.srcset.length, `${img.alt} has no srcset`).toBeGreaterThan(0);
+      // Without `sizes` the browser assumes 100vw and over-fetches.
+      expect(img.sizes.length, `${img.alt} has no sizes hint`).toBeGreaterThan(0);
+    }
+  });
+
   test("keeps a phone mockup near handset proportions, not viewport-tall", async ({
     page,
   }) => {

@@ -2,7 +2,7 @@
 
 Working doc for **Dilip Rapaka's UX / Product Designer portfolio**. Hand this to a new chat to continue the work.
 
-Last updated: 2026-08-13 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 72/72 · build green**
+Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 73/73 · build green**
 
 ---
 
@@ -164,7 +164,12 @@ Server component; only `Reveal` and `SusScores` are client islands. Primitives i
 14 images in `public/nextstep/*.webp` (916KB total), all wired. Prototype link is live via `PROTOTYPE_URL` in `nextstep-screens.tsx`.
 
 - ⚠️ **Slot ratios match the real exports, not idealised device sizes** — `phone` is `aspect-[830/1686]` and `wide` is `16/9`. Changing them to "clean" numbers like `9/19.5` will start cropping the screens.
-- Converted PNG → WebP with sharp: **5.88MB → 0.82MB (−86%)**, style guide downscaled to 2400px. These are plain `<img>` tags with **no automatic optimisation**, so re-uploading raw PNGs puts ~6MB back on the page.
+- Converted PNG → WebP with sharp: **5.88MB → 0.82MB (−86%)**, style guide downscaled to 2400px.
+- **Everything routes through `next/image`.** `Figure` uses `fill` + `object-cover`, so **the slot wrapper must keep its `relative` class** — `fill` is absolutely positioned and will escape to the nearest positioned ancestor without it.
+  - Each ratio carries a **`sizes` hint** (`SIZES` in `figure.tsx`); without one the browser assumes `100vw` and over-fetches. Measured: a phone screen drops from the 830px source to a **256px candidate (47KB → 15KB)**. Keep `sizes` in step with the grid caps in `COLS` if those change.
+  - The `<img>` in `tilted-card.jsx` has to stay a `motion.img` for the tilt, so it pulls its src/srcset from **`getImageProps`** instead of rendering `<Image>`.
+  - Only the case-study hero and the Hero portrait are `eager`; everything else is lazy. In Next 16 `priority` is **deprecated** — use `preload`, or `loading="eager"`, which is what these do.
+  - A test asserts every case-study figure points at `/_next/image` and carries a `srcset` and a `sizes`. It reads the **`src` attribute, not `currentSrc`** — the screens are lazy and below the fold, so nothing has resolved a candidate while the test runs.
 - ⚠️ **A filled `<Figure>` drops its label on purpose** (the image replaces it). Any test asserting "every figure contains text" breaks on the first upload — the figure test checks *filled → non-empty `alt`, empty → non-empty label*.
 - `IMAGES.md` (repo root) is the step-by-step Figma export guide — export ratios, filenames, the one-line edit per slot. It describes the **original** workflow (PNG, a combined Notifications+Profile collage); the shipped setup differs. Treat it as the guide for *future* case studies.
 
@@ -190,7 +195,7 @@ npm run test:all
 ## 10. Open items
 
 1. **More real projects.** The single biggest lever. Add to `PROJECTS` in `lib/projects.ts` — bracketed placeholders render as "Coming soon" rows.
-2. **Consider `next/image`.** Images are plain `<img>` with no srcset or automatic format negotiation.
-3. **Deploy to Vercel** and update `metadataBase` in `app/layout.tsx`.
+2. ~~Consider `next/image`.~~ **Done** — see §8.
+3. **Deploy to Vercel.** `metadataBase` now reads `NEXT_PUBLIC_SITE_URL` and falls back to `https://diliprapaka.vercel.app`; **set that env var in the Vercel project once the real domain is known**, or the OG and Twitter cards point at the wrong origin. Nothing else is deploy-gated: `app/icon.svg` and `app/opengraph-image.tsx` already generate the favicon and the social card, and `npm run build` is green with all 7 routes static.
 4. **Aesthetic-lane question (strategic, Dilip's call).** An `/impeccable` audit scored **14/20** and flagged that the site sits in the currently-saturated "editorial-typographic" lane (display serif + mono labels + ruled separators + monochrome), and that both typefaces are on its reflex-reject list. Identity-preservation says leave committed choices alone, and the slop detector returns clean — but it's worth knowing the first build was rejected as generic and this lane has since become the *next* generic.
-5. Minor: `home-1-sketch.webp` is 874×1704 while the other twelve are 830×1686, so it crops ~4.5%. Invisible on a sketch.
+5. ~~`home-1-sketch.webp` is 874×1704 while the other twelve are 830×1686.~~ **Done** — recropped to 830×1686 (52KB → 47KB). It only ever removed the 4% the browser was already discarding, so the rendered result is unchanged; the file now just matches the slot.
