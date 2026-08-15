@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dilip Rapaka — Portfolio
 
-## Getting Started
+Personal portfolio for a junior UX / Product Designer working in the UK. Light, editorial and typographic, built so the site itself serves as the work sample.
 
-First, run the development server:
+Built with Next.js 16 (App Router), React 19, Tailwind CSS v4 and Motion v12.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+PORT=3311 npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Then open <http://localhost:3311>. Port 3311 rather than the default, because 3000 is used by another project in this environment.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Command | Description |
+|---|---|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run test` | Unit tests (Vitest) |
+| `npm run test:e2e` | End-to-end and accessibility tests (Playwright) |
+| `npm run test:all` | Both suites |
 
-To learn more about Next.js, take a look at the following resources:
+Type-check and lint with the local binaries, since a bare `npx tsc` resolves to an unrelated global package:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+./node_modules/.bin/tsc --noEmit && ./node_modules/.bin/eslint .
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Documentation
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **[PROGRESS.md](PROGRESS.md)** — the design and engineering handbook: design system, accessibility budget, settled decisions and known traps. **Read this before making changes.**
+- **[IMAGES.md](IMAGES.md)** — Figma export guide for case-study imagery.
+- **[AGENTS.md](AGENTS.md)** — notes for AI coding agents working in this repository.

@@ -49,4 +49,3 @@ export function contrastRatio(a: Rgb, b: Rgb): number {
 }
 
 export const AA_NORMAL_TEXT = 4.5;
-export const AA_LARGE_TEXT = 3;

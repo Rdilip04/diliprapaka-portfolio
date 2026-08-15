@@ -7,7 +7,6 @@
   /* Neutrals */
   --color-ink: #14181f;
   --color-paper: #f7f8fa;
-  --color-slate: #5b6572;
 
   /* Editorial palette — light canvas + a single disciplined cobalt accent */
   --color-canvas: #f4f4f2; /* neutral off-white (chroma ~0, not warm-cream) */
@@ -43,7 +42,6 @@
   --color-paper: #0f1319; /* page bg, and text on inverted surfaces */
   --color-canvas: #14181f; /* section surface */
   --color-mist: #1b2028; /* muted panel */
-  --color-slate: #99a2b0;
 
   --color-cobalt: #6f6bff; /* accent mark on dark */
   --color-cobalt-ink: #a9a6ff; /* accent text on dark — 8.1:1 on canvas */
@@ -106,14 +104,6 @@ body {
 /* Entrance reveals — CSS-driven so they run at first paint (no JS/hydration
    gate) and can never ship the content blank. Reduced-motion is handled by the
    global rule above, which collapses the duration so content snaps in visible. */
-@keyframes rise-in {
-  from {
-    transform: translateY(110%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -124,18 +114,6 @@ body {
     transform: translateY(0);
   }
 }
-.anim-rise {
-  animation: rise-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
 .anim-fade-up {
   animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* Subtle noise/grain texture layered over light surfaces so they read
-   as textured "glass" rather than flat white. Sits in the background
-   layer (behind content), on top of the surface's background-color. */
-.grain-bg {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-  background-repeat: repeat;
 }
