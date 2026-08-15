@@ -99,6 +99,38 @@ test.describe("Motion — the award ribbon", () => {
     expect(after[0]).not.toBe(before[0]);
   });
 
+  // The SVG scales to its width, so the band grows as the viewport does. A
+  // fixed px height fits at one width and slices the peaks flat at every
+  // wider one — which is exactly what shipped before this test existed.
+  for (const width of [768, 1280, 1920, 2560]) {
+    test(`keeps the whole wave inside its crop at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/");
+      await scrollTo(page, LOOP);
+
+      const r = await page.evaluate((sel) => {
+        const root = document.querySelector(sel)!;
+        const svg = root.querySelector("svg")!;
+        const path = svg.querySelector("path")!;
+        const bb = path.getBBox();
+        const sw = parseFloat(path.getAttribute("stroke-width") ?? "0");
+        // getBBox excludes the stroke, so grow it by half a ribbon each side.
+        const m = svg.getScreenCTM()!;
+        const toClient = (u: number) => m.f + u * m.d;
+        const box = root.getBoundingClientRect();
+        return {
+          top: toClient(bb.y - sw / 2) - box.top,
+          bottom: box.bottom - toClient(bb.y + bb.height + sw / 2),
+        };
+      }, LOOP);
+
+      expect(r.top, `wave clipped at the top (${width}px)`).toBeGreaterThanOrEqual(0);
+      expect(r.bottom, `wave clipped at the bottom (${width}px)`).toBeGreaterThanOrEqual(0);
+    });
+  }
+
   test("keeps looping while the pointer sits on it", async ({ page }) => {
     await page.goto("/");
     await scrollTo(page, LOOP);

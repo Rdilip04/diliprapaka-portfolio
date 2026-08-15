@@ -18,12 +18,17 @@ export default function Recognition() {
       };
 
   return (
-    <section className="border-y border-ink/10 bg-paper text-ink">
+    <section className="border-y border-ink/10 bg-canvas text-ink">
       <div className="w-full py-16 md:py-20">
         <motion.div {...reveal} viewport={{ once: true, margin: "-15%" }}>
           {/* The viewBox is 1200x520, most of which is empty space above and
-              below the curve. The wrapper crops to the band and centres it,
-              rather than editing the component's own geometry. */}
+              below the curve, so the wrapper crops to the band rather than
+              editing the component's own geometry.
+
+              The height has to be a vw, not a fixed px cap. The SVG scales to
+              the element's width, so the band's height is (curviness*2.2 +
+              ribbonWidth) / 1200 of it — here 190/1200 = 15.8vw. A fixed cap
+              fits at one width and slices the peaks flat at every wider one. */}
           <TextLoop
             text="1st Place — BCU Innovation Fest 2025"
             color="var(--color-paper)"
@@ -32,15 +37,10 @@ export default function Recognition() {
             // together so the type keeps its breathing room inside the ribbon.
             ribbonWidth={58}
             fontSize={32}
+            curviness={60}
             pauseOnHover={false}
-            className="grid h-[clamp(170px,24vw,290px)] place-items-center"
+            className="grid h-[17.5vw] place-items-center"
           />
-
-          <p className="mx-auto mt-10 max-w-md px-6 text-center font-sans text-sm leading-relaxed text-ink/70">
-            Awarded for <span className="font-medium text-ink">NextStep</span>, a
-            stroke-rehabilitation concept for the NHS — recognised for innovation
-            and impact in healthcare design.
-          </p>
         </motion.div>
       </div>
     </section>
