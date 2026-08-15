@@ -2,6 +2,17 @@ import { test, expect, type Page } from "@playwright/test";
 
 const RULE = "#work [aria-hidden].h-px";
 const BAR = "[data-sus-bar]";
+const LOOP = ".text-loop";
+
+/** Where each copy of the award text currently sits along the ribbon. */
+const loopOffsets = (page: Page) =>
+  page.evaluate(
+    (sel) =>
+      [...document.querySelectorAll(`${sel} textPath`)].map((p) =>
+        p.getAttribute("startOffset"),
+      ),
+    LOOP,
+  );
 
 /**
  * Scroll from inside the page rather than with scrollIntoViewIfNeeded: these
@@ -75,6 +86,44 @@ test.describe("Motion — anime.js reveals finish", () => {
   });
 });
 
+test.describe("Motion — the award ribbon", () => {
+  test("scrolls the award text around the curve", async ({ page }) => {
+    await page.goto("/");
+    await scrollTo(page, LOOP);
+
+    const before = await loopOffsets(page);
+    expect(before).toHaveLength(2);
+    await page.waitForTimeout(600);
+    const after = await loopOffsets(page);
+
+    expect(after[0]).not.toBe(before[0]);
+  });
+
+  test("announces the award once, not once per repetition", async ({ page }) => {
+    await page.goto("/");
+    // The ribbon repeats the phrase a dozen times; every <text> inside is
+    // aria-hidden so the accessible name is the phrase exactly once.
+    const svg = page.locator(`${LOOP} svg[role="img"]`);
+    await expect(svg).toHaveAttribute("aria-label", /1st Place.*BCU Innovation Fest/i);
+  });
+
+  test("re-maps the ribbon to the dark accent token", async ({ page }) => {
+    await page.goto("/");
+    const stroke = () =>
+      page.evaluate(
+        (sel) => getComputedStyle(document.querySelector(`${sel} path`)!).stroke,
+        LOOP,
+      );
+
+    // The colours come in as var(--color-*), so the ribbon has to follow the
+    // theme rather than staying on a hardcoded hex.
+    expect(await stroke()).toBe("rgb(47, 43, 230)");
+    await page.getByRole("switch").first().click();
+    await page.waitForTimeout(400);
+    expect(await stroke()).toBe("rgb(111, 107, 255)");
+  });
+});
+
 test.describe("Motion — reduced motion never hides content", () => {
   // emulateMedia rather than test.use({ reducedMotion }): the describe-level
   // option did not reach matchMedia in this config (verified — the page kept
@@ -94,6 +143,19 @@ test.describe("Motion — reduced motion never hides content", () => {
     for (const t of bars) {
       expect(isIdentity(t), `bar transform was "${t}"`).toBe(true);
     }
+  });
+
+  test("holds the award ribbon still without emptying it", async ({ page }) => {
+    await page.goto("/");
+    await scrollTo(page, LOOP);
+
+    const before = await loopOffsets(page);
+    await page.waitForTimeout(500);
+    expect(await loopOffsets(page)).toEqual(before);
+
+    // Frozen is the point; blank would not be.
+    const text = await page.locator(`${LOOP} textPath`).first().textContent();
+    expect(text?.trim().length ?? 0).toBeGreaterThan(0);
   });
 
   test("never collapses the section rule", async ({ page }) => {

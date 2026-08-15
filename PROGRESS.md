@@ -2,7 +2,7 @@
 
 Working doc for **Dilip Rapaka's UX / Product Designer portfolio**. Hand this to a new chat to continue the work.
 
-Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 73/73 · build green**
+Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 77/77 · build green**
 
 ---
 
@@ -23,6 +23,8 @@ The site was originally a dark, WebGL-heavy "React-Bits template" (cosmic orange
 
 **Do NOT reintroduce:** LiquidEther, cosmic orange, dark-hero fluid, the Tetris loader, or a mono eyebrow above every section.
 
+⚠️ One React Bits component is now back **on purpose** — the award ribbon in Recognition (§6, §7), recoloured to the cobalt tokens. That is a deliberate exception to this section, not a regression.
+
 Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (Story Spine, 3-Lever Polish, POV Stack, 3-Click path, Squint Test) and **The Portfolio Blueprint** (7 blocks). Strong on positioning, "site is the sample", about/photo, CTA. **Weak only on volume of real projects** — content-gated, not design-gated.
 
 ## 3. Tech stack
@@ -32,7 +34,8 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 - **Tailwind CSS v4** (CSS-first via `@theme` in `app/globals.css`).
 - **Motion v12** (`motion/react`) — this IS Framer Motion, renamed. **Do not `npm i framer-motion`.**
 - **anime.js v4.5.0** — second animation library, see §7.
-- **Runtime deps (5):** `animejs`, `motion`, `next`, `react`, `react-dom`. `three` / `ogl` / `lenis` were removed in cleanup.
+- **gsap** — third animation library, added **2026-08-14 at Dilip's explicit instruction** for the award ribbon. See §7 before touching it.
+- **Runtime deps (6):** `animejs`, `gsap`, `motion`, `next`, `react`, `react-dom`. `three` / `ogl` / `lenis` were removed in cleanup.
 - **Verify with local binaries:** `./node_modules/.bin/tsc --noEmit` and `./node_modules/.bin/eslint .` — a bare `npx tsc` grabs a bogus global package.
 - ⚠️ `npm audit` reports 3 production advisories inherited from `next@16.2.1`. Pre-existing. `npm audit fix --force` would bump Next's major — treat as a deliberate upgrade task.
 
@@ -114,6 +117,16 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 - ⚠️ **"healthcare and accessibility" was deliberately removed from the hero** (it was in the H1, then the sub-line, then cut). The specialism first appears below the fold. **Don't restore it.** Known trade-off: nothing above the fold names a sector.
 - A test caps the H1 at 16 words and pins the CTA above the fold at 375px and 1280×720.
 
+### Recognition — the award ribbon
+
+The BCU award is a **looping cobalt ribbon** (React Bits `TextLoop`, see §7), not the display-type line it used to be. Reads `1st Place — BCU Innovation Fest 2025 ✦`, repeating.
+
+- **Colours are passed as `var(--color-*)`, not hex** — `var(--color-cobalt)` for the ribbon, `var(--color-paper)` for the text. Verified: CSS custom properties **do** resolve in SVG presentation attributes, so the ribbon follows the theme (`#2f2be6` light → `#6f6bff` dark) with no `dark:` class. Measured contrast **7.57:1 light, 4.63:1 dark**. A test pins both stroke values.
+- ⚠️ **The wrapper crops; the component is untouched.** Its viewBox is `1200x520` and most of that is empty space above and below the curve, so `Recognition.tsx` passes `className="grid h-[clamp(200px,30vw,340px)] place-items-center"` and lets `.text-loop`'s own `overflow: hidden` trim it. At 1280px the ribbon sits with ~18px clearance top and bottom — **don't shrink that height much further or the wave starts clipping.**
+- The phrase reaches assistive tech **once** via `role="img"` + `aria-label`; every `<text>` inside is `aria-hidden`. A test asserts it.
+- Type is **Inter 800 uppercase at 46px** — the component's defaults, inherited from the body font. This is the one place the site uses an 800 weight.
+- Known trade-off: `preserveAspectRatio="meet"` means the whole thing scales down on a phone, so at 390px the type renders ~15px. Legible but small. Raising `fontSize`/`ribbonWidth` is the lever, but they are fixed props, not responsive.
+
 ### Selected work (`CaseStudies.tsx`)
 
 Hover-expand row list. NextStep + three "Coming soon" rows.
@@ -136,7 +149,16 @@ Hover-expand row list. NextStep + three "Coming soon" rows.
 - **anime.js v4** (added at Dilip's request) is scoped to two moments only:
   1. `components/ui/draw-rule.tsx` — section hairlines draw in on scroll
   2. SUS bars in `sus-scores.tsx` — stagger-fill
-- ⚠️ **This is a deliberate exception to the minimal-deps rule. Don't migrate Motion work to it, and don't add a third library.**
+- ⚠️ **This is a deliberate exception to the minimal-deps rule. Don't migrate Motion work to it.**
+
+### gsap — the third library (`components/ui/text-loop.jsx`)
+
+⚠️ **Added 2026-08-14 at Dilip's explicit instruction, overriding the "no third library" rule above. Do not remove it as cleanup.**
+
+- The full history: a native Motion rewrite of this effect was built first, shipped, and then **reverted at Dilip's request** (commits `dc82d68` → `75e5416`). He wanted the actual React Bits component, not an equivalent. **Don't re-propose the rewrite.**
+- `text-loop.jsx` is the **upstream React Bits source, kept byte-identical** apart from two forced changes: a `'use client'` directive (App Router) and the CSS import path (`./text-loop.css`, matching this repo's kebab-case). Keeping it verbatim means it can be re-pulled from reactbits.dev without re-porting.
+- Types live in a **separate `text-loop.d.ts`** for the same reason. Without it `tsc` infers `path` as *required* (it is the only prop with no default) and every call site fails to compile.
+- gsap is used for exactly one tween here. Nothing else in the codebase imports it.
 - v4 API: `import { animate, stagger } from "animejs"` — **no default export** (that's v3). Ease names are strings like `outQuart`.
 - Both animate **`scaleX` with `origin-left`**, never `width` — transform is composited, width triggers layout.
 - ⚠️ **Both must fail safe.** The collapse to `scaleX(0)` happens *only inside the effect*, so with JS off or reduced motion the content renders full-size. **Never move the collapsed state into markup or CSS** — that ships the section blank if the observer doesn't fire.

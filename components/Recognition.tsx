@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import TextLoop from "@/components/ui/text-loop";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -18,17 +19,19 @@ export default function Recognition() {
 
   return (
     <section className="border-y border-ink/10 bg-mist text-ink">
-      <div className="mx-auto w-full max-w-7xl px-6 py-16 md:py-20">
-        <motion.div
-          {...reveal}
-          viewport={{ once: true, margin: "-15%" }}
-          className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-12"
-        >
-          <p className="max-w-2xl font-serif text-[clamp(1.75rem,4vw,3rem)] font-normal leading-[1.05] tracking-[-0.02em]">
-            <span className="text-cobalt-ink">1st Place</span> — BCU Innovation
-            Fest 2025
-          </p>
-          <p className="max-w-xs font-sans text-sm leading-relaxed text-ink/70">
+      <div className="w-full py-16 md:py-20">
+        <motion.div {...reveal} viewport={{ once: true, margin: "-15%" }}>
+          {/* The viewBox is 1200x520, most of which is empty space above and
+              below the curve. The wrapper crops to the band and centres it,
+              rather than editing the component's own geometry. */}
+          <TextLoop
+            text="1st Place — BCU Innovation Fest 2025"
+            color="var(--color-paper)"
+            ribbonColor="var(--color-cobalt)"
+            className="grid h-[clamp(200px,30vw,340px)] place-items-center"
+          />
+
+          <p className="mx-auto mt-10 max-w-md px-6 text-center font-sans text-sm leading-relaxed text-ink/70">
             Awarded for <span className="font-medium text-ink">NextStep</span>, a
             stroke-rehabilitation concept for the NHS — recognised for innovation
             and impact in healthcare design.
