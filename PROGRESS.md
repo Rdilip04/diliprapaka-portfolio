@@ -142,8 +142,10 @@ This replaced **23 ad-hoc declarations — 17 rendered sizes and 16 bespoke `cla
 ### Motifs
 
 - **Hairlines** (`border-ink/12`) mark **section boundaries**, not every row.
-  > **Locked — rules are rationed.** The homepage carried **34 borders**; it now carries **14**. What went: six underlines and six bordered icon chips in Approach's method list, five outlined toolkit chips, the column divider beside them, and the two underlined rows in About. Spacing carries that rhythm instead. What stayed earns its place — the work-index row separators, the thumbnail frames, two section boundaries and the footer's structure.
+  > **Locked — rules are rationed.** The homepage carried **34 borders**; it now carries **14**. What went: six underlines and six bordered icon chips in Approach's method list, five outlined toolkit chips, the column divider beside them, and the two underlined rows in About. What stayed earns its place — the work-index row separators, the thumbnail frames, two section boundaries and the footer's structure.
   > A repeated rule inside a list is the editorial-template tell the `/impeccable` audit flagged (§10). **Before adding a border, try spacing.**
+  >
+  > ⚠️ **Removing a rule is only half the job.** The first pass deleted Approach's borders and changed nothing else, and the section lost its hierarchy: rows spanned **330px around a 97px label**, so icons floated away from their text, and below the 35px statement the next level down was **14px at 85% opacity** — a 2.5× jump with nothing between. Subtracting structure means **re-composing** what is left: constrain the measure (`max-w-lg`), and give the surviving level enough size and contrast to *be* a level.
 - **One radius:** `rounded-lg` (8px). `rounded-full` is reserved for genuine pills and dots.
 - **Focus ring:** cobalt, via `:focus-visible` in globals.
 - Everything respects `prefers-reduced-motion`.

@@ -123,19 +123,19 @@ export default function Approach() {
             <span className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
               Methods
             </span>
-            <ul className="mt-6 grid grid-cols-1 gap-x-10 sm:grid-cols-2">
+            {/* max-w-lg is doing real work: unconstrained, each row spanned
+                330px around a 97px label, which stranded the icon from its
+                text and left the block looking unfinished. */}
+            <ul className="mt-8 grid max-w-lg grid-cols-1 gap-x-8 sm:grid-cols-2">
               {METHODS.map((method) => (
                 <li
                   key={method.label}
-                  className="group flex items-center gap-3.5 py-4"
+                  className="group flex items-baseline gap-3 py-3"
                 >
-                  {/* Bare icon, not a bordered chip: six outlined boxes plus
-                      six underlines made this list the densest block on the
-                      page. Spacing carries the rhythm instead. */}
-                  <span className="grid h-9 w-9 shrink-0 place-items-center text-ink/70 transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:text-cobalt-ink">
+                  <span className="grid w-5 shrink-0 place-items-center text-ink/70 transition-colors duration-300 group-hover:text-cobalt-ink">
                     {method.icon}
                   </span>
-                  <span className="font-sans text-sm text-ink/85 transition-colors duration-300 group-hover:text-cobalt-ink">
+                  <span className="font-sans text-base text-ink transition-colors duration-300 group-hover:text-cobalt-ink">
                     {method.label}
                   </span>
                 </li>
@@ -159,7 +159,7 @@ export default function Approach() {
               {TOOLS.map((tool) => (
                 <li
                   key={tool}
-                  className="font-sans text-sm font-medium text-ink after:ml-3 after:text-ink/30 after:content-['·'] last:after:content-none"
+                  className="font-sans text-base text-ink after:ml-3 after:text-ink/30 after:content-['·'] last:after:content-none"
                 >
                   {tool}
                 </li>
