@@ -2,7 +2,7 @@
 
 Working doc for **Dilip Rapaka's UX / Product Designer portfolio**. Hand this to a new chat to continue the work.
 
-Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 (1 warning) · vitest 21/21 · playwright 77/77 · build green**
+Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 (1 warning) · vitest 21/21 · playwright 78/78 · build green**
 
 ---
 
@@ -124,11 +124,13 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 A horizontal marquee of tool logos between Hero and Selected work, using the vendored React Bits `LogoLoop` (§7). Replaced the Recognition/award section on 2026-08-14 — **Dilip's call, he judged the award not important enough for that slot.**
 
 - **The award is not lost.** It still reads in the Selected work outcome line (`lib/projects.ts`) and three times in the case study. Removing the section cost the display-size treatment, not the credential.
-- **Eight tools, six logos.** `SiFigma` / `SiMiro` / `SiFramer` / `SiJira` / `SiClaudecode` / `SiCursor`. ⚠️ **FigJam and Illustrator run as mono wordmarks** — FigJam has no mark of its own (it sits under the Figma brand) and Adobe withdrew Illustrator from Simple Icons. The other icon families that do have an Illustrator glyph draw in a different style, which would put two visual languages in one strip. **Don't "fix" this by mixing families.**
+- **Seven tools, all logos.** `SiFigma` / `SiMiro` / `SiFramer` / `SiJira` / `SiClaudecode` / `SiCursor`, plus **`BiLogoAdobe`** from Boxicons. ⚠️ **Adobe is the one icon from another family** — Simple Icons carries no Adobe mark since Adobe withdrew them, and Boxicons' is solid-filled so it matches. **Tabler's `TbBrandAdobe` is an outline — don't swap to it.** FigJam was dropped (2026-08-14, Dilip's call); it has no mark of its own, sitting under the Figma brand.
+- **Hover reveals the tool name** in a mono pill, via the component's own `renderItem` prop — the documented extension point, so `logo-loop.jsx` stays untouched. The label is the **accessible name** and the icon beside it is `aria-hidden`, because naming both announces every tool twice. It hides by **opacity only, never `display`**, so assistive tech still reaches it. The wrapper's bottom padding is what the label drops into — **shrink `py-14` and it gets clipped** by the `overflow-hidden`.
+- ⚠️ **Hover cannot be tested without freezing the strip first.** Playwright waits for a target to stop moving and a marquee never does, so the hover test sets `emulateMedia({ reducedMotion: "reduce" })` before `goto`. `[data-tool-label]` is the hook — the label text also lives in the wrapper's `textContent`, so a plain `hasText` selector matches two elements.
 - ⚠️⚠️ **The wrapper needs `overflow-hidden`.** The component's track is `width: max-content`, so without it the strip puts the **whole page** into horizontal scroll. This shipped wrong once and took out five tests at once — the hero overflow check, both desktop a11y runs, and a case-study nav test that only failed as a knock-on. Upstream's usage example wraps it the same way.
 - **Icons inherit `currentColor`** from `text-ink/85` on the root, so both themes work with no `dark:` class. `fadeOutColor` is `var(--color-canvas)` — it **must** match the section's own surface or the edges fade toward the wrong colour.
 - `pauseOnHover={false}`, matching the rest of the site. `scaleOnHover` is pure CSS and unaffected.
-- Each icon gets a `title`, so every tool has an accessible name; copies past the first are `aria-hidden`. A test asserts each tool is announced **exactly once** — note an icon's `<title>` sits inside the wrapping span, so naive selectors count every logo twice.
+- Copies past the first are `aria-hidden`. A test asserts each tool is announced **exactly once**, and that the list is exactly seven long.
 - Scales better on mobile than the old ribbon did: logos are fixed px, not a scaled viewBox.
 - ⚠️ **Tools now appear twice on the page** — here, and as text chips in Approach's Toolkit column. Approach adds the prose about *how* he uses them, so it is not pure duplication, but if the page feels repetitive that column is the thing to cut.
 

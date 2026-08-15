@@ -114,27 +114,44 @@ test.describe("Motion — the tool strip", () => {
     const names = await page.evaluate(() =>
       [...document.querySelectorAll(".logoloop__list:not([aria-hidden=true])")]
         .flatMap((list) => [...list.querySelectorAll(".logoloop__item")])
-        // One name per item: the icons carry a <title>, the wordmarks are text.
-        // Reading both would count every icon twice, since the <title> lives
-        // inside the span whose textContent also returns it.
-        .map((item) =>
-          (item.querySelector("svg title") ?? item).textContent?.trim(),
-        )
+        // The hover label is the accessible name; the icon beside it is
+        // aria-hidden, so each item yields exactly one string.
+        .map((item) => item.textContent?.trim())
         .filter((t): t is string => !!t),
     );
 
     for (const tool of [
       "Figma",
-      "FigJam",
       "Miro",
       "Framer",
-      "Illustrator",
+      "Adobe",
       "Jira",
       "Claude Code",
       "Cursor",
     ]) {
       expect(names.filter((n) => n === tool), `${tool} appears once`).toHaveLength(1);
     }
+    expect(names, "no tool left unnamed").toHaveLength(7);
+  });
+
+  test("reveals the tool name on hover", async ({ page }) => {
+    // Frozen first: Playwright's hover waits for the target to stop moving,
+    // and a marquee never does. Reduced motion pins the track, which also
+    // proves the label still works in that mode.
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await scrollTo(page, LOOP);
+
+    const item = page
+      .locator(`${LOOP} .logoloop__list:not([aria-hidden=true]) .logoloop__item`)
+      .first();
+    const label = item.locator("[data-tool-label]");
+
+    await expect(label).toHaveText("Figma");
+    // Hidden by opacity only, so it stays reachable by assistive tech.
+    await expect(label).toHaveCSS("opacity", "0");
+    await item.hover();
+    await expect(label).toHaveCSS("opacity", "1");
   });
 });
 
