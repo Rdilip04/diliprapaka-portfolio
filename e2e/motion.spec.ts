@@ -2,15 +2,14 @@ import { test, expect, type Page } from "@playwright/test";
 
 const RULE = "#work [aria-hidden].h-px";
 const BAR = "[data-sus-bar]";
-const LOOP = ".text-loop";
+const LOOP = ".logoloop";
 
-/** Where each copy of the award text currently sits along the ribbon. */
-const loopOffsets = (page: Page) =>
+/** How far the tool strip has travelled, read off its transform. */
+const loopOffset = (page: Page) =>
   page.evaluate(
     (sel) =>
-      [...document.querySelectorAll(`${sel} textPath`)].map((p) =>
-        p.getAttribute("startOffset"),
-      ),
+      getComputedStyle(document.querySelector(`${sel} .logoloop__track`)!)
+        .transform,
     LOOP,
   );
 
@@ -86,85 +85,56 @@ test.describe("Motion — anime.js reveals finish", () => {
   });
 });
 
-test.describe("Motion — the award ribbon", () => {
-  test("scrolls the award text around the curve", async ({ page }) => {
+test.describe("Motion — the tool strip", () => {
+  test("scrolls the logos across", async ({ page }) => {
     await page.goto("/");
     await scrollTo(page, LOOP);
 
-    const before = await loopOffsets(page);
-    expect(before).toHaveLength(2);
+    const before = await loopOffset(page);
     await page.waitForTimeout(600);
-    const after = await loopOffsets(page);
-
-    expect(after[0]).not.toBe(before[0]);
+    expect(await loopOffset(page)).not.toBe(before);
   });
 
-  // The SVG scales to its width, so the band grows as the viewport does. A
-  // fixed px height fits at one width and slices the peaks flat at every
-  // wider one — which is exactly what shipped before this test existed.
-  for (const width of [768, 1280, 1920, 2560]) {
-    test(`keeps the whole wave inside its crop at ${width}px`, async ({
-      page,
-    }) => {
-      await page.setViewportSize({ width, height: 900 });
-      await page.goto("/");
-      await scrollTo(page, LOOP);
-
-      const r = await page.evaluate((sel) => {
-        const root = document.querySelector(sel)!;
-        const svg = root.querySelector("svg")!;
-        const path = svg.querySelector("path")!;
-        const bb = path.getBBox();
-        const sw = parseFloat(path.getAttribute("stroke-width") ?? "0");
-        // getBBox excludes the stroke, so grow it by half a ribbon each side.
-        const m = svg.getScreenCTM()!;
-        const toClient = (u: number) => m.f + u * m.d;
-        const box = root.getBoundingClientRect();
-        return {
-          top: toClient(bb.y - sw / 2) - box.top,
-          bottom: box.bottom - toClient(bb.y + bb.height + sw / 2),
-        };
-      }, LOOP);
-
-      expect(r.top, `wave clipped at the top (${width}px)`).toBeGreaterThanOrEqual(0);
-      expect(r.bottom, `wave clipped at the bottom (${width}px)`).toBeGreaterThanOrEqual(0);
-    });
-  }
-
-  test("keeps looping while the pointer sits on it", async ({ page }) => {
+  test("keeps moving while the pointer sits on it", async ({ page }) => {
     await page.goto("/");
     await scrollTo(page, LOOP);
     await page.locator(LOOP).hover();
 
-    const before = await loopOffsets(page);
+    const before = await loopOffset(page);
     await page.waitForTimeout(600);
 
-    // pauseOnHover is off on purpose — the ribbon should never stall.
-    expect((await loopOffsets(page))[0]).not.toBe(before[0]);
+    // pauseOnHover is off, matching the rest of the site's motion.
+    expect(await loopOffset(page)).not.toBe(before);
   });
 
-  test("announces the award once, not once per repetition", async ({ page }) => {
+  test("names every tool exactly once for assistive tech", async ({ page }) => {
     await page.goto("/");
-    // The ribbon repeats the phrase a dozen times; every <text> inside is
-    // aria-hidden so the accessible name is the phrase exactly once.
-    const svg = page.locator(`${LOOP} svg[role="img"]`);
-    await expect(svg).toHaveAttribute("aria-label", /1st Place.*BCU Innovation Fest/i);
-  });
+    // The strip renders several copies to fill the width; all but the first
+    // are aria-hidden, so each tool must be announced once and only once.
+    const names = await page.evaluate(() =>
+      [...document.querySelectorAll(".logoloop__list:not([aria-hidden=true])")]
+        .flatMap((list) => [...list.querySelectorAll(".logoloop__item")])
+        // One name per item: the icons carry a <title>, the wordmarks are text.
+        // Reading both would count every icon twice, since the <title> lives
+        // inside the span whose textContent also returns it.
+        .map((item) =>
+          (item.querySelector("svg title") ?? item).textContent?.trim(),
+        )
+        .filter((t): t is string => !!t),
+    );
 
-  test("re-maps the ribbon to the dark accent token", async ({ page }) => {
-    await page.goto("/");
-    const stroke = () =>
-      page.evaluate(
-        (sel) => getComputedStyle(document.querySelector(`${sel} path`)!).stroke,
-        LOOP,
-      );
-
-    // The colours come in as var(--color-*), so the ribbon has to follow the
-    // theme rather than staying on a hardcoded hex.
-    expect(await stroke()).toBe("rgb(47, 43, 230)");
-    await page.getByRole("switch").first().click();
-    await page.waitForTimeout(400);
-    expect(await stroke()).toBe("rgb(111, 107, 255)");
+    for (const tool of [
+      "Figma",
+      "FigJam",
+      "Miro",
+      "Framer",
+      "Illustrator",
+      "Jira",
+      "Claude Code",
+      "Cursor",
+    ]) {
+      expect(names.filter((n) => n === tool), `${tool} appears once`).toHaveLength(1);
+    }
   });
 });
 
@@ -189,17 +159,16 @@ test.describe("Motion — reduced motion never hides content", () => {
     }
   });
 
-  test("holds the award ribbon still without emptying it", async ({ page }) => {
+  test("holds the tool strip still without emptying it", async ({ page }) => {
     await page.goto("/");
     await scrollTo(page, LOOP);
 
-    const before = await loopOffsets(page);
+    const before = await loopOffset(page);
     await page.waitForTimeout(500);
-    expect(await loopOffsets(page)).toEqual(before);
+    expect(await loopOffset(page)).toBe(before);
 
     // Frozen is the point; blank would not be.
-    const text = await page.locator(`${LOOP} textPath`).first().textContent();
-    expect(text?.trim().length ?? 0).toBeGreaterThan(0);
+    await expect(page.locator(`${LOOP} .logoloop__item`).first()).toBeVisible();
   });
 
   test("never collapses the section rule", async ({ page }) => {

@@ -2,7 +2,7 @@
 
 Working doc for **Dilip Rapaka's UX / Product Designer portfolio**. Hand this to a new chat to continue the work.
 
-Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 82/82 · build green**
+Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 (1 warning) · vitest 21/21 · playwright 77/77 · build green**
 
 ---
 
@@ -23,7 +23,7 @@ The site was originally a dark, WebGL-heavy "React-Bits template" (cosmic orange
 
 **Do NOT reintroduce:** LiquidEther, cosmic orange, dark-hero fluid, the Tetris loader, or a mono eyebrow above every section.
 
-⚠️ One React Bits component is now back **on purpose** — the award ribbon in Recognition (§6, §7), recoloured to the cobalt tokens. That is a deliberate exception to this section, not a regression.
+⚠️ React Bits components are now back **on purpose**, recoloured to the site's tokens — the tool strip in §6, and a ribbon that shipped and was pulled the same day (§7). That is a deliberate exception to this section, not a regression.
 
 Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (Story Spine, 3-Lever Polish, POV Stack, 3-Click path, Squint Test) and **The Portfolio Blueprint** (7 blocks). Strong on positioning, "site is the sample", about/photo, CTA. **Weak only on volume of real projects** — content-gated, not design-gated.
 
@@ -34,8 +34,10 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 - **Tailwind CSS v4** (CSS-first via `@theme` in `app/globals.css`).
 - **Motion v12** (`motion/react`) — this IS Framer Motion, renamed. **Do not `npm i framer-motion`.**
 - **anime.js v4.5.0** — second animation library, see §7.
-- **gsap** — third animation library, added **2026-08-14 at Dilip's explicit instruction** for the award ribbon. See §7 before touching it.
-- **Runtime deps (6):** `animejs`, `gsap`, `motion`, `next`, `react`, `react-dom`. `three` / `ogl` / `lenis` were removed in cleanup.
+- **gsap** — ⚠️ **currently unused.** Added for the award ribbon, which was removed the same day (see §6). Nothing imports it; it is not in the bundle. **Ask Dilip before removing** — the ribbon may come back.
+- **react-icons** — Simple Icons marks for the tool strip. Tree-shaken per icon.
+- **Runtime deps (7):** `animejs`, `gsap`, `motion`, `next`, `react`, `react-dom`, `react-icons`. `three` / `ogl` / `lenis` were removed in cleanup.
+- One **eslint warning** is expected and deliberate: `logo-loop.jsx` uses `<img>` in a branch this project never takes (all items are `node` items). Silencing it would mean editing vendored source — see §7.
 - **Verify with local binaries:** `./node_modules/.bin/tsc --noEmit` and `./node_modules/.bin/eslint .` — a bare `npx tsc` grabs a bogus global package.
 - ⚠️ `npm audit` reports 3 production advisories inherited from `next@16.2.1`. Pre-existing. `npm audit fix --force` would bump Next's major — treat as a deliberate upgrade task.
 
@@ -106,7 +108,7 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 
 ## 6. Page composition
 
-`app/page.tsx`: `<Nav/>` + `<main id="main">{ Hero · Recognition · CaseStudies · About · Approach }</main>` + `<Footer/>`
+`app/page.tsx`: `<Nav/>` + `<main id="main">{ Hero · Toolkit · CaseStudies · About · Approach }</main>` + `<Footer/>`
 `app/work/nextstep/page.tsx`: the case study.
 
 ### Hero
@@ -117,20 +119,19 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 - ⚠️ **"healthcare and accessibility" was deliberately removed from the hero** (it was in the H1, then the sub-line, then cut). The specialism first appears below the fold. **Don't restore it.** Known trade-off: nothing above the fold names a sector.
 - A test caps the H1 at 16 words and pins the CTA above the fold at 375px and 1280×720.
 
-### Recognition — the award ribbon
+### Toolkit — the tool strip (`Toolkit.tsx`)
 
-The BCU award is a **looping cobalt ribbon** (React Bits `TextLoop`, see §7), not the display-type line it used to be. Reads `1st Place — BCU Innovation Fest 2025 ✦`, repeating.
+A horizontal marquee of tool logos between Hero and Selected work, using the vendored React Bits `LogoLoop` (§7). Replaced the Recognition/award section on 2026-08-14 — **Dilip's call, he judged the award not important enough for that slot.**
 
-- The section is **`bg-canvas`** — the same grey as Selected work and About, chosen so the three read as one surface. It was briefly `bg-mist` (too dark) then `bg-paper` (too white). The hairlines carry the edges, so **don't drop `border-y`**.
-- **No caption.** The "Awarded for NextStep…" line was cut on 2026-08-14 — the ribbon carries the award alone. Known trade-off: the NHS/stroke-rehab context now appears only in the case study.
-- **`ribbonWidth={58}` / `fontSize={32}`**, down from the component's 86/46. ⚠️ **Move those two together.** Thinning the ribbon alone crowds the type against its edges; the ratio is what keeps the padding.
-- **`pauseOnHover={false}`** — Dilip's call. The ribbon must never stall under the pointer. A test pins it.
+- **The award is not lost.** It still reads in the Selected work outcome line (`lib/projects.ts`) and three times in the case study. Removing the section cost the display-size treatment, not the credential.
+- **Eight tools, six logos.** `SiFigma` / `SiMiro` / `SiFramer` / `SiJira` / `SiClaudecode` / `SiCursor`. ⚠️ **FigJam and Illustrator run as mono wordmarks** — FigJam has no mark of its own (it sits under the Figma brand) and Adobe withdrew Illustrator from Simple Icons. The other icon families that do have an Illustrator glyph draw in a different style, which would put two visual languages in one strip. **Don't "fix" this by mixing families.**
+- ⚠️⚠️ **The wrapper needs `overflow-hidden`.** The component's track is `width: max-content`, so without it the strip puts the **whole page** into horizontal scroll. This shipped wrong once and took out five tests at once — the hero overflow check, both desktop a11y runs, and a case-study nav test that only failed as a knock-on. Upstream's usage example wraps it the same way.
+- **Icons inherit `currentColor`** from `text-ink/85` on the root, so both themes work with no `dark:` class. `fadeOutColor` is `var(--color-canvas)` — it **must** match the section's own surface or the edges fade toward the wrong colour.
+- `pauseOnHover={false}`, matching the rest of the site. `scaleOnHover` is pure CSS and unaffected.
+- Each icon gets a `title`, so every tool has an accessible name; copies past the first are `aria-hidden`. A test asserts each tool is announced **exactly once** — note an icon's `<title>` sits inside the wrapping span, so naive selectors count every logo twice.
+- Scales better on mobile than the old ribbon did: logos are fixed px, not a scaled viewBox.
+- ⚠️ **Tools now appear twice on the page** — here, and as text chips in Approach's Toolkit column. Approach adds the prose about *how* he uses them, so it is not pure duplication, but if the page feels repetitive that column is the thing to cut.
 
-- **Colours are passed as `var(--color-*)`, not hex** — `var(--color-cobalt)` for the ribbon, `var(--color-paper)` for the text. Verified: CSS custom properties **do** resolve in SVG presentation attributes, so the ribbon follows the theme (`#2f2be6` light → `#6f6bff` dark) with no `dark:` class. Measured contrast **7.57:1 light, 4.63:1 dark**. A test pins both stroke values.
-- ⚠️⚠️ **The crop height must be a `vw`, never a fixed px cap.** The wrapper trims the mostly-empty `1200x520` viewBox via `.text-loop`'s own `overflow: hidden`, but **the SVG scales to its width**, so the band's height is `(curviness * 2.2 + ribbonWidth) / 1200` of the element width — currently `190/1200 = 15.8vw`, set to `h-[17.5vw]` for ~5% clearance each side. A `clamp(…, 290px)` shipped first: it fit at 1280px and **sliced the peaks flat at 1920px and above**, which is how it reached Dilip. **Recompute this whenever `curviness` or `ribbonWidth` changes.** Tests assert containment at 768 / 1280 / 1920 / 2560 — verified to fail on the old value.
-- The phrase reaches assistive tech **once** via `role="img"` + `aria-label`; every `<text>` inside is `aria-hidden`. A test asserts it.
-- Type is **Inter 800 uppercase**, inherited from the body font. This is the one place the site uses an 800 weight.
-- Known trade-off: `preserveAspectRatio="meet"` means the whole thing scales down on a phone, so at 390px the type renders ~10px. Legible but small, and thinning the ribbon made it smaller still. `fontSize`/`ribbonWidth` are the levers, but they are fixed props, not responsive.
 
 ### Selected work (`CaseStudies.tsx`)
 
@@ -156,14 +157,16 @@ Hover-expand row list. NextStep + three "Coming soon" rows.
   2. SUS bars in `sus-scores.tsx` — stagger-fill
 - ⚠️ **This is a deliberate exception to the minimal-deps rule. Don't migrate Motion work to it.**
 
-### gsap — the third library (`components/ui/text-loop.jsx`)
+### Vendored React Bits components (`text-loop.jsx`, `logo-loop.jsx`)
 
-⚠️ **Added 2026-08-14 at Dilip's explicit instruction, overriding the "no third library" rule above. Do not remove it as cleanup.**
+⚠️ **`text-loop.jsx` + gsap are currently ORPHANED.** The award ribbon they powered was removed hours after it shipped (§6). Nothing imports either. They are kept because Dilip may want the ribbon back — **ask before deleting.** `logo-loop.jsx` is live and needs no extra dependency.
+
+⚠️ **gsap was added 2026-08-14 at Dilip's explicit instruction, overriding the "no third library" rule above. Do not remove it as silent cleanup.**
 
 - The full history: a native Motion rewrite of this effect was built first, shipped, and then **reverted at Dilip's request** (commits `dc82d68` → `75e5416`). He wanted the actual React Bits component, not an equivalent. **Don't re-propose the rewrite.**
-- `text-loop.jsx` is the **upstream React Bits source, kept byte-identical** apart from two forced changes: a `'use client'` directive (App Router) and the CSS import path (`./text-loop.css`, matching this repo's kebab-case). Keeping it verbatim means it can be re-pulled from reactbits.dev without re-porting.
-- Types live in a **separate `text-loop.d.ts`** for the same reason. Without it `tsc` infers `path` as *required* (it is the only prop with no default) and every call site fails to compile.
-- gsap is used for exactly one tween here. Nothing else in the codebase imports it.
+- Both are the **upstream React Bits source, kept byte-identical** apart from two forced changes each: a `'use client'` directive (App Router) and the CSS import path (kebab-case, matching this repo). Keeping them verbatim means they can be re-pulled from reactbits.dev without re-porting.
+- Types live in **separate `.d.ts` files** for the same reason. Without one, `tsc` infers `TextLoop`'s `path` as *required* (the only prop with no default) and every call site fails to compile.
+- ⚠️ **Don't reach for a native rewrite.** One was built for the ribbon, shipped, and reverted at Dilip's request (`dc82d68` → `75e5416`) — he wanted the real component. The same applies to `LogoLoop`.
 - v4 API: `import { animate, stagger } from "animejs"` — **no default export** (that's v3). Ease names are strings like `outQuart`.
 - Both animate **`scaleX` with `origin-left`**, never `width` — transform is composited, width triggers layout.
 - ⚠️ **Both must fail safe.** The collapse to `scaleX(0)` happens *only inside the effect*, so with JS off or reduced motion the content renders full-size. **Never move the collapsed state into markup or CSS** — that ships the section blank if the observer doesn't fire.
