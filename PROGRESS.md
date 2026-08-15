@@ -2,7 +2,7 @@
 
 Working doc for **Dilip Rapaka's UX / Product Designer portfolio**. Hand this to a new chat to continue the work.
 
-Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 73/73 · build green**
+Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 76/76 · build green**
 
 ---
 
@@ -103,7 +103,7 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 
 ## 6. Page composition
 
-`app/page.tsx`: `<Nav/>` + `<main id="main">{ Hero · Recognition · CaseStudies · About · Approach }</main>` + `<Footer/>`
+`app/page.tsx`: `<Nav/>` + `<main id="main">{ Hero · Recognition · TextLoop · CaseStudies · About · Approach }</main>` + `<Footer/>`
 `app/work/nextstep/page.tsx`: the case study.
 
 ### Hero
@@ -111,8 +111,19 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 - **H1:** *"Hi, I'm Dilip Rapaka. I turn hard problems into products people can actually use."* — italic on *hard*.
 - ⚠️ **The greeting is Dilip's explicit call.** I argued against it (display type spent on low-value words, template-ish) and was overruled twice. **Don't re-litigate.** Because the name is in the H1, the eyebrow is just `Product Designer` — don't add the name there too.
 - **Sub-line:** *"A product designer based in the UK. I keep things **simple and easy to use**. Currently open to junior roles."* (`simple and easy to use` in cobalt — the hero's only accent).
-- ⚠️ **"healthcare and accessibility" was deliberately removed from the hero** (it was in the H1, then the sub-line, then cut). The specialism first appears below the fold. **Don't restore it.** Known trade-off: nothing above the fold names a sector.
+- ⚠️ **"healthcare and accessibility" was deliberately removed from the hero** (it was in the H1, then the sub-line, then cut). The specialism first appears below the fold. **Don't restore it.** The **specialism band** (below) is what now names the sector, one screen down.
 - A test caps the H1 at 16 words and pins the CTA above the fold at 375px and 1280×720.
+
+### Specialism band (`components/ui/text-loop.tsx`)
+
+Text looping along a shallow wave, between Recognition and Selected work. Reads `Healthcare · Accessibility · Research-led · Data-rich interfaces`.
+
+- **It carries content, not decoration** — it is the first mention of healthcare on the page, which is why it takes `role="img"` + `aria-label` (the phrase reaches assistive tech **once**, not once per repetition; every `<text>` inside is `aria-hidden`). A test asserts the label matches `/healthcare/i`.
+- ⚠️ **This started as the React Bits `<TextLoop/>`, which was rebuilt from scratch instead of installed.** That component needs **gsap** — a *third* animation library (see §7) — and gsap was doing nothing but tweening one number linearly. Motion's `useAnimationFrame` does the same in four lines. Its defaults (`#5227FF` ribbon, 800-weight uppercase sans) were also the same house style §2 records as having been rejected as generic. **Don't swap the native one back out for a library component.**
+- Two `<textPath>` copies sit exactly **one path-length apart**, each stretched to span the path (`textLength`), so the join is always off-screen. A test pins that separation — get it wrong and a visible gap crosses the band.
+- `preserveAspectRatio="xMidYMid slice"`, **not** `meet`. With `meet` the whole viewBox scales down on a phone and the type drops to ~10px; `slice` crops the curve instead and keeps it readable.
+- Fails safe like `DrawRule`: offsets only move inside the frame callback, so reduced motion or no JS renders the text **static along the curve**, never blank. A test covers it.
+- Colour is `text-cobalt-ink` + `fill="currentColor"` — that token is remapped in `.dark` (`#a9a6ff`, 8.1:1), so it is correct in both themes with **no `dark:` class**.
 
 ### Selected work (`CaseStudies.tsx`)
 
@@ -136,7 +147,7 @@ Hover-expand row list. NextStep + three "Coming soon" rows.
 - **anime.js v4** (added at Dilip's request) is scoped to two moments only:
   1. `components/ui/draw-rule.tsx` — section hairlines draw in on scroll
   2. SUS bars in `sus-scores.tsx` — stagger-fill
-- ⚠️ **This is a deliberate exception to the minimal-deps rule. Don't migrate Motion work to it, and don't add a third library.**
+- ⚠️ **This is a deliberate exception to the minimal-deps rule. Don't migrate Motion work to it, and don't add a third library.** Held in practice: the specialism band (§6) was rebuilt on Motion rather than installing a component that wanted **gsap**.
 - v4 API: `import { animate, stagger } from "animejs"` — **no default export** (that's v3). Ease names are strings like `outQuart`.
 - Both animate **`scaleX` with `origin-left`**, never `width` — transform is composited, width triggers layout.
 - ⚠️ **Both must fail safe.** The collapse to `scaleX(0)` happens *only inside the effect*, so with JS off or reduced motion the content renders full-size. **Never move the collapsed state into markup or CSS** — that ships the section blank if the observer doesn't fire.
