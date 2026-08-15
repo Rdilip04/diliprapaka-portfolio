@@ -82,7 +82,7 @@ export function Figure({
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-4 text-center text-ink/70">
             <PlaceholderMark />
-            <span className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.14em]">
+            <span className="font-mono text-label uppercase leading-relaxed tracking-[0.14em]">
               {label}
             </span>
           </div>

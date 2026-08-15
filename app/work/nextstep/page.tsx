@@ -178,10 +178,10 @@ function MetaGrid() {
     <dl className="grid gap-px overflow-hidden border-t border-ink/12 sm:grid-cols-2 lg:grid-cols-4">
       {META.map((item) => (
         <div key={item.term} className="pt-5 sm:pr-6">
-          <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink/70">
+          <dt className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
             {item.term}
           </dt>
-          <dd className="mt-2 max-w-[34ch] font-sans text-[15px] leading-[1.6] text-ink/75">
+          <dd className="mt-2 max-w-[34ch] font-sans text-sm leading-[1.6] text-ink/75">
             {item.detail}
           </dd>
         </div>
@@ -193,10 +193,10 @@ function MetaGrid() {
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <p className="font-serif text-[clamp(2.25rem,6vw,4rem)] font-normal leading-[0.95] tracking-[-0.02em] text-cobalt-ink">
+      <p className="font-serif text-statement font-normal leading-[0.95] tracking-[-0.02em] text-cobalt-ink">
         {value}
       </p>
-      <p className="mt-3 max-w-[32ch] font-sans text-[15px] leading-relaxed text-ink/70">
+      <p className="mt-3 max-w-[32ch] font-sans text-sm leading-relaxed text-ink/70">
         {label}
       </p>
     </div>
@@ -224,7 +224,7 @@ function TermList({
             {/* One slot, two markers: an index where the list is a sequence,
                 an icon where it is a set. Keeps both variants on one grid. */}
             {numbered ? (
-              <span className="font-mono text-[11px] tabular-nums tracking-[0.14em] text-cobalt-ink">
+              <span className="font-mono text-label tabular-nums tracking-[0.14em] text-cobalt-ink">
                 {String(i + 1).padStart(2, "0")}
               </span>
             ) : item.icon ? (
@@ -235,7 +235,7 @@ function TermList({
             <h3 className="font-sans text-base font-medium leading-snug text-ink">
               {heading}
             </h3>
-            <p className="max-w-[58ch] font-sans text-[15px] leading-[1.7] text-ink/75">
+            <p className="max-w-[58ch] font-sans text-sm leading-[1.7] text-ink/75">
               {item.detail}
             </p>
           </li>
@@ -256,20 +256,20 @@ export default function NextStepCaseStudy() {
             <div className="anim-fade-up">
               <Link
                 href="/#work"
-                className="-my-3 inline-flex min-h-11 items-center font-mono text-[11px] uppercase tracking-[0.16em] text-ink/70 transition-colors hover:text-cobalt-ink"
+                className="-my-3 inline-flex min-h-11 items-center font-mono text-label uppercase tracking-[0.16em] text-ink/70 transition-colors hover:text-cobalt-ink"
               >
                 ← All work
               </Link>
 
-              <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
+              <p className="mt-10 font-mono text-label uppercase tracking-[0.18em] text-ink/70">
                 UX/UI case study · Team project
               </p>
 
-              <h1 className="mt-5 font-serif text-[clamp(3rem,10vw,7rem)] font-normal leading-[0.92] tracking-[-0.035em]">
+              <h1 className="mt-5 font-serif text-hero font-normal leading-[0.92] tracking-[-0.035em]">
                 NextStep
               </h1>
 
-              <p className="mt-7 max-w-[52ch] font-sans text-[clamp(1.05rem,2.2vw,1.375rem)] leading-[1.5] text-ink/75">
+              <p className="mt-7 max-w-[52ch] font-sans text-lead leading-[1.5] text-ink/75">
                 Designing core screens for a rehabilitation app that helps
                 outpatients stay on track with recovery after discharge.
               </p>
@@ -332,7 +332,7 @@ export default function NextStepCaseStudy() {
           </Reveal>
 
           <Reveal className="mt-16">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink/70">
+            <h3 className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
               Constraints
             </h3>
             <div className="mt-6">
@@ -358,7 +358,7 @@ export default function NextStepCaseStudy() {
           <Reveal className="mt-12">
             <div className="grid gap-10 border-t border-ink/12 pt-10 md:grid-cols-2 md:gap-16">
               <div>
-                <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink/70">
+                <h3 className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
                   Research
                 </h3>
                 <ul className="mt-5 flex flex-col gap-4">
@@ -369,7 +369,7 @@ export default function NextStepCaseStudy() {
                   ].map((item) => (
                     <li
                       key={item}
-                      className="font-sans text-[15px] leading-[1.7] text-ink/75"
+                      className="font-sans text-sm leading-[1.7] text-ink/75"
                     >
                       {item}
                     </li>
@@ -377,7 +377,7 @@ export default function NextStepCaseStudy() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink/70">
+                <h3 className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
                   UI/UX design
                 </h3>
                 <ul className="mt-5 flex flex-col gap-4">
@@ -389,7 +389,7 @@ export default function NextStepCaseStudy() {
                   ].map((item) => (
                     <li
                       key={item}
-                      className="font-sans text-[15px] leading-[1.7] text-ink/75"
+                      className="font-sans text-sm leading-[1.7] text-ink/75"
                     >
                       {item}
                     </li>
@@ -438,7 +438,7 @@ export default function NextStepCaseStudy() {
           </Reveal>
 
           <Reveal className="mt-14">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink/70">
+            <h3 className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
               How might we
             </h3>
             <ul className="mt-6 border-t border-ink/12">
@@ -447,20 +447,20 @@ export default function NextStepCaseStudy() {
                   key={item.q}
                   className="grid gap-x-8 gap-y-2 border-b border-ink/12 py-6 md:grid-cols-[minmax(0,1fr)_14rem]"
                 >
-                  <p className="max-w-[52ch] font-serif text-[clamp(1.15rem,2vw,1.5rem)] font-normal leading-[1.25] tracking-[-0.01em]">
+                  <p className="max-w-[52ch] font-serif text-lead font-normal leading-[1.25] tracking-[-0.01em]">
                     {item.q}
                   </p>
-                  <p className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.12em] text-ink/70 md:text-right">
+                  <p className="font-mono text-label uppercase leading-relaxed tracking-[0.12em] text-ink/70 md:text-right">
                     From — {item.from}
                   </p>
                 </li>
               ))}
             </ul>
-            <p className="mt-6 max-w-[62ch] font-sans text-[15px] leading-[1.7] text-ink/75">
+            <p className="mt-6 max-w-[62ch] font-sans text-sm leading-[1.7] text-ink/75">
               The Homepage answers the first, Community the third, and Exercises
               picks up the second.
             </p>
-            <p className="mt-6 max-w-[62ch] font-serif text-[15px] italic leading-relaxed text-ink/70">
+            <p className="mt-6 max-w-[62ch] font-serif text-sm italic leading-relaxed text-ink/70">
               The fourth finding — clinicians losing sight of a patient once
               they leave hospital — needed a clinician-side view, which sat
               outside the screens I owned. It is not answered here. A clinician
@@ -517,14 +517,14 @@ export default function NextStepCaseStudy() {
               can use an app independently during a vulnerable time in their
               life.
             </Body>
-            <p className="mt-8 max-w-[46ch] font-serif text-[clamp(1.35rem,2.6vw,1.9rem)] font-normal leading-[1.2] tracking-[-0.01em] text-cobalt-ink">
+            <p className="mt-8 max-w-[46ch] font-serif text-subhead font-normal leading-[1.2] tracking-[-0.01em] text-cobalt-ink">
               Joining a health community needs more trust-building than a
               standard social app.
             </p>
           </Reveal>
 
           <Reveal className="mt-16">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink/70">
+            <h3 className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
               What I&apos;d do differently
             </h3>
             <div className="mt-6 grid gap-8 border-t border-ink/12 pt-8 md:grid-cols-2 md:gap-12">
@@ -555,12 +555,12 @@ export default function NextStepCaseStudy() {
         <Section surface="mist">
           <Reveal>
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-              <p className="max-w-[40ch] font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-normal leading-[1.1] tracking-[-0.015em]">
+              <p className="max-w-[40ch] font-serif text-subhead font-normal leading-[1.1] tracking-[-0.015em]">
                 That&apos;s NextStep. More work is on the way.
               </p>
               <Link
                 href="/#work"
-                className="-my-3 inline-flex min-h-11 items-center font-mono text-[11px] uppercase tracking-[0.16em] text-cobalt-ink transition-opacity hover:opacity-70"
+                className="-my-3 inline-flex min-h-11 items-center font-mono text-label uppercase tracking-[0.16em] text-cobalt-ink transition-opacity hover:opacity-70"
               >
                 ← Back to all work
               </Link>

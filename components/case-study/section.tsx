@@ -25,7 +25,7 @@ export function Section({
 // Mono eyebrow. Held at /70 — /50 measured 3.32:1 and fails AA at this size.
 export function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
+    <p className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
       {children}
     </p>
   );
@@ -33,7 +33,7 @@ export function Eyebrow({ children }: { children: React.ReactNode }) {
 
 export function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mt-4 max-w-3xl font-serif text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-[1.05] tracking-[-0.015em]">
+    <h2 className="mt-4 max-w-3xl font-serif text-title font-normal leading-[1.05] tracking-[-0.015em]">
       {children}
     </h2>
   );

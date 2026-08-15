@@ -39,10 +39,10 @@ export default function About() {
             viewport={{ once: true, margin: "-12%" }}
             className="md:col-span-3"
           >
-            <h2 className="font-serif text-3xl font-normal tracking-[-0.01em]">
+            <h2 className="font-serif text-title font-normal tracking-[-0.01em]">
               About
             </h2>
-            <p className="mt-4 font-mono text-[11px] uppercase leading-relaxed tracking-[0.16em] text-ink/70">
+            <p className="mt-4 font-mono text-label uppercase leading-relaxed tracking-[0.16em] text-ink/70">
               Dilip Rapaka
               <br />
               Product Designer, UK
@@ -72,7 +72,7 @@ export default function About() {
             <motion.p
               {...reveal(0.05)}
               viewport={{ once: true, margin: "-12%" }}
-              className="max-w-3xl text-pretty font-serif text-[clamp(1.5rem,2.8vw,2.35rem)] font-normal leading-[1.28] tracking-[-0.01em] text-ink"
+              className="max-w-3xl text-pretty font-serif text-subhead font-normal leading-[1.28] tracking-[-0.01em] text-ink"
             >
               I craft{" "}
               <span className="text-cobalt-ink">
@@ -90,12 +90,12 @@ export default function About() {
                   key={block.heading}
                   {...reveal(0.1 + i * 0.08)}
                   viewport={{ once: true, margin: "-8%" }}
-                  className="grid gap-2 border-b border-ink/12 py-8 md:grid-cols-[7rem_1fr] md:gap-6"
+                  className="grid gap-2 py-8 md:grid-cols-[7rem_1fr] md:gap-6"
                 >
                   <dt className="font-sans text-base font-semibold text-ink">
                     {block.heading}
                   </dt>
-                  <dd className="max-w-xl font-sans text-[15px] leading-relaxed text-ink/75">
+                  <dd className="max-w-xl font-sans text-sm leading-relaxed text-ink/75">
                     {block.body}
                   </dd>
                 </motion.div>
@@ -112,7 +112,7 @@ export default function About() {
               <a
                 href="/Dilip-Rapaka-CV.pdf"
                 download
-                className="mt-8 inline-flex min-h-11 w-fit items-center gap-2 font-sans text-[15px] font-medium text-cobalt-ink transition-opacity hover:opacity-70"
+                className="mt-8 inline-flex min-h-11 w-fit items-center gap-2 font-sans text-sm font-medium text-cobalt-ink transition-opacity hover:opacity-70"
               >
                 Download Resume (PDF)
                 <span aria-hidden="true">↓</span>

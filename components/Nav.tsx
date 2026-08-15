@@ -161,7 +161,7 @@ export default function Nav() {
             flung to the window edge by the header's justify-between. */}
         <div className="ml-auto flex items-center gap-6">
           <div
-            className={`hidden items-center gap-7 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors sm:flex ${controls}`}
+            className={`hidden items-center gap-7 font-mono text-label uppercase tracking-[0.14em] transition-colors sm:flex ${controls}`}
           >
             <ul className="flex items-center gap-7">
               {LINKS.map((link) => {
@@ -243,7 +243,7 @@ export default function Nav() {
                 <a
                   href={`mailto:${EMAIL}`}
                   onClick={() => setOpen(false)}
-                  className="font-mono text-xs uppercase tracking-[0.16em] text-ink/70"
+                  className="font-mono text-label uppercase tracking-[0.16em] text-ink/70"
                 >
                   {EMAIL}
                 </a>

@@ -116,9 +116,34 @@ Every load starts light. `prefers-color-scheme` is ignored, and the choice is **
 
 Familjen Grotesk was removed to honour the mentor's "two typefaces maximum". Do not add a second sans.
 
+### Type scale
+
+> **Locked — every size comes from the ladder in `@theme`.** No `text-[13px]`, no new `clamp()` curve.
+
+| Token | Value | Role |
+|---|---|---|
+| `text-label` | 11px | Mono eyebrows, meta, tags |
+| `text-sm` | 14px | Secondary copy (Tailwind's own) |
+| `text-base` | 16px | Body (Tailwind's own) |
+| `text-lead` | `clamp(1.15rem, 2vw, 1.5rem)` | Stand-first paragraphs |
+| `text-subhead` | `clamp(1.4rem, 2.8vw, 2.2rem)` | h3s, statement copy |
+| `text-heading` | `clamp(1.5rem, 4vw, 3rem)` | Work-index project titles |
+| `text-title` | `clamp(1.75rem, 3.4vw, 2.75rem)` | Section headings |
+| `text-display` | `clamp(2rem, 4.6vw, 3.6rem)` | Home h1 |
+| `text-statement` | `clamp(2rem, 5.5vw, 4.5rem)` | Footer h2 and email |
+| `text-hero` | `clamp(3rem, 10vw, 7rem)` | Case-study h1 — the largest type |
+
+`text-lg` / `text-xl` / `text-2xl` survive on three one-off pieces of chrome (nav wordmark, placeholder numeral, mobile nav link) where the step is genuinely distinct.
+
+This replaced **23 ad-hoc declarations — 17 rendered sizes and 16 bespoke `clamp()` curves**, several near-identical (`1.4rem/2.6vw/2rem` sat beside `1.4rem/2.6vw/2.15rem`; three variants shared a `1.35rem` floor). Near-duplicates read as drift rather than intent, which is the one thing a minimal design cannot afford. The homepage now renders **11 distinct sizes, down from 17**.
+
+> **Trap — `--text-statement` has a `2rem` floor for a reason.** The footer email is a single unbreakable 27-character string; at `2.25rem` it overflows 375px on *both* routes. Two tests pin it.
+
 ### Motifs
 
-- **Hairlines** (`border-ink/12`) are the structural grid language.
+- **Hairlines** (`border-ink/12`) mark **section boundaries**, not every row.
+  > **Locked — rules are rationed.** The homepage carried **34 borders**; it now carries **14**. What went: six underlines and six bordered icon chips in Approach's method list, five outlined toolkit chips, the column divider beside them, and the two underlined rows in About. Spacing carries that rhythm instead. What stayed earns its place — the work-index row separators, the thumbnail frames, two section boundaries and the footer's structure.
+  > A repeated rule inside a list is the editorial-template tell the `/impeccable` audit flagged (§10). **Before adding a border, try spacing.**
 - **One radius:** `rounded-lg` (8px). `rounded-full` is reserved for genuine pills and dots.
 - **Focus ring:** cobalt, via `:focus-visible` in globals.
 - Everything respects `prefers-reduced-motion`.

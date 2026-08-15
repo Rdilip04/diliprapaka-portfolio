@@ -99,7 +99,7 @@ export default function Approach() {
         <motion.h2
           {...reveal(0)}
           viewport={{ once: true, margin: "-12%" }}
-          className="font-serif text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-none tracking-[-0.01em]"
+          className="font-serif text-title font-normal leading-none tracking-[-0.01em]"
         >
           How I work
         </motion.h2>
@@ -108,7 +108,7 @@ export default function Approach() {
         <motion.p
           {...reveal(0.05)}
           viewport={{ once: true, margin: "-12%" }}
-          className="mt-10 max-w-3xl text-pretty font-serif text-[clamp(1.4rem,2.6vw,2.15rem)] font-normal leading-[1.3] tracking-[-0.01em]"
+          className="mt-10 max-w-3xl text-pretty font-serif text-subhead font-normal leading-[1.3] tracking-[-0.01em]"
         >
           I balance{" "}
           <span className="text-cobalt-ink">broad exploration</span> with{" "}
@@ -120,19 +120,22 @@ export default function Approach() {
         <div className="mt-16 grid gap-10 border-t border-ink/12 pt-10 md:grid-cols-[1.5fr_1fr] md:gap-16">
           {/* Methods — icon list with micro-interactions */}
           <motion.div {...reveal(0.1)} viewport={{ once: true, margin: "-10%" }}>
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
+            <span className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
               Methods
             </span>
             <ul className="mt-6 grid grid-cols-1 gap-x-10 sm:grid-cols-2">
               {METHODS.map((method) => (
                 <li
                   key={method.label}
-                  className="group flex items-center gap-3.5 border-b border-ink/12 py-3.5"
+                  className="group flex items-center gap-3.5 py-4"
                 >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-ink/12 bg-canvas text-ink/70 transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:border-cobalt/40 group-hover:text-cobalt-ink">
+                  {/* Bare icon, not a bordered chip: six outlined boxes plus
+                      six underlines made this list the densest block on the
+                      page. Spacing carries the rhythm instead. */}
+                  <span className="grid h-9 w-9 shrink-0 place-items-center text-ink/70 transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:text-cobalt-ink">
                     {method.icon}
                   </span>
-                  <span className="font-sans text-[15px] text-ink/85 transition-colors duration-300 group-hover:text-cobalt-ink">
+                  <span className="font-sans text-sm text-ink/85 transition-colors duration-300 group-hover:text-cobalt-ink">
                     {method.label}
                   </span>
                 </li>
@@ -144,22 +147,25 @@ export default function Approach() {
           <motion.div
             {...reveal(0.16)}
             viewport={{ once: true, margin: "-10%" }}
-            className="md:border-l md:border-ink/12 md:pl-16"
+            className="md:pl-16"
           >
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
+            <span className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
               Toolkit
             </span>
-            <ul className="mt-6 flex flex-wrap gap-2.5">
+            {/* Set as a run of names rather than five outlined chips. The
+                middot is the same separator the meta rows already use, so the
+                list still reads as a list without five more boxes. */}
+            <ul className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               {TOOLS.map((tool) => (
                 <li
                   key={tool}
-                  className="rounded-lg border border-ink/15 bg-canvas px-4 py-2 font-sans text-sm font-medium text-ink transition-colors duration-300 hover:border-cobalt/40 hover:text-cobalt-ink"
+                  className="font-sans text-sm font-medium text-ink after:ml-3 after:text-ink/30 after:content-['·'] last:after:content-none"
                 >
                   {tool}
                 </li>
               ))}
             </ul>
-            <p className="mt-5 max-w-xs font-sans text-[13px] leading-relaxed text-ink/70">
+            <p className="mt-5 max-w-xs font-sans text-sm leading-relaxed text-ink/70">
               Figma for design. I actively use Claude Code and Cursor to bridge
               the gap between design and front-end, including{" "}
               <span className="font-medium text-ink">

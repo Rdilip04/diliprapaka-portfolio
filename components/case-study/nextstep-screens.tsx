@@ -10,7 +10,7 @@ const PROTOTYPE_URL: string =
 
 function ScreenTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="font-serif text-[clamp(1.4rem,2.6vw,2rem)] font-normal leading-[1.1] tracking-[-0.01em]">
+    <h3 className="font-serif text-subhead font-normal leading-[1.1] tracking-[-0.01em]">
       {children}
     </h3>
   );
@@ -65,7 +65,7 @@ export function NextStepScreens() {
             href={PROTOTYPE_URL}
             target="_blank"
             rel="noreferrer"
-            className="mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-cobalt-ink transition-opacity hover:opacity-70"
+            className="mt-8 inline-flex min-h-11 items-center gap-2 font-mono text-label uppercase tracking-[0.16em] text-cobalt-ink transition-opacity hover:opacity-70"
           >
             Open the interactive prototype
             <span aria-hidden>↗</span>

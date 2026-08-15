@@ -135,14 +135,14 @@ export default function Hero() {
             {/* The name is in the H1, so it is not repeated here. Held at /70:
                 /55 measures 3.90:1 and fails AA. */}
             <p
-              className="anim-fade-up font-mono text-[11px] uppercase tracking-[0.2em] text-ink/70"
+              className="anim-fade-up font-mono text-label uppercase tracking-[0.2em] text-ink/70"
               style={{ animationDelay: "0.05s" }}
             >
               Product Designer
             </p>
 
             <h1
-              className="anim-fade-up mt-5 font-serif text-[clamp(2rem,4.6vw,3.6rem)] font-normal leading-[1.1] tracking-[-0.02em] text-ink"
+              className="anim-fade-up mt-5 font-serif text-display font-normal leading-[1.1] tracking-[-0.02em] text-ink"
               style={{ animationDelay: "0.12s" }}
             >
               {/* A real space between the words, not just a margin. These are
@@ -182,7 +182,7 @@ export default function Hero() {
             >
               <a
                 href="#work"
-                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 min-h-11 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-paper transition-colors duration-300 hover:bg-cobalt-ink"
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 min-h-11 font-mono text-label font-semibold uppercase tracking-[0.16em] text-paper transition-colors duration-300 hover:bg-cobalt-ink"
               >
                 Selected work
                 <span
@@ -194,7 +194,7 @@ export default function Hero() {
               </a>
               <MagneticLink
                 href={`mailto:${EMAIL}`}
-                className="group inline-flex min-h-11 items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-ink/70 transition-colors hover:text-ink"
+                className="group inline-flex min-h-11 items-center gap-2 font-mono text-label font-semibold uppercase tracking-[0.16em] text-ink/70 transition-colors hover:text-ink"
               >
                 Let&apos;s talk
                 <span
@@ -234,7 +234,7 @@ export default function Hero() {
 
       {/* Scroll cue */}
       <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center gap-2.5 px-6 pb-4 text-ink/70">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em]">
+        <span className="font-mono text-label uppercase tracking-[0.2em]">
           Scroll
         </span>
         {!reduce ? (

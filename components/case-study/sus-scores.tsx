@@ -30,7 +30,7 @@ function Row({
   return (
     <li className="grid grid-cols-[7.5rem_1fr_3.5rem] items-center gap-4 py-2.5">
       <span
-        className={`font-mono text-[11px] uppercase tracking-[0.12em] ${
+        className={`font-mono text-label uppercase tracking-[0.12em] ${
           emphasis ? "text-ink" : "text-ink/70"
         }`}
       >
@@ -104,10 +104,10 @@ export function SusScores() {
   return (
     <div ref={ref} className="rounded-lg border border-ink/12 p-6 md:p-8">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-        <h3 className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
+        <h3 className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
           System Usability Scale — Round 2
         </h3>
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink/70">
+        <p className="font-mono text-label uppercase tracking-[0.14em] text-ink/70">
           Benchmark {BENCHMARK}
         </p>
       </div>

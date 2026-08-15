@@ -24,6 +24,27 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-serif-src), Georgia, "Times New Roman", serif;
   --font-mono: var(--font-mono-src), ui-monospace, "SFMono-Regular", monospace;
+
+  /* Type scale — every size on the site comes from this ladder.
+     It replaced 23 ad-hoc declarations (17 rendered sizes, 16 bespoke clamp
+     curves, several of them near-identical: 1.4/2.6vw/2rem next to
+     1.4/2.6vw/2.15rem). Near-duplicates read as drift rather than intent,
+     which is the thing a minimal design cannot afford.
+
+     Add a step only if an existing one genuinely cannot carry the role. */
+  --text-label: 0.6875rem; /* 11px — mono eyebrows, meta, tags */
+  --text-label--line-height: 1rem;
+  /* Secondary copy is Tailwind's own `text-sm` (14px) and body is `text-base`
+     (16px). The old 15px sat one pixel from body, which is drift, not a step. */
+  --text-lead: clamp(1.15rem, 2vw, 1.5rem); /* stand-first paragraphs */
+  --text-subhead: clamp(1.4rem, 2.8vw, 2.2rem); /* h3s, statement copy */
+  --text-heading: clamp(1.5rem, 4vw, 3rem); /* work-index project titles */
+  --text-title: clamp(1.75rem, 3.4vw, 2.75rem); /* section headings */
+  --text-display: clamp(2rem, 4.6vw, 3.6rem); /* home h1 */
+  /* The 2rem floor is load-bearing: the footer email is one long unbreakable
+     string, and at 2.25rem it overflows 375px. A test pins it on both routes. */
+  --text-statement: clamp(2rem, 5.5vw, 4.5rem); /* footer h2 + email */
+  --text-hero: clamp(3rem, 10vw, 7rem); /* case-study h1, the largest type */
 }
 
 :root {

@@ -13,7 +13,7 @@ function Findings({
 }) {
   return (
     <div>
-      <h4 className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink/70">
+      <h4 className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
         {heading}
       </h4>
       <ul className="mt-4 flex flex-col gap-3">
@@ -25,7 +25,7 @@ function Findings({
                 accent ? "bg-cobalt" : "bg-ink/30"
               }`}
             />
-            <p className="font-sans text-[15px] leading-[1.65] text-ink/75">
+            <p className="font-sans text-sm leading-[1.65] text-ink/75">
               {item}
             </p>
           </li>
@@ -56,14 +56,14 @@ function Round({
   return (
     <Reveal className="border-t border-ink/12 pt-10 md:pt-12">
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-        <span className="font-mono text-[11px] tabular-nums tracking-[0.14em] text-cobalt-ink">
+        <span className="font-mono text-label tabular-nums tracking-[0.14em] text-cobalt-ink">
           {index}
         </span>
-        <h3 className="font-serif text-[clamp(1.35rem,2.4vw,1.85rem)] font-normal leading-[1.1] tracking-[-0.01em]">
+        <h3 className="font-serif text-subhead font-normal leading-[1.1] tracking-[-0.01em]">
           {title}
         </h3>
       </div>
-      <p className="mt-3 max-w-[60ch] font-sans text-[15px] leading-[1.65] text-ink/70">
+      <p className="mt-3 max-w-[60ch] font-sans text-sm leading-[1.65] text-ink/70">
         {meta}
       </p>
       <div className="mt-8 grid gap-8 md:grid-cols-2 md:gap-12">
@@ -71,7 +71,7 @@ function Round({
         <Findings heading="What we changed" items={changed} accent />
       </div>
       {note && (
-        <p className="mt-8 max-w-[62ch] border-t border-ink/12 pt-6 font-serif text-[15px] italic leading-relaxed text-ink/70">
+        <p className="mt-8 max-w-[62ch] border-t border-ink/12 pt-6 font-serif text-sm italic leading-relaxed text-ink/70">
           {note}
         </p>
       )}
