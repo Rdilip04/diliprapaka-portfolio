@@ -1,6 +1,5 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import Toolkit from "@/components/Toolkit";
 import CaseStudies from "@/components/CaseStudies";
 import About from "@/components/About";
 import Approach from "@/components/Approach";
@@ -12,7 +11,6 @@ export default function Home() {
       <Nav />
       <main id="main">
         <Hero />
-        <Toolkit />
         <CaseStudies />
         <About />
         <Approach />

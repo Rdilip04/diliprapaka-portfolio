@@ -2,16 +2,6 @@ import { test, expect, type Page } from "@playwright/test";
 
 const RULE = "#work [aria-hidden].h-px";
 const BAR = "[data-sus-bar]";
-const LOOP = ".logoloop";
-
-/** How far the tool strip has travelled, read off its transform. */
-const loopOffset = (page: Page) =>
-  page.evaluate(
-    (sel) =>
-      getComputedStyle(document.querySelector(`${sel} .logoloop__track`)!)
-        .transform,
-    LOOP,
-  );
 
 /**
  * Scroll from inside the page rather than with scrollIntoViewIfNeeded: these
@@ -85,76 +75,6 @@ test.describe("Motion — anime.js reveals finish", () => {
   });
 });
 
-test.describe("Motion — the tool strip", () => {
-  test("scrolls the logos across", async ({ page }) => {
-    await page.goto("/");
-    await scrollTo(page, LOOP);
-
-    const before = await loopOffset(page);
-    await page.waitForTimeout(600);
-    expect(await loopOffset(page)).not.toBe(before);
-  });
-
-  test("keeps moving while the pointer sits on it", async ({ page }) => {
-    await page.goto("/");
-    await scrollTo(page, LOOP);
-    await page.locator(LOOP).hover();
-
-    const before = await loopOffset(page);
-    await page.waitForTimeout(600);
-
-    // pauseOnHover is off, matching the rest of the site's motion.
-    expect(await loopOffset(page)).not.toBe(before);
-  });
-
-  test("names every tool exactly once for assistive tech", async ({ page }) => {
-    await page.goto("/");
-    // The strip renders several copies to fill the width; all but the first
-    // are aria-hidden, so each tool must be announced once and only once.
-    const names = await page.evaluate(() =>
-      [...document.querySelectorAll(".logoloop__list:not([aria-hidden=true])")]
-        .flatMap((list) => [...list.querySelectorAll(".logoloop__item")])
-        // The hover label is the accessible name; the icon beside it is
-        // aria-hidden, so each item yields exactly one string.
-        .map((item) => item.textContent?.trim())
-        .filter((t): t is string => !!t),
-    );
-
-    for (const tool of [
-      "Figma",
-      "Miro",
-      "Framer",
-      "Adobe",
-      "Jira",
-      "Claude Code",
-      "Cursor",
-    ]) {
-      expect(names.filter((n) => n === tool), `${tool} appears once`).toHaveLength(1);
-    }
-    expect(names, "no tool left unnamed").toHaveLength(7);
-  });
-
-  test("reveals the tool name on hover", async ({ page }) => {
-    // Frozen first: Playwright's hover waits for the target to stop moving,
-    // and a marquee never does. Reduced motion pins the track, which also
-    // proves the label still works in that mode.
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/");
-    await scrollTo(page, LOOP);
-
-    const item = page
-      .locator(`${LOOP} .logoloop__list:not([aria-hidden=true]) .logoloop__item`)
-      .first();
-    const label = item.locator("[data-tool-label]");
-
-    await expect(label).toHaveText("Figma");
-    // Hidden by opacity only, so it stays reachable by assistive tech.
-    await expect(label).toHaveCSS("opacity", "0");
-    await item.hover();
-    await expect(label).toHaveCSS("opacity", "1");
-  });
-});
-
 test.describe("Motion — reduced motion never hides content", () => {
   // emulateMedia rather than test.use({ reducedMotion }): the describe-level
   // option did not reach matchMedia in this config (verified — the page kept
@@ -174,18 +94,6 @@ test.describe("Motion — reduced motion never hides content", () => {
     for (const t of bars) {
       expect(isIdentity(t), `bar transform was "${t}"`).toBe(true);
     }
-  });
-
-  test("holds the tool strip still without emptying it", async ({ page }) => {
-    await page.goto("/");
-    await scrollTo(page, LOOP);
-
-    const before = await loopOffset(page);
-    await page.waitForTimeout(500);
-    expect(await loopOffset(page)).toBe(before);
-
-    // Frozen is the point; blank would not be.
-    await expect(page.locator(`${LOOP} .logoloop__item`).first()).toBeVisible();
   });
 
   test("never collapses the section rule", async ({ page }) => {
