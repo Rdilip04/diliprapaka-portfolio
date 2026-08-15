@@ -93,6 +93,16 @@ body {
   border-radius: 2px;
 }
 
+/* ClickSpark paints its canvas as its FIRST child, so every section that
+   follows — all of which carry an opaque background — would cover the sparks
+   completely. Lifting it above the nav (z-50) is the only change the vendored
+   component needs, and it sets no inline z-index, so this wins without
+   !important. Kept here rather than in the component so that file stays
+   byte-identical to upstream. */
+[data-spark-root] > div > canvas {
+  z-index: 60;
+}
+
 /* Entrance reveals — CSS-driven so they run at first paint (no JS/hydration
    gate) and can never ship the content blank. Reduced-motion is handled by the
    global rule above, which collapses the duration so content snaps in visible. */

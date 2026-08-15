@@ -75,6 +75,49 @@ test.describe("Motion — anime.js reveals finish", () => {
   });
 });
 
+test.describe("Motion — click sparks", () => {
+  test("paints sparks where the pointer clicks", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForTimeout(500);
+
+    const lit = await page.evaluate(async () => {
+      const canvas = document.querySelector<HTMLCanvasElement>(
+        "[data-spark-root] canvas",
+      )!;
+      const root = document.querySelector("[data-spark-root] > div")!;
+      const rect = canvas.getBoundingClientRect();
+      const [x, y] = [640, 300];
+
+      root.dispatchEvent(
+        new MouseEvent("click", {
+          clientX: x + rect.left,
+          clientY: y + rect.top,
+          bubbles: true,
+        }),
+      );
+      await new Promise((r) => setTimeout(r, 120));
+
+      // Count painted pixels rather than trusting the element exists: the
+      // canvas is the first child, so an opaque section would hide it and the
+      // markup would still look right.
+      const data = canvas.getContext("2d")!.getImageData(x - 60, y - 60, 120, 120).data;
+      let count = 0;
+      for (let i = 3; i < data.length; i += 4) if (data[i] > 0) count++;
+      return count;
+    });
+
+    expect(lit).toBeGreaterThan(0);
+  });
+
+  test("lets clicks through to the page underneath", async ({ page }) => {
+    await page.goto("/");
+    // The canvas covers the whole document, so if it ever caught pointer
+    // events the entire site would stop responding.
+    await page.getByRole("link", { name: /selected work/i }).first().click();
+    await expect(page.locator("#work")).toBeInViewport();
+  });
+});
+
 test.describe("Motion — reduced motion never hides content", () => {
   // emulateMedia rather than test.use({ reducedMotion }): the describe-level
   // option did not reach matchMedia in this config (verified — the page kept
@@ -94,6 +137,14 @@ test.describe("Motion — reduced motion never hides content", () => {
     for (const t of bars) {
       expect(isIdentity(t), `bar transform was "${t}"`).toBe(true);
     }
+  });
+
+  test("mounts no spark canvas at all", async ({ page }) => {
+    await page.goto("/");
+    // Opted out entirely rather than rendered-but-still: no canvas, no rAF
+    // loop, no document-sized buffer.
+    await expect(page.locator("[data-spark-root]")).toHaveCount(0);
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("never collapses the section rule", async ({ page }) => {

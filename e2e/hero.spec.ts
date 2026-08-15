@@ -34,6 +34,29 @@ test.describe("Hero — positioning", () => {
     );
   });
 
+  test("picks the name out of the headline in the accent colour", async ({
+    page,
+  }) => {
+    const colours = await page.evaluate(() => {
+      const spans = [...document.querySelectorAll("h1 span")];
+      const colourOf = (t: string) => {
+        const el = spans.find((s) => s.textContent?.trim() === t);
+        return el ? getComputedStyle(el).color : null;
+      };
+      return {
+        first: colourOf("Dilip"),
+        last: colourOf("Rapaka."),
+        plain: colourOf("turn"),
+      };
+    });
+
+    // Both halves of the name, and clearly not the same as the surrounding
+    // words — otherwise the "highlight" is invisible.
+    expect(colours.first).toBe(colours.last);
+    expect(colours.first).not.toBe(colours.plain);
+    expect(colours.first).not.toBeNull();
+  });
+
   test("does not repeat the name in the eyebrow above it", async ({ page }) => {
     const eyebrow = page.locator("#top").getByText("Product Designer", {
       exact: true,

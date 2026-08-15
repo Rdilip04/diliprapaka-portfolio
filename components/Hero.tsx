@@ -18,8 +18,8 @@ type Word = string | { t: string; em?: boolean; accent?: boolean };
 const H1: Word[] = [
   "Hi,",
   "I’m",
-  "Dilip",
-  "Rapaka.",
+  { t: "Dilip", accent: true },
+  { t: "Rapaka.", accent: true },
   "I",
   "turn",
   { t: "hard", em: true },

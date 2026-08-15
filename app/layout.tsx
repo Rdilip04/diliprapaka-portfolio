@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Martian_Mono, Instrument_Serif } from "next/font/google";
+import SparkLayer from "@/components/SparkLayer";
 import "./globals.css";
 
 const inter = Inter({
@@ -86,7 +87,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <SparkLayer>{children}</SparkLayer>
+      </body>
     </html>
   );
 }

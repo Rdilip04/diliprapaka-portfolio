@@ -2,7 +2,7 @@
 
 Working doc for **Dilip Rapaka's UX / Product Designer portfolio**. Hand this to a new chat to continue the work.
 
-Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 73/73 · build green**
+Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 77/77 · build green**
 
 ---
 
@@ -23,7 +23,9 @@ The site was originally a dark, WebGL-heavy "React-Bits template" (cosmic orange
 
 **Do NOT reintroduce:** LiquidEther, cosmic orange, dark-hero fluid, the Tetris loader, or a mono eyebrow above every section.
 
-**On 2026-08-14 three React Bits components were tried in the Hero→Work slot and all three were removed the same day** — a native curved-text band, then the real `TextLoop` as an award ribbon, then `LogoLoop` as a tool strip. Dilip's verdict each time was that the section did not earn its place; the last word was *"let's keep it simple."* The award section they replaced is gone too. **That slot is now empty on purpose — don't fill it without asking.** Full history in `git log` between `dc82d68` and `HEAD`.
+One React Bits component **is** in use and staying: `ClickSpark`, site-wide (§7). It needs no dependency and is recoloured to the cobalt tokens.
+
+**On 2026-08-14 three other React Bits components were tried in the Hero→Work slot and all three were removed the same day** — a native curved-text band, then the real `TextLoop` as an award ribbon, then `LogoLoop` as a tool strip. Dilip's verdict each time was that the section did not earn its place; the last word was *"let's keep it simple."* The award section they replaced is gone too. **That slot is now empty on purpose — don't fill it without asking.** Full history in `git log` between `dc82d68` and `HEAD`.
 
 Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (Story Spine, 3-Lever Polish, POV Stack, 3-Click path, Squint Test) and **The Portfolio Blueprint** (7 blocks). Strong on positioning, "site is the sample", about/photo, CTA. **Weak only on volume of real projects** — content-gated, not design-gated.
 
@@ -112,7 +114,8 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 
 - **H1:** *"Hi, I'm Dilip Rapaka. I turn hard problems into products people can actually use."* — italic on *hard*.
 - ⚠️ **The greeting is Dilip's explicit call.** I argued against it (display type spent on low-value words, template-ish) and was overruled twice. **Don't re-litigate.** Because the name is in the H1, the eyebrow is just `Product Designer` — don't add the name there too.
-- **Sub-line:** *"A product designer based in the UK. I keep things **simple and easy to use**. Currently open to junior roles."* (`simple and easy to use` in cobalt — the hero's only accent).
+- **Sub-line:** *"A product designer based in the UK. I keep things **simple and easy to use**. Currently open to junior roles."* (`simple and easy to use` in cobalt).
+- **The name is cobalt too**, added 2026-08-14 at Dilip's request. It uses the `accent` flag that already existed on the `Word` type — set it per token in `H1`, don't wrap words in spans by hand or the per-word hover and the real spaces between words both break. ⚠️ This makes **two** cobalt accents in the hero where the doc previously said one; that was the deliberate old constraint, so weigh it before adding a third.
 - ⚠️ **"healthcare and accessibility" was deliberately removed from the hero** (it was in the H1, then the sub-line, then cut). The specialism first appears below the fold. **Don't restore it.** Known trade-off: nothing above the fold names a sector.
 - A test caps the H1 at 16 words and pins the CTA above the fold at 375px and 1280×720.
 
@@ -148,6 +151,16 @@ Hover-expand row list. NextStep + three "Coming soon" rows.
   1. `components/ui/draw-rule.tsx` — section hairlines draw in on scroll
   2. SUS bars in `sus-scores.tsx` — stagger-fill
 - ⚠️ **This is a deliberate exception to the minimal-deps rule. Don't migrate Motion work to it, and don't add a third library.** gsap was added on 2026-08-14 for a React Bits ribbon and removed with it the same day (§2); the codebase is back to two.
+
+### Click sparks (`components/ui/click-spark.jsx` + `SparkLayer.tsx`)
+
+Vendored React Bits `ClickSpark`, wrapping the whole app in `layout.tsx`. **Needs no dependency** — it is plain canvas. Kept byte-identical to upstream apart from a `'use client'` directive; everything it needed adapting for lives in `SparkLayer` or globals.css instead.
+
+- ⚠️⚠️ **Its canvas is its FIRST child, so every opaque section paints over it.** Out of the box the sparks are invisible. `[data-spark-root] > div > canvas { z-index: 60 }` in globals.css lifts it above the nav (z-50). The component sets **no inline z-index**, which is why a plain rule wins without `!important`. A test counts *painted pixels*, not just the element, because the markup looks correct either way.
+- **Canvas can't read CSS variables** — `strokeStyle` needs a real colour, so `SparkLayer` mirrors cobalt's two token values in JS and picks by theme via `useSyncExternalStore` on `<html>`. **Keep `COBALT` in step with `@theme`/`.dark`.**
+- **Reduced motion renders children untouched** — no canvas, no rAF loop, no buffer. A test asserts `[data-spark-root]` is absent.
+- ⚠️ **Cost, measured:** the canvas spans the whole document — **1280×3974 ≈ 19MB** at desktop — and its rAF loop clears that whole buffer every frame, forever, even with no sparks on screen. Sizing it to the viewport instead is not possible without editing the component, because it has to wrap the content to catch clicks. **If the site ever feels sluggish on a low-end phone, this is the first thing to test.**
+- The canvas is `pointer-events: none`, so clicks reach the page. A test opens a link through it — if that ever regressed the entire site would stop responding.
 - v4 API: `import { animate, stagger } from "animejs"` — **no default export** (that's v3). Ease names are strings like `outQuart`.
 - Both animate **`scaleX` with `origin-left`**, never `width` — transform is composited, width triggers layout.
 - ⚠️ **Both must fail safe.** The collapse to `scaleX(0)` happens *only inside the effect*, so with JS off or reduced motion the content renders full-size. **Never move the collapsed state into markup or CSS** — that ships the section blank if the observer doesn't fire.
