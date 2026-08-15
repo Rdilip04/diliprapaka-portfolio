@@ -99,6 +99,18 @@ test.describe("Motion — the award ribbon", () => {
     expect(after[0]).not.toBe(before[0]);
   });
 
+  test("keeps looping while the pointer sits on it", async ({ page }) => {
+    await page.goto("/");
+    await scrollTo(page, LOOP);
+    await page.locator(LOOP).hover();
+
+    const before = await loopOffsets(page);
+    await page.waitForTimeout(600);
+
+    // pauseOnHover is off on purpose — the ribbon should never stall.
+    expect((await loopOffsets(page))[0]).not.toBe(before[0]);
+  });
+
   test("announces the award once, not once per repetition", async ({ page }) => {
     await page.goto("/");
     // The ribbon repeats the phrase a dozen times; every <text> inside is

@@ -18,7 +18,7 @@ export default function Recognition() {
       };
 
   return (
-    <section className="border-y border-ink/10 bg-mist text-ink">
+    <section className="border-y border-ink/10 bg-paper text-ink">
       <div className="w-full py-16 md:py-20">
         <motion.div {...reveal} viewport={{ once: true, margin: "-15%" }}>
           {/* The viewBox is 1200x520, most of which is empty space above and
@@ -28,7 +28,12 @@ export default function Recognition() {
             text="1st Place — BCU Innovation Fest 2025"
             color="var(--color-paper)"
             ribbonColor="var(--color-cobalt)"
-            className="grid h-[clamp(200px,30vw,340px)] place-items-center"
+            // Thinner band than the component's defaults (86/46). Both drop
+            // together so the type keeps its breathing room inside the ribbon.
+            ribbonWidth={58}
+            fontSize={32}
+            pauseOnHover={false}
+            className="grid h-[clamp(170px,24vw,290px)] place-items-center"
           />
 
           <p className="mx-auto mt-10 max-w-md px-6 text-center font-sans text-sm leading-relaxed text-ink/70">

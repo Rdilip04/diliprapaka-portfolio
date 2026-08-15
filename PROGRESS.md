@@ -2,7 +2,7 @@
 
 Working doc for **Dilip Rapaka's UX / Product Designer portfolio**. Hand this to a new chat to continue the work.
 
-Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 77/77 · build green**
+Last updated: 2026-08-14 · Status: **tsc 0 · eslint 0 · vitest 21/21 · playwright 78/78 · build green**
 
 ---
 
@@ -121,11 +121,15 @@ Audited against two frameworks from Dilip's mentor — **Portfolio Red Flags** (
 
 The BCU award is a **looping cobalt ribbon** (React Bits `TextLoop`, see §7), not the display-type line it used to be. Reads `1st Place — BCU Innovation Fest 2025 ✦`, repeating.
 
+- The section is **`bg-paper` (white), not `bg-mist`** — Dilip's call, 2026-08-14. The hairlines are what separate it now, so **don't drop `border-y`** or the section loses its edges entirely against the hero above.
+- **`ribbonWidth={58}` / `fontSize={32}`**, down from the component's 86/46. ⚠️ **Move those two together.** Thinning the ribbon alone crowds the type against its edges; the ratio is what keeps the padding.
+- **`pauseOnHover={false}`** — Dilip's call. The ribbon must never stall under the pointer. A test pins it.
+
 - **Colours are passed as `var(--color-*)`, not hex** — `var(--color-cobalt)` for the ribbon, `var(--color-paper)` for the text. Verified: CSS custom properties **do** resolve in SVG presentation attributes, so the ribbon follows the theme (`#2f2be6` light → `#6f6bff` dark) with no `dark:` class. Measured contrast **7.57:1 light, 4.63:1 dark**. A test pins both stroke values.
-- ⚠️ **The wrapper crops; the component is untouched.** Its viewBox is `1200x520` and most of that is empty space above and below the curve, so `Recognition.tsx` passes `className="grid h-[clamp(200px,30vw,340px)] place-items-center"` and lets `.text-loop`'s own `overflow: hidden` trim it. At 1280px the ribbon sits with ~18px clearance top and bottom — **don't shrink that height much further or the wave starts clipping.**
+- ⚠️ **The wrapper crops; the component is untouched.** Its viewBox is `1200x520` and most of that is empty space above and below the curve, so `Recognition.tsx` passes `className="grid h-[clamp(170px,24vw,290px)] place-items-center"` and lets `.text-loop`'s own `overflow: hidden` trim it. **That height is tied to `ribbonWidth`** — the wave peaks at `260 ± 99` in viewBox units plus half the ribbon, so a thicker band needs a taller crop or it clips.
 - The phrase reaches assistive tech **once** via `role="img"` + `aria-label`; every `<text>` inside is `aria-hidden`. A test asserts it.
-- Type is **Inter 800 uppercase at 46px** — the component's defaults, inherited from the body font. This is the one place the site uses an 800 weight.
-- Known trade-off: `preserveAspectRatio="meet"` means the whole thing scales down on a phone, so at 390px the type renders ~15px. Legible but small. Raising `fontSize`/`ribbonWidth` is the lever, but they are fixed props, not responsive.
+- Type is **Inter 800 uppercase**, inherited from the body font. This is the one place the site uses an 800 weight.
+- Known trade-off: `preserveAspectRatio="meet"` means the whole thing scales down on a phone, so at 390px the type renders ~10px. Legible but small, and thinning the ribbon made it smaller still. `fontSize`/`ribbonWidth` are the levers, but they are fixed props, not responsive.
 
 ### Selected work (`CaseStudies.tsx`)
 
