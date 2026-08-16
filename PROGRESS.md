@@ -2,7 +2,7 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 77/77 · production build green
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 79/79 · production build green
 **Last updated:** 2026-08-14
 
 Conventions used below:
@@ -47,6 +47,7 @@ Later experiments that were built, reviewed and removed. Each is recoverable fro
 | Curved looping text band (native, then React Bits `TextLoop`) | Both built and removed. |
 | `LogoLoop` tool strip | Built and removed. |
 | Recognition section — the BCU award at display size | Removed; the award survives elsewhere (§6). |
+| Masked word-rise entrance on the display headings | Built and reverted. The brief was **new background elements**, not more motion applied to existing text. |
 
 The last four all occupied the slot between Hero and Selected work. Dilip's verdict each time was that the section did not earn its place, ending with *"let's keep it simple."*
 
@@ -141,6 +142,10 @@ This replaced **23 ad-hoc declarations — 17 rendered sizes and 16 bespoke `cla
 
 ### Motifs
 
+- **Two background layers** carry the "not flat" job, so no decorative element has to:
+  - **Paper grain** — a fixed viewport-wide noise overlay on `body::before`. Individually invisible; together it stops the off-white surfaces reading as flat screen white. Fixed rather than document-sized, so it costs one viewport of painting however long the page grows. **Dark mode inverts it** (`filter: invert(1)`) — ink-coloured grain on a dark surface is invisible.
+  - **Column grid** (`.bg-column-grid`) — hairline verticals on the layout's own columns in the Hero, at 5% opacity, so it registers as texture rather than as rules. Nested inside a `max-w-7xl px-6` box so the gradient's repeat lands on the same grid the copy is set to.
+  > **Trap — the grain sits at `z-100`, above the nav.** It is only safe because it is `pointer-events: none`; if that ever changes, nothing on the site is clickable. A test clicks a link *through* it rather than just reading the property.
 - **Hairlines** (`border-ink/12`) mark **section boundaries**, not every row.
   > **Locked — rules are rationed.** The homepage carried **34 borders**; it now carries **14**. What went: six underlines and six bordered icon chips in Approach's method list, five outlined toolkit chips, the column divider beside them, and the two underlined rows in About. What stayed earns its place — the work-index row separators, the thumbnail frames, two section boundaries and the footer's structure.
   > A repeated rule inside a list is the editorial-template tell the `/impeccable` audit flagged (§10). **Before adding a border, try spacing.**
@@ -318,7 +323,7 @@ A server component; only `Reveal` and `SusScores` are client islands. Primitives
 
 ```bash
 npm run test        # vitest — 21 unit tests
-npm run test:e2e    # Playwright — 77 tests across 7 files
+npm run test:e2e    # Playwright — 79 tests across 7 files
 npm run test:all
 ```
 

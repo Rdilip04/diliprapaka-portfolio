@@ -112,6 +112,15 @@ export default function Hero() {
       onMouseLeave={onLeave}
       className="relative flex min-h-svh flex-col overflow-hidden bg-canvas text-ink"
     >
+      {/* Column grid — the layout's own columns, made faintly visible. Nested
+          so the gradient box is the padded content area, which is what makes
+          the verticals land on the same grid the copy is set to. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <div className="mx-auto h-full w-full max-w-7xl px-6">
+          <div className="bg-column-grid h-full w-full" />
+        </div>
+      </div>
+
       {!reduce && (
         <motion.div
           aria-hidden

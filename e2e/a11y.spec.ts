@@ -140,6 +140,35 @@ test("re-resolves every themed colour when the theme flips", async ({ page }) =>
   expect(stuck, `holding light-mode ink in dark mode: ${JSON.stringify(stuck)}`).toEqual([]);
 });
 
+test.describe("Decorative background layers stay out of the way", () => {
+  test("the grain overlay never intercepts a click", async ({ page }) => {
+    await page.goto("/");
+
+    // It is fixed across the whole viewport at z-100, above the nav. If it
+    // ever stopped being pointer-events: none, nothing on the site would be
+    // clickable, so this is checked by actually clicking through it.
+    const grain = await page.evaluate(() => {
+      const s = getComputedStyle(document.body, "::before");
+      return { pointerEvents: s.pointerEvents, z: s.zIndex, painted: s.backgroundImage !== "none" };
+    });
+    expect(grain.painted, "grain is not painted").toBe(true);
+    expect(grain.pointerEvents).toBe("none");
+
+    await page.getByRole("link", { name: /selected work/i }).first().click();
+    await expect(page.locator("#work")).toBeInViewport();
+  });
+
+  test("the column grid is decorative only", async ({ page }) => {
+    await page.goto("/");
+    const grid = page.locator(".bg-column-grid");
+    await expect(grid).toHaveCount(1);
+
+    // Hidden from assistive tech and carrying no content of its own.
+    await expect(grid.locator("xpath=ancestor-or-self::*[@aria-hidden='true']").first()).toBeAttached();
+    expect((await grid.textContent())?.trim()).toBe("");
+  });
+});
+
 for (const route of ROUTES) {
   for (const [name, width, height] of [
     ["mobile", 390, 844],

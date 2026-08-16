@@ -138,3 +138,47 @@ body {
 .anim-fade-up {
   animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* ── Background layer 1: paper grain ───────────────────────────────────────
+   A fixed noise overlay over the whole viewport. On its own each speck is
+   invisible; together they stop the off-white surfaces reading as flat screen
+   white and give them a printed, tactile quality — the one background element
+   an editorial/paper design can carry without becoming decoration.
+
+   Fixed rather than document-sized so it costs one viewport-worth of painting
+   no matter how long the page grows, and it does not scroll with content
+   (grain that scrolls reads as a texture *on* the page rather than *of* it). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Dark ink-on-dark grain is invisible, so flip it to light specks and lift it
+   slightly — dark surfaces show less texture for the same alpha. */
+.dark body::before,
+body:where(.dark, .dark *)::before {
+  opacity: 0.42;
+  filter: invert(1);
+}
+
+/* ── Background layer 2: the column grid ───────────────────────────────────
+   Hairline verticals on the same 12 columns the layout is built on, at an
+   alpha low enough to register as texture rather than as rules. It exposes the
+   structure the design already follows, which is the Swiss/editorial device,
+   and it reuses the hairline motif rather than introducing a new one. */
+.bg-column-grid {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-ink) 0,
+    var(--color-ink) 1px,
+    transparent 1px,
+    transparent calc(100% / 6)
+  );
+  opacity: 0.05;
+}
