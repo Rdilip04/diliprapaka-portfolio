@@ -218,6 +218,8 @@ A hover-expand row list: NextStep plus three "Coming soon" rows.
 ### About
 
 - **The CV link ends the reading path**, under "Beyond work" in the content column. It briefly sat in the left rail, which forced the eye back across the page.
+- **Block terms are mono labels; block bodies are 16px.** They were 16px semibold against 14px regular — two steps apart in size and nothing else, which stopped reading as a hierarchy once the dividing rules came out (the two blocks' boxes touch at a **0px** gap, so the removed border had been the only marker). The mono term now matches every other label on the site, and the body is the section's main reading content at body size.
+  > **Trap — the `dt` track is 112px and the labels nearly fill it.** Measured at `text-label` with `tracking-[0.14em]`: "Background" 92px, "Beyond work" **102px**. A longer term, more tracking, or a bigger label step will wrap it, and a test fails on exactly that.
 - Background copy says **"specialising in complex, data-rich digital environments"** — deliberately not "healthcare", matching the broader hero. A test asserts `/healthcare/i` never appears in About.
 - Spacing verified on the 8pt grid: section 128px, rows 32px, label track 112 + 24.
 

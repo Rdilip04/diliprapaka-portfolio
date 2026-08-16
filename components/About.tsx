@@ -92,10 +92,14 @@ export default function About() {
                   viewport={{ once: true, margin: "-8%" }}
                   className="grid gap-2 py-8 md:grid-cols-[7rem_1fr] md:gap-6"
                 >
-                  <dt className="font-sans text-base font-semibold text-ink">
+                  {/* Mono label, matching every other section label on the
+                      site. Term and body were 16px semibold against 14px
+                      regular — two steps apart in size and nothing else, which
+                      is not enough separation once the dividing rule is gone. */}
+                  <dt className="font-mono text-label uppercase leading-relaxed tracking-[0.14em] text-ink/70">
                     {block.heading}
                   </dt>
-                  <dd className="max-w-xl font-sans text-sm leading-relaxed text-ink/75">
+                  <dd className="max-w-xl font-sans text-base leading-relaxed text-ink/80">
                     {block.body}
                   </dd>
                 </motion.div>
