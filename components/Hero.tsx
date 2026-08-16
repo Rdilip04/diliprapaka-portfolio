@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useRef } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   motion,
   useMotionValue,
@@ -141,10 +141,7 @@ export default function Hero() {
               Product Designer
             </p>
 
-            <h1
-              className="anim-fade-up mt-5 font-serif text-display font-normal leading-[1.1] tracking-[-0.02em] text-ink"
-              style={{ animationDelay: "0.12s" }}
-            >
+            <h1 className="mt-5 font-serif text-display font-normal leading-[1.1] tracking-[-0.02em] text-ink">
               {/* A real space between the words, not just a margin. These are
                   inline-blocks: without it the heading serialises as one
                   run-on word for screen readers and copy-paste. */}
@@ -154,12 +151,18 @@ export default function Hero() {
                 const accent = typeof w === "object" && w.accent;
                 return (
                   <Fragment key={i}>
-                    <span
-                      className={`inline-block transition-[transform,color] duration-300 ease-out hover:-translate-y-0.5 hover:text-cobalt-ink ${
-                        em ? "font-normal italic" : ""
-                      } ${accent ? "text-cobalt-ink" : ""}`}
-                    >
-                      {text}
+                    {/* Hover lives on the mask, the rise on the word inside it.
+                        Both on one element and the animation's transform would
+                        win over the hover lift. */}
+                    <span className="inline-block overflow-hidden pb-[0.12em] align-bottom transition-[transform,color] duration-300 ease-out hover:-translate-y-0.5 hover:text-cobalt-ink">
+                      <span
+                        style={{ "--i": i } as CSSProperties}
+                        className={`anim-word-rise inline-block ${
+                          em ? "font-normal italic" : ""
+                        } ${accent ? "text-cobalt-ink" : ""}`}
+                      >
+                        {text}
+                      </span>
                     </span>
                     {i < H1.length - 1 && " "}
                   </Fragment>

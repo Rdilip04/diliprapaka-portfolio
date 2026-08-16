@@ -38,7 +38,11 @@ test.describe("Hero — positioning", () => {
     page,
   }) => {
     const colours = await page.evaluate(() => {
-      const spans = [...document.querySelectorAll("h1 span")];
+      // Each word is a mask span wrapping the word itself, so match the leaf:
+      // the outer mask carries the clipping, the inner one carries the colour.
+      const spans = [...document.querySelectorAll("h1 span")].filter(
+        (s) => s.children.length === 0,
+      );
       const colourOf = (t: string) => {
         const el = spans.find((s) => s.textContent?.trim() === t);
         return el ? getComputedStyle(el).color : null;

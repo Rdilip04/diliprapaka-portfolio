@@ -75,6 +75,72 @@ test.describe("Motion — anime.js reveals finish", () => {
   });
 });
 
+const yOf = (page: Page, selector: string) =>
+  page.evaluate(
+    (sel) =>
+      [...document.querySelectorAll(sel)].map((el) =>
+        Math.round(new DOMMatrixReadOnly(getComputedStyle(el).transform).f),
+      ),
+    selector,
+  );
+
+test.describe("Motion — the word rise", () => {
+  test("holds the section heading out of frame until it is scrolled to", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.waitForTimeout(400);
+
+    // Below the fold, so it must still be waiting — collapsed, not played.
+    const offsets = await yOf(page, "#work h2 [data-word]");
+    expect(offsets.length).toBeGreaterThan(1);
+    for (const y of offsets) expect(y).toBeGreaterThan(0);
+  });
+
+  test("raises each word after the one before it", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() =>
+      window.scrollTo(
+        0,
+        document.querySelector<HTMLElement>("#work")!.offsetTop - 200,
+      ),
+    );
+    // Sampling one instant is unreliable — the ease is fast, so the window
+    // where the words differ is short. Poll frame by frame and assert we ever
+    // catch the first word ahead of the last, which a plain fade never shows.
+    const staggered = await page.evaluate(async (sel) => {
+      const read = () =>
+        [...document.querySelectorAll(sel)].map(
+          (el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).f,
+        );
+      for (let frame = 0; frame < 60; frame++) {
+        const y = read();
+        if (y[y.length - 1] > 0.5 && y[0] < y[y.length - 1] - 0.5) return true;
+        await new Promise((r) => requestAnimationFrame(r));
+      }
+      return false;
+    }, "#work h2 [data-word]");
+
+    expect(staggered, "words never moved independently").toBe(true);
+
+    await page.waitForTimeout(1500);
+    for (const y of await yOf(page, "#work h2 [data-word]")) expect(y).toBe(0);
+  });
+
+  test("rises the hero headline without breaking how it reads", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.waitForTimeout(1600);
+
+    // The words are individually masked; the heading must still serialise with
+    // real spaces for screen readers and copy-paste.
+    await expect(page.locator("h1")).toHaveText(
+      "Hi, I’m Dilip Rapaka. I turn hard problems into products people can actually use.",
+    );
+  });
+});
+
 test.describe("Motion — click sparks", () => {
   test("paints sparks where the pointer clicks", async ({ page }) => {
     await page.goto("/");
@@ -136,6 +202,19 @@ test.describe("Motion — reduced motion never hides content", () => {
     expect(bars).toHaveLength(6);
     for (const t of bars) {
       expect(isIdentity(t), `bar transform was "${t}"`).toBe(true);
+    }
+  });
+
+  test("never leaves a heading word out of frame", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForTimeout(300);
+
+    // Both halves of the gesture must opt out: the JS one never collapses, and
+    // the CSS one must not sit on its start frame through the delay either.
+    for (const sel of ["#work h2 [data-word]", "h1 [style*='--i']"]) {
+      const offsets = await yOf(page, sel);
+      expect(offsets.length).toBeGreaterThan(0);
+      for (const y of offsets) expect(y).toBe(0);
     }
   });
 

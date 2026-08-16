@@ -235,6 +235,20 @@ Carries the **Toolkit** chips — now the only place on the site where the tools
 
 **Motion v12** handles all component entrance and exit: the CSS `.anim-fade-up` class above the fold (it runs at first paint, so it can never ship blank), `whileInView` below it, magnetic links, the hero cursor-glow and parallax, and the per-word H1 hover.
 
+### The word rise — the signature gesture
+
+Display headings arrive a word at a time, each word masked by its own clipping box. This is the site's **one signature move**, and it *replaces* the generic fade on the elements it touches rather than adding to them. Applied to the Hero h1 and the Selected work / About / How I work headings.
+
+It exists because the page is legitimately text-heavy — three images on the whole homepage — so the typography carries the motion instead of decoration being added around it.
+
+- ⚠️ **There are two implementations on purpose.** Below the fold, `ui/word-rise.tsx` collapses the words **inside an effect** and plays them on an `IntersectionObserver`, exactly like `DrawRule`. Above the fold that approach flashes: the server HTML paints, then hydration collapses it. So the Hero uses the CSS twin, `.anim-word-rise`, which runs at first paint and cannot ship blank.
+- **`backwards`, not `both`.** With `both` the word keeps the animation's `translateY(0)` forever, and an animated transform outranks a hover one — the per-word hover lift would silently stop working.
+- **Hover lives on the mask, the rise on the word inside it.** Same reason.
+- ⚠️ **The reduced-motion rule had to grow an `animation-delay` override.** It collapsed duration only, so a staggered entrance with `backwards` fill sat on its start frame — off-screen — for the length of its delay, then popped. That affected the pre-existing `.anim-fade-up` too, whose inline delays reach 350ms.
+- **Masks carry `pb-[0.12em]`** so descenders (the p's in "problems", "people") are not shaved off at rest, and words start at **130%** rather than 110% so they do not peek into that padding.
+- Words are separated by a **real space**, same as the un-animated H1 was — otherwise the heading serialises as one run-on word. A test asserts the exact sentence.
+- ⚠️ **Testing a stagger by sampling one instant is flaky** — the ease is fast and the window where words differ is short. The test polls frame by frame and asserts it ever catches the first word ahead of the last.
+
 ### anime.js — scoped to two moments
 
 1. `components/ui/draw-rule.tsx` — section hairlines draw in on scroll
@@ -318,7 +332,7 @@ A server component; only `Reveal` and `SusScores` are client islands. Primitives
 
 ```bash
 npm run test        # vitest — 21 unit tests
-npm run test:e2e    # Playwright — 77 tests across 7 files
+npm run test:e2e    # Playwright — 81 tests across 7 files
 npm run test:all
 ```
 
