@@ -2,7 +2,7 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 77/77 · production build green
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 81/81 · production build green
 **Last updated:** 2026-08-14
 
 Conventions used below:
