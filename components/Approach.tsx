@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { WordRise } from "@/components/ui/word-rise";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -96,10 +95,14 @@ export default function Approach() {
   return (
     <section id="approach" className="border-t border-ink/10 bg-mist text-ink">
       <div className="mx-auto w-full max-w-7xl px-6 py-24 md:py-32">
-        {/* Header — WordRise carries the entrance, so no fade wrapper here. */}
-        <h2 className="font-serif text-title font-normal leading-none tracking-[-0.01em]">
-          <WordRise text="How I work" />
-        </h2>
+        {/* Header */}
+        <motion.h2
+          {...reveal(0)}
+          viewport={{ once: true, margin: "-12%" }}
+          className="font-serif text-title font-normal leading-none tracking-[-0.01em]"
+        >
+          How I work
+        </motion.h2>
 
         {/* POV line */}
         <motion.p

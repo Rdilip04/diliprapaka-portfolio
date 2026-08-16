@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { DrawRule } from "@/components/ui/draw-rule";
-import { WordRise } from "@/components/ui/word-rise";
 import type { Project } from "@/lib/projects";
 import { PROJECTS } from "@/lib/projects";
 
@@ -192,7 +191,7 @@ export default function CaseStudies() {
       <div className="mx-auto w-full max-w-7xl px-6 py-24 md:py-32">
         <div className="flex items-baseline justify-between">
           <h2 className="font-serif text-title font-normal leading-none tracking-[-0.01em]">
-            <WordRise text="Selected work" />
+            Selected work
           </h2>
           {/* Count only what exists. "· 4 planned" told a recruiter the
               portfolio was 80% empty. */}

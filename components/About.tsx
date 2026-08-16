@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { WordRise } from "@/components/ui/word-rise";
 import TiltedCard from "@/components/ui/tilted-card";
 import { DrawRule } from "@/components/ui/draw-rule";
 
@@ -41,7 +40,7 @@ export default function About() {
             className="md:col-span-3"
           >
             <h2 className="font-serif text-title font-normal tracking-[-0.01em]">
-              <WordRise text="About" />
+              About
             </h2>
             <p className="mt-4 font-mono text-label uppercase leading-relaxed tracking-[0.16em] text-ink/70">
               Dilip Rapaka
