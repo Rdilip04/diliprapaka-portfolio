@@ -222,20 +222,37 @@ export default function Hero() {
             className="hidden shrink-0 justify-self-end lg:block"
           >
             <div className="anim-fade-up" style={{ animationDelay: "0.35s" }}>
-              <TiltedCard
-                imageSrc="/dilip-hero.jpg"
-                altText="Dilip Rapaka, product designer"
-                captionText="Dilip Rapaka"
-                containerWidth="280px"
-                containerHeight="350px"
-                imageWidth="280px"
-                imageHeight="350px"
-                rotateAmplitude={9}
-                scaleOnHover={1.04}
-                eager
-                showMobileWarning={false}
-                showTooltip
-              />
+              {/* The portrait's counterpart to the About block: same geometry,
+                  same accent, mirrored. About fills its offset down-right; this
+                  one outlines up-left, so the two portraits read as a pair
+                  rather than as the same trick twice. `mr-0.5` is the 2px nudge
+                  off the right edge — the only value on the page off the 8pt
+                  grid, and deliberate. */}
+              <div className="relative mr-0.5 w-fit">
+                <div
+                  aria-hidden
+                  className="absolute -left-4 -top-4 h-[350px] w-[280px] rounded-lg border border-cobalt/40"
+                />
+                {/* z-10, or the frame paints over the photo — an absolutely
+                    positioned element outranks static content in the painting
+                    order regardless of source order. Same trap as About. */}
+                <div className="relative z-10">
+                  <TiltedCard
+                    imageSrc="/dilip-hero.jpg"
+                    altText="Dilip Rapaka, product designer"
+                    captionText="Dilip Rapaka"
+                    containerWidth="280px"
+                    containerHeight="350px"
+                    imageWidth="280px"
+                    imageHeight="350px"
+                    rotateAmplitude={9}
+                    scaleOnHover={1.04}
+                    eager
+                    showMobileWarning={false}
+                    showTooltip
+                  />
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
