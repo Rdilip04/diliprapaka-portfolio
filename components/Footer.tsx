@@ -55,6 +55,7 @@ function Reveal({
   const reduce = useReducedMotion();
   return (
     <motion.div
+      data-reveal
       initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-12%" }}

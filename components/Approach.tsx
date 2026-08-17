@@ -83,10 +83,13 @@ const TOOLS = ["Figma", "Framer", "Miro", "Claude Code", "Cursor"];
 export default function Approach() {
   const reduce = useReducedMotion();
 
+  // See About.tsx — `data-reveal` keeps the section visible when nothing is
+  // driving the animation.
   const reveal = (delay: number) =>
     reduce
-      ? { initial: { opacity: 0 }, whileInView: { opacity: 1 } }
+      ? { "data-reveal": "", initial: { opacity: 0 }, whileInView: { opacity: 1 } }
       : {
+          "data-reveal": "",
           initial: { opacity: 0, y: 20 },
           whileInView: { opacity: 1, y: 0 },
           transition: { duration: 0.6, ease: EASE, delay },

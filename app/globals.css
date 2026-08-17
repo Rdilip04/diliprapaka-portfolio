@@ -139,6 +139,24 @@ body {
   animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Motion serialises its `initial` prop into the server-rendered markup, so every
+   below-fold reveal ships as an inline `opacity:0` and only becomes visible once
+   JS hydrates and the observer fires. With scripting off that left the nav,
+   About, Approach and the whole contact block — the email included — blank.
+
+   It is the same failure the anime.js reveals dodge by collapsing only inside
+   the effect (see draw-rule.tsx). Motion offers no equivalent hook, so the
+   escape hatch lives here: wherever nothing is driving the animation, the
+   content is simply visible. `!important` is required — it overrides an inline
+   style, which nothing else can. Print is included because a reveal that has
+   not fired yet would otherwise print as a blank block. */
+@media (scripting: none), print {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ── Background layer 1: paper grain ───────────────────────────────────────
    A fixed noise overlay over the whole viewport. On its own each speck is
    invisible; together they stop the off-white surfaces reading as flat screen

@@ -118,6 +118,44 @@ test.describe("Motion — click sparks", () => {
   });
 });
 
+test.describe("Motion — scripting off never hides content", () => {
+  // Motion writes its `initial` prop into the server-rendered markup, so every
+  // below-fold reveal shipped as an inline `opacity: 0` that only cleared once
+  // JS hydrated and the observer fired. With scripting off that left the nav,
+  // About, Approach and the whole contact block blank — the email included,
+  // which is the page's primary CTA. globals.css forces `[data-reveal]` visible
+  // under `(scripting: none)` and in print; these pin both.
+  test.use({ javaScriptEnabled: false });
+
+  for (const route of ["/", "/work/nextstep"] as const) {
+    test(`renders every reveal on ${route} without JS`, async ({ page }) => {
+      // domcontentloaded, not load: the case study's below-fold images are
+      // lazy and stay deferred with no JS to scroll them into view, so `load`
+      // never fires. The assertion is about server-rendered markup anyway.
+      await page.goto(route, { waitUntil: "domcontentloaded" });
+
+      const hidden = await page.$$eval("[data-reveal]", (els) =>
+        els
+          .filter((el) => parseFloat(getComputedStyle(el).opacity) < 0.99)
+          .map((el) => (el.textContent || "").trim().slice(0, 40)),
+      );
+
+      expect(await page.locator("[data-reveal]").count()).toBeGreaterThan(0);
+      expect(hidden, `still transparent: ${JSON.stringify(hidden)}`).toEqual([]);
+    });
+  }
+
+  test("keeps the contact block and its email readable", async ({ page }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    // The email is the one piece of the page a recruiter has to be able to
+    // read, and it sat inside a reveal.
+    await expect(page.getByRole("link", { name: /gmail\.com/i })).toBeVisible();
+    await expect(page.getByRole("banner")).toBeVisible();
+    await expect(page.locator("#about")).toBeVisible();
+    await expect(page.locator("#approach")).toBeVisible();
+  });
+});
+
 test.describe("Motion — reduced motion never hides content", () => {
   // emulateMedia rather than test.use({ reducedMotion }): the describe-level
   // option did not reach matchMedia in this config (verified — the page kept

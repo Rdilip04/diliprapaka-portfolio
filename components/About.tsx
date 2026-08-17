@@ -20,10 +20,14 @@ const BLOCKS = [
 export default function About() {
   const reduce = useReducedMotion();
 
+  // `data-reveal` is the hook globals.css uses to force these visible wherever
+  // nothing is driving the animation — without it Motion's serialised
+  // `opacity: 0` ships the whole section blank to a scripting-off client.
   const reveal = (delay: number) =>
     reduce
-      ? { initial: { opacity: 0 }, whileInView: { opacity: 1 } }
+      ? { "data-reveal": "", initial: { opacity: 0 }, whileInView: { opacity: 1 } }
       : {
+          "data-reveal": "",
           initial: { opacity: 0, y: 20 },
           whileInView: { opacity: 1, y: 0 },
           transition: { duration: 0.7, ease: EASE, delay },

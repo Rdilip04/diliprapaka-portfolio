@@ -19,6 +19,7 @@ export function Reveal({
 
   return (
     <motion.div
+      data-reveal
       initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20 }}
       whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-12%" }}
