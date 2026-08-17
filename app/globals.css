@@ -148,10 +148,10 @@ body {
    JS hydrates and the observer fires. With scripting off that left the nav,
    About, Approach and the whole contact block — the email included — blank.
 
-   It is the same failure the anime.js reveals dodge by collapsing only inside
-   the effect (see draw-rule.tsx). Motion offers no equivalent hook, so the
-   escape hatch lives here: wherever nothing is driving the animation, the
-   content is simply visible. `!important` is required — it overrides an inline
+   It is the same failure the two imperative reveals dodge by collapsing only
+   inside the effect (see draw-rule.tsx). A `motion.*` component offers no
+   equivalent hook, so the escape hatch lives here: wherever nothing is driving
+   the animation, the content is simply visible. `!important` is required — it overrides an inline
    style, which nothing else can. Print is included because a reveal that has
    not fired yet would otherwise print as a blank block. */
 @media (scripting: none), print {

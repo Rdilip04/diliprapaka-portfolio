@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { animate, stagger } from "animejs";
+import { animate } from "motion";
+
+// anime.js's `outQuart` by its cubic-bezier definition (see draw-rule.tsx).
+const OUT_QUART = [0.165, 0.84, 0.44, 1] as const;
+const STAGGER = 0.09; // seconds between bars — anime's stagger(90)
 
 const useIsoLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -87,12 +91,15 @@ export function SusScores() {
       ([entry], obs) => {
         if (!entry.isIntersecting) return;
         obs.disconnect();
-        animate(bars, {
-          scaleX: [0, 1],
-          duration: 1000,
-          delay: stagger(90),
-          ease: "outQuart",
-        });
+        // Motion has no `stagger()` in its DOM entry, so the offset is applied
+        // per bar. Same result, one fewer import.
+        bars.forEach((bar, i) =>
+          animate(
+            bar,
+            { scaleX: [0, 1] },
+            { duration: 1, ease: OUT_QUART, delay: i * STAGGER },
+          ),
+        );
       },
       { threshold: 0.25 },
     );

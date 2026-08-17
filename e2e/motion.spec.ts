@@ -54,7 +54,7 @@ const scaleXOf = (t: string) => {
 
 const isIdentity = (t: string) => t === "none" || scaleXOf(t) === 1;
 
-test.describe("Motion — anime.js reveals finish", () => {
+test.describe("Motion — the scaleX reveals finish", () => {
   test("fills every SUS bar to full scale", async ({ page }) => {
     await page.goto("/work/nextstep");
     await scrollTo(page, BAR);
