@@ -56,6 +56,16 @@ function Thumb({ project }: { project: Project }) {
   );
 }
 
+// Shared so the mobile row and the desktop hover panel can't drift apart. It is
+// a span, not an anchor — the whole row is already the link.
+function ReadCta() {
+  return (
+    <span className="font-mono text-label uppercase tracking-[0.14em] text-cobalt-ink">
+      Read case study →
+    </span>
+  );
+}
+
 function ExpandedContext({ project }: { project: Project }) {
   return (
     <div className="grid gap-x-8 gap-y-3 pt-4 md:grid-cols-[1fr_auto] md:items-start">
@@ -81,9 +91,7 @@ function ExpandedContext({ project }: { project: Project }) {
             </li>
           ))}
         </ul>
-        <span className="font-mono text-label uppercase tracking-[0.14em] text-cobalt-ink">
-          Read case study →
-        </span>
+        <ReadCta />
       </div>
     </div>
   );
@@ -181,9 +189,13 @@ function ProjectRow({
             {project.description}
           </p>
 
-          {/* Mobile: always visible (no hover to depend on) */}
-          <div className="md:hidden">
-            <ExpandedContext project={project} />
+          {/* Mobile: title, description, CTA — nothing else. There is no hover
+              to hide behind, so the meta row, the outcome line and the tags all
+              rendered inline and stacked into a wall of text on a 390px column.
+              They stay desktop-only; the case study itself carries every one of
+              them within a tap. */}
+          <div className="mt-4 md:hidden">
+            <ReadCta />
           </div>
 
           {/* Desktop: reveal on hover/focus */}

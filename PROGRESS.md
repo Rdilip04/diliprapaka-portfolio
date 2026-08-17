@@ -2,7 +2,7 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 90/90 · production build green
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 91/91 · production build green
 **Last updated:** 2026-08-17
 
 Conventions used below:
@@ -225,6 +225,8 @@ Deliberately empty (§2).
 
 A hover-expand row list: NextStep plus three "Coming soon" rows.
 
+- **Mobile shows title, description and CTA only.** With no hover to hide behind, the meta row, outcome line and tags all rendered inline and stacked the NextStep row into **384px and 274 characters** at 390px — a wall of text before the reader has decided they care. They are desktop-only now: **189px, 118 characters**. `ReadCta` is shared by both so the two paths cannot drift.
+  > ⚠️ **This is where the BCU award stopped appearing on mobile.** It reads in the outcome line, which mobile no longer renders, so a phone visitor now meets the award only inside the case study — where it appears three times. Accepted as the price of the row being readable; revisit if the homepage ever needs to carry the credential on its own.
 - The card is on a **content diet** — industry and year appear once, in the outcome line. The floating `HEALTHCARE / 2025` corner label was deleted. The header reads `01 live`; `· 4 planned` was cut because it told a recruiter the portfolio was 80% empty.
 - The meta row is `role · duration`. **Tags are deliverables only** (`Mobile App` · `Usability Testing` · `NHS`) — never role or industry, which the copy already states. `category` and `year` were removed from the `Project` type.
 - **The resting thumbnail spans its row's text block**: top level with the title's first line, bottom level with the description's last. That is 128×80 at md, measured — it is not a round number, it is the height of `text-heading` + `mt-2` + one line of `text-sm`. Below md the description wraps to two or three lines, and a 1.6:1 thumb tall enough to match would take 160px of a 342px row, so it stays 76×56 there. The placeholder numeral steps to `text-2xl` at md so it does not float in the larger box.
@@ -352,7 +354,7 @@ A server component; only `Reveal` and `SusScores` are client islands. Primitives
 
 ```bash
 npm run test        # vitest — 21 unit tests
-npm run test:e2e    # Playwright — 90 tests across 8 files
+npm run test:e2e    # Playwright — 91 tests across 8 files
 npm run test:all
 ```
 

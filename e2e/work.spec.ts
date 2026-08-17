@@ -64,6 +64,27 @@ test.describe("Selected work — the thumbnail spans its text block", () => {
     expect(g.thumbH).toBeLessThanOrEqual(60);
   });
 
+  test("shows only title, description and CTA on mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    await settle(page);
+
+    const row = page.locator("#work li").first().locator("a").first();
+    const text = ((await row.textContent()) ?? "").replace(/\s+/g, " ");
+
+    // There is no hover on mobile, so the meta, outcome and tags used to render
+    // inline and stack the row into a wall of text — 384px tall. They are
+    // desktop-only now; the case study carries all of it one tap away.
+    await expect(row).toContainText("NextStep");
+    await expect(row).toContainText(/stroke-rehabilitation/i);
+    await expect(row).toContainText(/read case study/i);
+    expect(text, "outcome line is desktop-only").not.toMatch(/Outcome —/i);
+    expect(text, "tags are desktop-only").not.toMatch(/Usability Testing/i);
+
+    const height = (await row.boundingBox())!.height;
+    expect(height, `row was ${Math.round(height)}px`).toBeLessThan(260);
+  });
+
   test("still grows to the full preview on hover", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
