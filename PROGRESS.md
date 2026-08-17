@@ -2,8 +2,8 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 79/79 · production build green
-**Last updated:** 2026-08-15
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 90/90 · production build green
+**Last updated:** 2026-08-17
 
 Conventions used below:
 
@@ -66,11 +66,10 @@ One React Bits component remains in use: **`ClickSpark`**, site-wide (§7). It n
 | **Next.js 16.2.1** | App Router, Turbopack. Read `node_modules/next/dist/docs/` before using an unfamiliar API — this version differs from most training data. See `AGENTS.md`. |
 | **React 19.2.4** | Its lint rules are strict: no synchronous `setState` in effects, no component declarations inside render, no reading refs during render. |
 | **Tailwind CSS v4** | CSS-first, configured via `@theme` in `app/globals.css`. |
-| **Motion v12** (`motion/react`) | This *is* Framer Motion, renamed. **Never `npm i framer-motion`.** |
-| **anime.js v4.5.0** | Second animation library, deliberately scoped to two moments (§7). |
+| **Motion v12** | This *is* Framer Motion, renamed. **Never `npm i framer-motion`.** Components import from `motion/react`; the two imperative DOM reveals import `animate` from `motion` (§7). |
 
-**Runtime dependencies (5):** `animejs`, `motion`, `next`, `react`, `react-dom`.
-`three`, `ogl` and `lenis` were removed during the rebuild; `gsap` and `react-icons` arrived and left with the experiments in §2.
+**Runtime dependencies (4):** `motion`, `next`, `react`, `react-dom`.
+`three`, `ogl` and `lenis` were removed during the rebuild; `gsap` and `react-icons` arrived and left with the experiments in §2. **`animejs` was removed on 2026-08-17** — it drove two `scaleX` reveals, and Motion produces the same curve (§7).
 
 **Verify with the local binaries** — `./node_modules/.bin/tsc --noEmit` and `./node_modules/.bin/eslint .`. A bare `npx tsc` resolves to an unrelated global package.
 
@@ -133,14 +132,14 @@ Familjen Grotesk was removed to honour the mentor's "two typefaces maximum". Do 
 | `text-heading` | `clamp(1.5rem, 4vw, 3rem)` | Work-index project titles |
 | `text-title` | `clamp(1.75rem, 3.4vw, 2.75rem)` | Section headings |
 | `text-display` | `clamp(2rem, 4.6vw, 3.6rem)` | Home h1 |
-| `text-statement` | `clamp(2rem, 5.5vw, 4.5rem)` | Footer h2 and email |
+| `text-statement` | `clamp(1.65rem, 5.5vw, 4.5rem)` | Footer h2 and email |
 | `text-hero` | `clamp(3rem, 10vw, 7rem)` | Case-study h1 — the largest type |
 
 `text-lg` / `text-xl` / `text-2xl` survive on three one-off pieces of chrome (nav wordmark, placeholder numeral, mobile nav link) where the step is genuinely distinct.
 
 This replaced **23 ad-hoc declarations — 17 rendered sizes and 16 bespoke `clamp()` curves**, several near-identical (`1.4rem/2.6vw/2rem` sat beside `1.4rem/2.6vw/2.15rem`; three variants shared a `1.35rem` floor). Near-duplicates read as drift rather than intent, which is the one thing a minimal design cannot afford. The homepage now renders **11 distinct sizes, down from 17**.
 
-> **Trap — `--text-statement` has a `2rem` floor for a reason.** The footer email is a single unbreakable 27-character string; at `2.25rem` it overflows 375px on *both* routes. Two tests pin it.
+> **Trap — the `--text-statement` floor is set by the footer email, not by the h2.** The email is a single unbreakable 27-character string costing ~9.84px of width per px of font-size. At `2.25rem` it overflowed 375px; at `2rem` it still overflowed **320px** by 19px — 315px of email inside a 272px box — on *both* routes, in *both* themes. `1.65rem` lands it at ~260px. The viewport matrix only ran 390 and 1280, so nothing caught it; 320 is now in the matrix (§5).
 
 ### Motifs
 
@@ -161,7 +160,9 @@ This replaced **23 ad-hoc declarations — 17 rendered sizes and 16 bespoke `cla
 
 ## 5. Accessibility
 
-All **8 combinations** of route × viewport × theme pass WCAG AA. `e2e/a11y.spec.ts` enforces it on every run.
+All **12 combinations** of route × viewport × theme pass WCAG AA — 320 / 390 / 1280 wide, both themes, both routes. `e2e/a11y.spec.ts` enforces it on every run.
+
+> **Trap — 320 is in the matrix because 390 was not enough.** The footer email overflowed 320px while both other widths passed (§4). 320 is still live traffic: iPhone SE 1st gen, the Fold's cover screen, and any laptop at 50% browser zoom.
 
 ### The alpha floor
 
@@ -205,6 +206,12 @@ app/work/nextstep     the case study
 
 > **Locked — "healthcare and accessibility" stays out of the hero.** It was in the H1, then the sub-line, then cut. The specialism first appears below the fold. Accepted trade-off: nothing above the fold names a sector.
 
+**The portrait stays `dilip-hero.jpg`** — the lit office shot. A dark studio alternative was cropped, shipped and reverted the same day (`public/dilip-hero.webp`, still on disk, unused). It composed better, but the hero portrait sits beside "Currently open to junior roles" and its job there is trust and recognition, not mood: a low-key portrait with the gaze off-frame reads creative-director, and it became the loudest thing above the fold, competing with the H1. The site is already the design sample; the photograph does not have to be.
+
+> **The frame behind it is the About block's counterpart.** Same geometry and the same accent, mirrored: About *fills* its offset down-right, the Hero *outlines* up-left at `border-cobalt/40`. Two portraits, one system, read as a pair rather than the same trick twice. It stays a 1px hairline on purpose — a 2px rule was tried and introduced a second border weight the site does not otherwise carry (§4).
+>
+> **Trap — same painting-order trap as About.** The frame is absolutely positioned and comes first in source, so the card needs its own `relative z-10` wrapper or the frame paints over the photo. And `mr-0.5` on the wrapper is a deliberate 2px nudge off the right edge — the one value on the page that is off the 8pt grid.
+>
 **Accenting words in the H1:** set the `accent` flag on the token in the `H1` array. Do not wrap words in spans by hand — that breaks both the per-word hover and the real spaces between words. The hero now carries two cobalt accents (the name, and *simple and easy to use*); weigh carefully before adding a third.
 
 ### Between Hero and Selected work
@@ -220,6 +227,9 @@ A hover-expand row list: NextStep plus three "Coming soon" rows.
 
 - The card is on a **content diet** — industry and year appear once, in the outcome line. The floating `HEALTHCARE / 2025` corner label was deleted. The header reads `01 live`; `· 4 planned` was cut because it told a recruiter the portfolio was 80% empty.
 - The meta row is `role · duration`. **Tags are deliverables only** (`Mobile App` · `Usability Testing` · `NHS`) — never role or industry, which the copy already states. `category` and `year` were removed from the `Project` type.
+- **The resting thumbnail spans its row's text block**: top level with the title's first line, bottom level with the description's last. That is 128×80 at md, measured — it is not a round number, it is the height of `text-heading` + `mt-2` + one line of `text-sm`. Below md the description wraps to two or three lines, and a 1.6:1 thumb tall enough to match would take 160px of a 342px row, so it stays 76×56 there. The placeholder numeral steps to `text-2xl` at md so it does not float in the larger box.
+  > **Trap — the resting size has to be read in JS, not set by a `md:` class.** Motion writes the animated width/height as inline styles, which beat any utility, so the breakpoint is read through `useSyncExternalStore` on `matchMedia` — the same reason `ThemeToggle` uses it. The `md:h-20 md:w-32` classes are the fallback for the reduced-motion and placeholder rows, where no `animate` runs.
+  > `e2e/work.spec.ts` pins the alignment at 1280 and 1440, the small size at 390, and that hover still grows to 300×188. **Assert the hover size with `expect.poll`, not a threshold** — the growth is a 0.5s animation and a one-shot read catches it at ~291.
 - The thumbnail is **`nextstep-thumb.webp`, not the case-study hero.** It is composed from two real screens on the hero's exact background (`#d9d2f0`) and is deliberately text-free; the hero image carries a wordmark and tagline that clashed with the site's typography and repeated the adjacent heading. Built at 1600×1000 (1.600) to match the expanded thumb box (300×188 = 1.596).
 
 ### About
@@ -227,7 +237,10 @@ A hover-expand row list: NextStep plus three "Coming soon" rows.
 - **The CV link ends the reading path**, under "Beyond work" in the content column. It briefly sat in the left rail, which forced the eye back across the page.
 - **Block terms are mono labels; block bodies are 16px.** They were 16px semibold against 14px regular — two steps apart in size and nothing else, which stopped reading as a hierarchy once the dividing rules came out (the two blocks' boxes touch at a **0px** gap, so the removed border had been the only marker). The mono term now matches every other label on the site, and the body is the section's main reading content at body size.
   > **Trap — the `dt` track is 112px and the labels nearly fill it.** Measured at `text-label` with `tracking-[0.14em]`: "Background" 92px, "Beyond work" **102px**. A longer term, more tracking, or a bigger label step will wrap it, and a test fails on exactly that.
-- **A solid cobalt block sits offset behind the portrait.** The one place on the site the accent appears as a *mark* rather than as text, and the only real colour on an otherwise monochrome page. The system already allows `bg-cobalt` for marks.
+- **A cobalt block sits offset behind the portrait, at `bg-cobalt/35`.** The one place on the site the accent appears as a *mark* rather than as text, and the only real colour on an otherwise monochrome page. The system already allows `bg-cobalt` for marks.
+  > **It was solid until 2026-08-17, and solid was too loud.** A large fully-saturated field pressed straight against a photograph vibrates against the skin and jacket tones rather than framing them — the one place on the site where the accent covers real area instead of marking a word. Dilip called it disturbing and it was taken to `/35`.
+  >
+  > **The alpha, not a lighter colour, is the point.** `bg-cobalt-lite` would have gone the wrong way in dark mode: `--color-cobalt-lite` is not re-mapped in `.dark`, so it stays `#9c99ff` and gets *brighter* against the dark canvas. An alpha of `bg-cobalt` rides the theme-aware token instead — soft periwinkle on canvas, muted indigo on dark — from one declaration and no `dark:` class, which is what §4 requires.
   > **Trap — it is offset down-*right* on purpose.** The wrapper is `w-fit relative` and the block is `-bottom-4 -right-4`. Offsetting it left pushes past the page padding and puts 375px into horizontal scroll. The portrait also needs its own `relative z-10` wrapper, or the block paints *over* the photo — an absolutely positioned element outranks static content in the painting order regardless of source order.
 - Background copy says **"specialising in complex, data-rich digital environments"** — deliberately not "healthcare", matching the broader hero. A test asserts `/healthcare/i` never appears in About.
 - Spacing verified on the 8pt grid: section 128px, rows 32px, label track 112 + 24.
@@ -244,16 +257,28 @@ Carries the **Toolkit** chips — now the only place on the site where the tools
 
 **Motion v12** handles all component entrance and exit: the CSS `.anim-fade-up` class above the fold (it runs at first paint, so it can never ship blank), `whileInView` below it, magnetic links, the hero cursor-glow and parallax, and the per-word H1 hover.
 
-### anime.js — scoped to two moments
+> **Trap — Motion serialises `initial` into the server-rendered markup, so a `whileInView` reveal ships as an inline `opacity: 0`.** With scripting off, that left the nav, About, Approach and the entire contact block — including the email, the page's primary CTA — blank: three of five sections and roughly 55% of the page height. The text was in the DOM the whole time, so screen readers were fine; only the visual layer was gated.
+>
+> Every element carrying a serialised `initial` now also carries **`data-reveal`**, and `globals.css` forces those visible under `@media (scripting: none), print`. `!important` is required — nothing else overrides an inline style. Three tests pin it, and a fourth check asserts the entrance still animates for everyone else (14 hidden before scroll, 0 after).
+>
+> **Two deliberate exceptions**, both `tilted-card-caption` figcaptions on the homepage: they are hover tooltips, so forcing them visible would float a caption over the portrait permanently. If you add a new `initial`, decide which case it is — a reveal gets the attribute, a hover state does not.
+
+### The two imperative reveals
 
 1. `components/ui/draw-rule.tsx` — section hairlines draw in on scroll
 2. `sus-scores.tsx` — SUS bars stagger-fill
 
-> **Locked — this is a deliberate exception to the minimal-dependency rule.** Do not migrate Motion work to anime.js, and do not add a third animation library. (gsap was added for one experiment and removed with it; the count is back to two.)
+These are the only two animations driven imperatively rather than by a `motion.*` component, because both act on plain DOM the components never own. They import **`animate` from `motion`** — the vanilla DOM entry, not `motion/react`.
 
-- **v4 API:** `import { animate, stagger } from "animejs"` — there is **no default export**; that was v3. Ease names are strings such as `outQuart`.
+> **anime.js used to drive these, and was removed on 2026-08-17.** §3 had it Locked as a deliberate exception on the grounds that the effects needed it. Measured, they did not: both are `scaleX` 0→1 on `outQuart`, which is just `cubic-bezier(0.165, 0.84, 0.44, 1)`, and Motion takes that curve directly. Frame-by-frame sampling put the two engines within **0.04 of each other** at every point; stagger spacing matched at 90ms. It cost **16KB gzip** (323 → 307KB across the 12 production chunks) and a second library's conventions.
+>
+> **Locked — do not add a third animation library, and do not reintroduce a second one.** (gsap arrived for one experiment and left with it.)
+
+- **Motion's units differ from anime's:** duration is in **seconds**, not ms. `900ms` → `0.9`. Getting this wrong yields a 900-second animation that looks like nothing happening.
+- **Motion's DOM entry has no `stagger()`.** The bar offset is applied per element as `i * 0.09`. Don't go looking for the helper — `stagger` exists in `motion/react` for variants, not here.
 - Both animate **`scaleX` with `origin-left`**, never `width` — transform is composited, width triggers layout.
 - Both use an isomorphic layout effect. A plain `useEffect` shows the element full-width for one frame, then snaps it to zero.
+- **Motion runs these on its JS engine, not WAAPI** (verified: `getAnimations()` is empty during the reveal), so there is no off-main-thread gain — the cost profile is the same as anime's was. It does clean the inline transform back to `none` on completion, where anime left `matrix(1, 0, 0, 1, 0, 0)` behind.
 
 > **Trap — both must fail safe.** The collapse to `scaleX(0)` happens *only inside the effect*, so with JS disabled or reduced motion on, the content renders full size. **Never move the collapsed state into markup or CSS** — that ships the section blank if the observer never fires.
 
@@ -327,11 +352,11 @@ A server component; only `Reveal` and `SusScores` are client islands. Primitives
 
 ```bash
 npm run test        # vitest — 21 unit tests
-npm run test:e2e    # Playwright — 79 tests across 7 files
+npm run test:e2e    # Playwright — 90 tests across 8 files
 npm run test:all
 ```
 
-`e2e/`: `a11y` · `about` · `case-study` · `hero` · `motion` · `nav` · `theme`.
+`e2e/`: `a11y` · `about` · `case-study` · `hero` · `motion` · `nav` · `theme` · `work`.
 Unit: `components/About.test.tsx` · `lib/contrast.test.ts`.
 
 ### Traps that have already cost time
@@ -343,6 +368,8 @@ Unit: `components/About.test.tsx` · `lib/contrast.test.ts`.
 5. **Fast Refresh during a run produces phantom failures** — hydration errors, detached elements. Re-run against a stable tree before believing a failure.
 6. **Verify in a real browser, not the in-app preview.** The preview pane does not composite when hidden, so `requestAnimationFrame` pauses, lazy images never load and screenshots time out. Driving Chromium through Playwright is the reliable route for both screenshots and measurements.
 7. **`preview_start` reads `C:\Users\rapak\.claude\launch.json`,** where the config named `portfolio-dev` points at a *different* project (`portfolio-website`, port 3000). Use the config named **`portfolio`** (port 3311).
+8. **The dev server can drop a single optimised image, forever, deterministically.** `home-2-lofi.webp` rendered as an empty slot in §05's four-stage row. The file is fine, and `/_next/image` serves every srcset width of it in ~30ms by hand — but in the browser the request is *issued and never answered*, on 8 of 8 trials. **`next start` serves all four every time.** Before chasing a missing image as a content bug, check it against a production build; this one was purely a dev artifact.
+9. **An `@theme` edit can serve stale after `npm run build`.** Changing `--text-statement` and reloading kept returning the *old* clamp from `getComputedStyle`, through two dev-server restarts — the fix read as ineffective and the new test read as a real failure. `rm -rf .next` and restart. Suspect this whenever a token edit appears to do nothing; check the computed custom property rather than the rendered result, because the stale value looks exactly like a bad fix.
 
 ---
 
@@ -369,6 +396,23 @@ Available if wanted, none of them started:
 ## 11. Where things stand — session summary
 
 Everything below is committed. `git log` has the detail; this is the shape of it.
+
+**2026-08-17 — `/impeccable audit`, the fixes it found, and a round of polish**
+
+Committed on the **`audit-fixes`** branch, seven commits on top of `f0ccee2`. ⚠️ Still **no remote** (§10.3).
+
+A live audit over both routes × 6 viewports × 2 themes (24 renders), driving real Chromium. Score **17/20**, up from the 14/20 in §10, and **18/20** after the fixes. Clean on contrast (0 failures in 24 contexts), console errors, headings, alt text, accessible names, keyboard order and focus rings, and prose measure (32–65ch). The detector returns `[]`.
+
+| Change | What it was |
+|---|---|
+| **Reveals no longer gate visibility on JS** | Motion's serialised `initial` shipped three of five sections blank with scripting off (§7). `data-reveal` + a `@media (scripting: none), print` rule. |
+| **320px no longer scrolls sideways** | The footer email overflowed by 19px on both routes, in both themes (§4). `--text-statement` floor 2rem → 1.65rem. |
+| **About accent calmed** | Solid `bg-cobalt` → `bg-cobalt/35` behind the portrait (§6). |
+| **Hero portrait framed** | An outlined offset frame, the About block's mirror (§6). The dark studio portrait was tried and reverted. |
+| **Work thumbnail resized** | 76×56 → 128×80 at md, spanning its row's copy exactly (§6). |
+| **anime.js removed** | Motion drives both reveals at the same curve; 16KB gzip and one dependency saved (§7). |
+
+The two audit findings share a root cause worth naming: *a test matrix that did not include the failing condition* — no-JS was never rendered, and 320px was never measured. The matrix now covers both. **79 → 90 tests.**
 
 **Shipped and kept**
 
