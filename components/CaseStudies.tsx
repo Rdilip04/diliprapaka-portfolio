@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -11,6 +11,26 @@ import { PROJECTS } from "@/lib/projects";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const isPlaceholder = (p: Project) => p.title.startsWith("[");
+
+/* Resting thumbnail size. It is sized to span the title and the description
+   sitting beside it — measured at 80px once the description fits on one line,
+   which is exactly what `md:h-20` is. Below md the description wraps to two or
+   three lines, and a 1.6:1 thumb at that height would take 160px of a 342px
+   row, so the small size stays there.
+
+   It has to be read in JS rather than left to a `md:` class because Motion
+   writes the animated width/height as inline styles, which beat any utility.
+   `useSyncExternalStore` for the same reason ThemeToggle uses it: the value
+   lives in matchMedia, outside React, and React 19 rejects a setState in an
+   effect. */
+const MD = "(min-width: 768px)";
+const REST = { sm: { width: 76, height: 56 }, md: { width: 128, height: 80 } };
+
+const subscribeMd = (cb: () => void) => {
+  const q = window.matchMedia(MD);
+  q.addEventListener("change", cb);
+  return () => q.removeEventListener("change", cb);
+};
 
 function Thumb({ project }: { project: Project }) {
   if (project.image) {
@@ -27,7 +47,9 @@ function Thumb({ project }: { project: Project }) {
   }
   return (
     <div className="grid h-full w-full place-items-center bg-mist">
-      <span className="font-serif text-xl leading-none text-ink/70">
+      {/* Steps up with the box: the thumb grew from 76×56 to 128×80 at md, and
+          at text-xl the numeral was left floating in it. */}
+      <span className="font-serif text-xl leading-none text-ink/70 md:text-2xl">
         {project.index}
       </span>
     </div>
@@ -105,6 +127,12 @@ function ProjectRow({
   const reduce = useReducedMotion();
   const canGrow = !!project.image; // only enlarge when there's a real image
   const grown = open && canGrow;
+  const isMd = useSyncExternalStore(
+    subscribeMd,
+    () => window.matchMedia(MD).matches,
+    () => false,
+  );
+  const rest = isMd ? REST.md : REST.sm;
 
   return (
     <motion.li
@@ -130,11 +158,13 @@ function ProjectRow({
           animate={
             reduce || !canGrow
               ? undefined
-              : { width: grown ? 300 : 76, height: grown ? 188 : 56 }
+              : grown
+                ? { width: 300, height: 188 }
+                : rest
           }
           transition={{ duration: 0.5, ease: EASE }}
           className={`relative shrink-0 overflow-hidden rounded-lg border border-ink/10 ${
-            reduce || !canGrow ? "h-14 w-[76px]" : ""
+            reduce || !canGrow ? "h-14 w-[76px] md:h-20 md:w-32" : ""
           }`}
         >
           <Thumb project={project} />
