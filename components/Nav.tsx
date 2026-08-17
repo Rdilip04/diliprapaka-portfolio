@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -27,6 +28,18 @@ const EASE = [0.22, 1, 0.36, 1] as const;
    is in flight for ~400ms and never at rest, which is why a full-bleed band of
    it is affordable. */
 const PRELAYERS = ["bg-mist", "bg-cobalt/25"];
+
+/* `createPortal` reads `document` during render, so it cannot run on the
+   server. Same mechanism ThemeToggle uses, and for the same reason: the value
+   lives outside React, and React 19 rejects a synchronous setState in an
+   effect. The menu is closed on first paint either way, so nothing is lost. */
+const subscribeNoop = () => () => {};
+const useMounted = () =>
+  useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
 
 /**
  * Which section is currently under the reader.
@@ -112,6 +125,7 @@ export default function Nav() {
 
   const panelRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
+  const mounted = useMounted();
 
   // Lock scroll, close on Escape, and keep the tab ring inside the panel while
   // it is open. A full-screen menu that leaks focus back to the page behind it
@@ -260,11 +274,20 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* Mobile menu. Rendered after <nav>, which carries `relative z-10`, so
-          the bar and its toggle stay above the panel while it covers the page. */}
-      <AnimatePresence>
-        {open && (
-          <div className="fixed inset-0 sm:hidden">
+      {/* Mobile menu, portalled to <body>.
+          ⚠️ It cannot live inside <header>. Once the page scrolls, the header
+          gains `backdrop-blur-md`, and a backdrop-filter ancestor becomes the
+          containing block for `position: fixed` — which collapsed the panel to
+          the height of the bar (measured: 390×152 instead of 390×844) and left
+          the page showing through. Scroll-dependent, so it looked fine on every
+          test that opened the menu at the top. The portal puts the panel beyond
+          the reach of any header style. `z-40` keeps it under the bar's `z-50`,
+          so the close button and theme toggle stay usable on top of it. */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+          {open && (
+            <div className="fixed inset-0 z-40 sm:hidden">
             {/* Coloured layers, arriving first and offset from each other. */}
             {PRELAYERS.map((surface, i) => (
               <motion.div
@@ -373,9 +396,11 @@ export default function Nav() {
                 </a>
               </motion.div>
             </motion.div>
-          </div>
+            </div>
+          )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
     </motion.header>
   );
 }

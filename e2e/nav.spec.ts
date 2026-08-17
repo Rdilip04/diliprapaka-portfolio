@@ -191,6 +191,35 @@ test.describe("Nav — the mobile menu", () => {
     await page.waitForTimeout(700);
   };
 
+  // The regression that shipped: the panel lived inside <header>, which gains
+  // `backdrop-blur-md` once the page scrolls. A backdrop-filter ancestor becomes
+  // the containing block for `position: fixed`, so the panel collapsed to the
+  // height of the bar — 390x152 instead of 390x844 — and the page showed
+  // through. Every other test in this file opens the menu at scroll 0, which is
+  // exactly why none of them caught it.
+  for (const [route, scrollTo] of [
+    ["/", 1500],
+    ["/work/nextstep", 2600],
+  ] as const) {
+    test(`fills the viewport on ${route} when opened scrolled down`, async ({ page }) => {
+      await page.goto(route);
+      await page.evaluate((y) => window.scrollTo(0, y), scrollTo);
+      await page.waitForTimeout(400);
+      await openMenu(page);
+
+      const box = (await page.locator("#mobile-menu").boundingBox())!;
+      const view = page.viewportSize()!;
+      expect(Math.round(box.height), "panel must cover the viewport").toBe(view.height);
+      expect(Math.round(box.width)).toBe(view.width);
+
+      // And it must actually be opaque over the page behind it.
+      await expect(page.locator("#mobile-menu")).toHaveCSS(
+        "background-color",
+        /rgb\(/,
+      );
+    });
+  }
+
   test("reveals the three sections, numbered", async ({ page }) => {
     await page.goto("/");
     await openMenu(page);

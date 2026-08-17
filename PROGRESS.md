@@ -2,7 +2,7 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 96/96 · production build green
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 98/98 · production build green
 **Last updated:** 2026-08-17
 
 Conventions used below:
@@ -223,7 +223,11 @@ A full-screen staggered panel below `sm`. Two token surfaces (`bg-mist`, then `b
 - **Cobalt gets a full-bleed band here** even though the accent is rationed. It is in flight for ~400ms and never at rest, which is what makes it affordable.
 - Items are `text-hero` — the ladder's largest step, shared with the case-study h1. A full-screen menu is a display moment; no new step was added.
 - **Accessibility is hand-built and test-pinned:** focus moves into the panel on open, `Tab` and `Shift+Tab` cycle inside it, `Escape` closes, focus returns to the toggle rather than falling to `<body>`, and the body scroll lock releases on close. Five tests in `nav.spec.ts` cover it, including one asserting no item is left transparent under reduced motion.
-  > **Trap — `<nav>` carries `relative z-10` so the bar outranks the panel.** The panel is a sibling inside the header's `z-50` stacking context; without that class it paints over the bar and buries its own close button.
+  > ⚠️ **Trap — the panel must be portalled to `<body>`, never rendered inside `<header>`.** It was, and it shipped broken: once the page scrolls the header gains `backdrop-blur-md`, and **a `backdrop-filter` ancestor becomes the containing block for `position: fixed`**. The panel collapsed to the height of the bar — measured **390×152 instead of 390×844** — with the page showing through it. The same is true of `transform`, `filter`, `perspective` and `contain`, so this will recur with any of them.
+  >
+  > The failure is **scroll-dependent, not route-dependent**, which is what made it invisible: all five original tests opened the menu at scroll 0, where the header carries no blur. Two tests now open it scrolled, on both routes, and assert the panel matches the viewport exactly.
+  >
+  > `createPortal` reads `document` during render, so it is gated behind a `useMounted` (`useSyncExternalStore`) or SSR crashes. The panel sits at `z-40` under the bar's `z-50`, which keeps the close button and theme toggle usable on top of it.
 
 ### Between Hero and Selected work
 
@@ -365,7 +369,7 @@ A server component; only `Reveal` and `SusScores` are client islands. Primitives
 
 ```bash
 npm run test        # vitest — 21 unit tests
-npm run test:e2e    # Playwright — 96 tests across 8 files
+npm run test:e2e    # Playwright — 98 tests across 8 files
 npm run test:all
 ```
 
