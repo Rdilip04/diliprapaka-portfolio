@@ -52,15 +52,21 @@ export default function About() {
               Product Designer, UK
             </p>
 
-            {/* The one place the accent appears as a solid mark rather than as
-                text. `w-fit` keeps the wrapper the size of the card, and the
-                block is offset down-right into the column gap — offsetting it
-                left would push past the page padding and put 375px into
-                horizontal scroll. */}
+            {/* The one place the accent appears as a mark rather than as text.
+                `w-fit` keeps the wrapper the size of the card, and the block is
+                offset down-right into the column gap — offsetting it left would
+                push past the page padding and put 375px into horizontal scroll.
+
+                Held at /35 rather than solid: at full strength the accent is a
+                large saturated field sitting directly against a photograph, and
+                it vibrated against the skin and jacket tones instead of framing
+                them. The alpha rides the theme-aware token, so it lands as soft
+                periwinkle on canvas and muted indigo on the dark surface with no
+                `dark:` class — same mark, both themes, one declaration. */}
             <div className="relative mt-8 w-fit">
               <div
                 aria-hidden
-                className="absolute -bottom-4 -right-4 h-[280px] w-[220px] rounded-lg bg-cobalt"
+                className="absolute -bottom-4 -right-4 h-[280px] w-[220px] rounded-lg bg-cobalt/35"
               />
               {/* z-10, or the block above paints over the photo: an absolutely
                   positioned element outranks static content in the painting
