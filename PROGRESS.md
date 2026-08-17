@@ -3,7 +3,7 @@
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
 **Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 79/79 · production build green
-**Last updated:** 2026-08-14
+**Last updated:** 2026-08-15
 
 Conventions used below:
 
@@ -48,8 +48,10 @@ Later experiments that were built, reviewed and removed. Each is recoverable fro
 | `LogoLoop` tool strip | Built and removed. |
 | Recognition section — the BCU award at display size | Removed; the award survives elsewhere (§6). |
 | Masked word-rise entrance on the display headings | Built and reverted. The brief was **new background elements**, not more motion applied to existing text. |
+| Ghosted index numeral behind each work row | Built and reverted. Selected work stays as it was. |
+| Column grid extended to every section | Staged and dropped — uniform grey verticals everywhere read as wallpaper, not structure. It stays in the Hero only. |
 
-The last four all occupied the slot between Hero and Selected work. Dilip's verdict each time was that the section did not earn its place, ending with *"let's keep it simple."*
+The **curved text band, the `LogoLoop` strip and the Recognition section** all occupied the same slot, between Hero and Selected work. Dilip's verdict each time was that the section did not earn its place, ending with *"let's keep it simple."*
 
 > **Locked — that slot is empty on purpose.** Do not fill it without asking.
 
@@ -225,6 +227,8 @@ A hover-expand row list: NextStep plus three "Coming soon" rows.
 - **The CV link ends the reading path**, under "Beyond work" in the content column. It briefly sat in the left rail, which forced the eye back across the page.
 - **Block terms are mono labels; block bodies are 16px.** They were 16px semibold against 14px regular — two steps apart in size and nothing else, which stopped reading as a hierarchy once the dividing rules came out (the two blocks' boxes touch at a **0px** gap, so the removed border had been the only marker). The mono term now matches every other label on the site, and the body is the section's main reading content at body size.
   > **Trap — the `dt` track is 112px and the labels nearly fill it.** Measured at `text-label` with `tracking-[0.14em]`: "Background" 92px, "Beyond work" **102px**. A longer term, more tracking, or a bigger label step will wrap it, and a test fails on exactly that.
+- **A solid cobalt block sits offset behind the portrait.** The one place on the site the accent appears as a *mark* rather than as text, and the only real colour on an otherwise monochrome page. The system already allows `bg-cobalt` for marks.
+  > **Trap — it is offset down-*right* on purpose.** The wrapper is `w-fit relative` and the block is `-bottom-4 -right-4`. Offsetting it left pushes past the page padding and puts 375px into horizontal scroll. The portrait also needs its own `relative z-10` wrapper, or the block paints *over* the photo — an absolutely positioned element outranks static content in the painting order regardless of source order.
 - Background copy says **"specialising in complex, data-rich digital environments"** — deliberately not "healthcare", matching the broader hero. A test asserts `/healthcare/i` never appears in About.
 - Spacing verified on the 8pt grid: section 128px, rows 32px, label track 112 + 24.
 
@@ -349,3 +353,42 @@ Unit: `components/About.test.tsx` · `lib/contrast.test.ts`.
    - **After the first deploy, set `NEXT_PUBLIC_SITE_URL`** to the real origin. `metadataBase` reads it and falls back to `https://diliprapaka.vercel.app`; until it is set, the OG and Twitter cards point at the wrong domain. This fails silently — the site looks fine, only the link previews are wrong.
 3. **Push to a remote.** The repository has no remote configured, so the only copy is local.
 4. **Aesthetic-lane question — strategic, Dilip's call.** An `/impeccable` audit scored 14/20 and flagged that the site sits in the currently saturated "editorial-typographic" lane (display serif, mono labels, ruled separators, monochrome), with both typefaces on its reflex-reject list. Identity preservation argues for leaving committed choices alone, and the slop detector returns clean. Worth knowing, given the first build was rejected as generic and this lane has since become the next default.
+
+### Ideas raised and not built
+
+Available if wanted, none of them started:
+
+- **Hero display type at 76–84px** (currently 58px). That range is the measured ceiling before the CTA drops below the fold at 1280×720; going larger needs the hero recomposed.
+- **Mono is at 34 instances**, nearly level with Inter at 38, though it is specified as a labels-only font.
+- **Nine motion mechanics** on the page. Fewer, better-chosen gestures would be more consistent with the rest of the design.
+- **A large ghosted `DUX` wordmark** in the footer — the brand mark currently only exists at 18px in the nav.
+- **The footer headline and case-study h1** were never given any entrance treatment.
+
+---
+
+## 11. Where things stand — session summary
+
+Everything below is committed. `git log` has the detail; this is the shape of it.
+
+**Shipped and kept**
+
+| Area | What changed |
+|---|---|
+| **Git** | The entire redesign was **uncommitted** and existed only in the working tree. Committed as `89c65e2`. ⚠️ There is still **no remote** — this is the only copy. |
+| **Images** | Everything moved to `next/image` with per-slot `sizes`. Measured: a case-study phone screen went from the 830px source to a **256px candidate, 47KB → 15KB**; the hero portrait **66KB → 15KB**. Also fixed the case-study hero and Hero portrait loading lazily despite being the LCP element. |
+| **Deploy prep** | `metadataBase` now reads `NEXT_PUBLIC_SITE_URL`. Favicon and OG card already generate. Build green. |
+| **Type scale** | 23 ad-hoc declarations — 17 rendered sizes, 16 bespoke `clamp()` curves — collapsed to one ladder in `@theme`. The homepage renders **11 distinct sizes, down from 17** (§4). |
+| **Hairlines** | **34 borders down to 14** (§4). Repeated rules inside lists went; section boundaries stayed. |
+| **Hierarchy repair** | Removing those rules flattened Approach and About; both were re-composed (§6). *Removing a rule is only half the job.* |
+| **Click sparks** | React Bits `ClickSpark`, site-wide, recoloured to the tokens, no dependency (§7). |
+| **Background** | Paper grain across the viewport, plus a faint column grid in the Hero (§4). |
+| **Accent** | The name in the H1, and a solid cobalt block behind the About portrait (§6). |
+| **Docs & cleanup** | Dead CSS, an unused token and an unused export removed; `README.md` rewritten from `create-next-app` boilerplate; this document restructured as a handbook. |
+
+**Built and reverted** — all in §2. Four separate attempts at the Hero→Work slot, a word-rise entrance, and a work-row watermark. The pattern worth knowing: *the slot between Hero and Selected work is empty on purpose, and Selected work is settled.*
+
+**Ways of working that paid off**
+
+- Every visual claim was checked by driving a real Chromium through Playwright and reading the numbers or looking at a screenshot. The in-app preview does not composite when hidden, so `requestAnimationFrame` pauses, lazy images never load and screenshots time out (§9).
+- The test suite caught three regressions that would otherwise have shipped: the footer email overflowing 375px, the tool strip putting the whole page into horizontal scroll, and a hero accent test matching the wrong element.
+- Two failures during the work were **Fast Refresh phantoms** — they passed on a settled tree. Re-run before believing one (§9).

@@ -48,20 +48,34 @@ export default function About() {
               Product Designer, UK
             </p>
 
-            <div className="mt-8">
-              <TiltedCard
-                imageSrc="/dilip-about.jpg"
-                altText="Dilip Rapaka, product designer"
-                captionText="Dilip Rapaka"
-                containerWidth="220px"
-                containerHeight="280px"
-                imageWidth="220px"
-                imageHeight="280px"
-                rotateAmplitude={8}
-                scaleOnHover={1.03}
-                showMobileWarning={false}
-                showTooltip
+            {/* The one place the accent appears as a solid mark rather than as
+                text. `w-fit` keeps the wrapper the size of the card, and the
+                block is offset down-right into the column gap — offsetting it
+                left would push past the page padding and put 375px into
+                horizontal scroll. */}
+            <div className="relative mt-8 w-fit">
+              <div
+                aria-hidden
+                className="absolute -bottom-4 -right-4 h-[280px] w-[220px] rounded-lg bg-cobalt"
               />
+              {/* z-10, or the block above paints over the photo: an absolutely
+                  positioned element outranks static content in the painting
+                  order regardless of source order. */}
+              <div className="relative z-10">
+                <TiltedCard
+                  imageSrc="/dilip-about.jpg"
+                  altText="Dilip Rapaka, product designer"
+                  captionText="Dilip Rapaka"
+                  containerWidth="220px"
+                  containerHeight="280px"
+                  imageWidth="220px"
+                  imageHeight="280px"
+                  rotateAmplitude={8}
+                  scaleOnHover={1.03}
+                  showMobileWarning={false}
+                  showTooltip
+                />
+              </div>
             </div>
           </motion.div>
 
