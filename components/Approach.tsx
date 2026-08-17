@@ -113,10 +113,9 @@ export default function Approach() {
           viewport={{ once: true, margin: "-12%" }}
           className="mt-10 max-w-3xl text-pretty font-serif text-subhead font-normal leading-[1.3] tracking-[-0.01em]"
         >
-          I balance{" "}
-          <span className="text-cobalt-ink">broad exploration</span> with{" "}
-          <span className="text-cobalt-ink">focused execution</span>, adapting my
-          process to the constraints of the problem.
+          I turn <span className="text-cobalt-ink">user insights</span> into{" "}
+          <span className="text-cobalt-ink">clean interfaces</span>, keeping my
+          process simple and functional.
         </motion.p>
 
         {/* Two-column: Methods | Toolkit */}
