@@ -171,6 +171,10 @@ test.describe("Decorative background layers stay out of the way", () => {
 
 for (const route of ROUTES) {
   for (const [name, width, height] of [
+    // 320 is the floor that matters: iPhone SE 1st gen, the Fold's cover
+    // screen, and any laptop at 50% zoom. The footer email overflowed it by
+    // 19px while 390 and 1280 both passed, so the matrix missed it entirely.
+    ["narrow", 320, 720],
     ["mobile", 390, 844],
     ["desktop", 1280, 900],
   ] as const) {

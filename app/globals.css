@@ -41,9 +41,13 @@
   --text-heading: clamp(1.5rem, 4vw, 3rem); /* work-index project titles */
   --text-title: clamp(1.75rem, 3.4vw, 2.75rem); /* section headings */
   --text-display: clamp(2rem, 4.6vw, 3.6rem); /* home h1 */
-  /* The 2rem floor is load-bearing: the footer email is one long unbreakable
-     string, and at 2.25rem it overflows 375px. A test pins it on both routes. */
-  --text-statement: clamp(2rem, 5.5vw, 4.5rem); /* footer h2 + email */
+  /* The floor is load-bearing, and it is the footer email — one unbreakable
+     27-character string — that sets it, not the h2. At 2.25rem it overflowed
+     375px; at 2rem it still overflowed 320px (measured: 315px of email inside a
+     272px box). The string costs ~9.84px of width per px of font-size, so
+     1.65rem lands it at ~260px with room to spare. Tests pin 320, 375 and 390
+     on both routes. */
+  --text-statement: clamp(1.65rem, 5.5vw, 4.5rem); /* footer h2 + email */
   --text-hero: clamp(3rem, 10vw, 7rem); /* case-study h1, the largest type */
 }
 
