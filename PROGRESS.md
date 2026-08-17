@@ -2,7 +2,7 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 91/91 · production build green
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 96/96 · production build green
 **Last updated:** 2026-08-17
 
 Conventions used below:
@@ -214,6 +214,17 @@ app/work/nextstep     the case study
 >
 **Accenting words in the H1:** set the `accent` flag on the token in the `H1` array. Do not wrap words in spans by hand — that breaks both the per-word hover and the real spaces between words. The hero now carries two cobalt accents (the name, and *simple and easy to use*); weigh carefully before adding a third.
 
+### The mobile menu (`Nav.tsx`)
+
+A full-screen staggered panel below `sm`. Two token surfaces (`bg-mist`, then `bg-cobalt/25`) slide in from the right at a 70ms offset, the `bg-paper` panel lands behind them, then the items rise out of masked boxes on a 90ms stagger with mono `01/02/03` numbering. Desktop is untouched.
+
+> **It is Motion, deliberately, not React Bits `StaggeredMenu`.** That component was the reference and it needs **gsap** — §3 is Locked against a third animation library, and gsap already arrived and left with the §2 experiments. Its CSS also hardcodes `3.5rem`, `letter-spacing: -2px`, `#000`/`#fff`, `#5227FF` and `backdrop-filter: blur(12px)`, so the panel would have stayed white in dark mode and sat outside the type ladder. It renders its own `<header>` too, which would have displaced the wordmark, the clock, the theme toggle and `aria-current`. The choreography is reproduced; the dependency and the hardcoded styling are not.
+
+- **Cobalt gets a full-bleed band here** even though the accent is rationed. It is in flight for ~400ms and never at rest, which is what makes it affordable.
+- Items are `text-hero` — the ladder's largest step, shared with the case-study h1. A full-screen menu is a display moment; no new step was added.
+- **Accessibility is hand-built and test-pinned:** focus moves into the panel on open, `Tab` and `Shift+Tab` cycle inside it, `Escape` closes, focus returns to the toggle rather than falling to `<body>`, and the body scroll lock releases on close. Five tests in `nav.spec.ts` cover it, including one asserting no item is left transparent under reduced motion.
+  > **Trap — `<nav>` carries `relative z-10` so the bar outranks the panel.** The panel is a sibling inside the header's `z-50` stacking context; without that class it paints over the bar and buries its own close button.
+
 ### Between Hero and Selected work
 
 Deliberately empty (§2).
@@ -354,7 +365,7 @@ A server component; only `Reveal` and `SusScores` are client islands. Primitives
 
 ```bash
 npm run test        # vitest — 21 unit tests
-npm run test:e2e    # Playwright — 91 tests across 8 files
+npm run test:e2e    # Playwright — 96 tests across 8 files
 npm run test:all
 ```
 

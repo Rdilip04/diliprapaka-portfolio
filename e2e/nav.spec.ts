@@ -179,3 +179,79 @@ test.describe("Nav — every load starts at the homepage", () => {
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
   });
 });
+
+test.describe("Nav — the mobile menu", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  const openMenu = async (page: Page) => {
+    await page.getByRole("button", { name: /open menu/i }).click();
+    await expect(page.locator("#mobile-menu")).toBeVisible();
+    // The items rise out of masked boxes on a stagger; wait for the last one.
+    await expect(page.locator("#mobile-menu a").last()).toBeVisible();
+    await page.waitForTimeout(700);
+  };
+
+  test("reveals the three sections, numbered", async ({ page }) => {
+    await page.goto("/");
+    await openMenu(page);
+
+    const panel = page.locator("#mobile-menu");
+    for (const [i, label] of ["Work", "About", "Contact"].entries()) {
+      await expect(panel.getByRole("link", { name: new RegExp(label, "i") })).toBeVisible();
+      await expect(panel).toContainText(`0${i + 1}`);
+    }
+  });
+
+  test("closes on Escape and hands focus back to the toggle", async ({ page }) => {
+    await page.goto("/");
+    await openMenu(page);
+
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#mobile-menu")).toHaveCount(0);
+    // Focus must not be left on <body>, or the next Tab restarts the page.
+    const focused = await page.evaluate(() => document.activeElement?.getAttribute("aria-label"));
+    expect(focused).toMatch(/menu/i);
+  });
+
+  test("keeps tab focus inside the panel", async ({ page }) => {
+    await page.goto("/");
+    await openMenu(page);
+
+    // Tab well past the number of focusable items; every stop must stay inside.
+    for (let i = 0; i < 10; i++) {
+      await page.keyboard.press("Tab");
+      const inside = await page.evaluate(
+        () => !!document.getElementById("mobile-menu")?.contains(document.activeElement),
+      );
+      expect(inside, `focus escaped on tab ${i + 1}`).toBe(true);
+    }
+  });
+
+  test("locks the page behind it, and releases on close", async ({ page }) => {
+    await page.goto("/");
+    await openMenu(page);
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).toBe("hidden");
+
+    await page.getByRole("button", { name: /close menu/i }).click();
+    await expect(page.locator("#mobile-menu")).toHaveCount(0);
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).not.toBe("hidden");
+  });
+
+  test("renders every item at full opacity under reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await openMenu(page);
+
+    const faded = await page.$$eval("#mobile-menu a", (els) =>
+      els.filter((el) => {
+        let n: HTMLElement | null = el as HTMLElement;
+        while (n) {
+          if (parseFloat(getComputedStyle(n).opacity) < 0.99) return true;
+          n = n.parentElement;
+        }
+        return false;
+      }).length,
+    );
+    expect(faded, "the reveal must not strand items transparent").toBe(0);
+  });
+});

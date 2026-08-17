@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -16,6 +16,17 @@ const LINKS = [
 ];
 
 const SECTION_IDS = LINKS.map((l) => l.href.slice(1));
+
+const LINKEDIN = "https://www.linkedin.com/in/diliprapaka";
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/* The panel arrives behind two coloured layers rather than on its own — the
+   layers land first, at a 70ms offset, so the reveal reads as depth instead of
+   a single sliding sheet. Both are tokens, so the whole thing re-maps in dark
+   mode without a `dark:` class. Cobalt is used sparingly on this site; here it
+   is in flight for ~400ms and never at rest, which is why a full-bleed band of
+   it is affordable. */
+const PRELAYERS = ["bg-mist", "bg-cobalt/25"];
 
 /**
  * Which section is currently under the reader.
@@ -99,15 +110,50 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock scroll and close on Escape while the mobile menu is open.
+  const panelRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+
+  // Lock scroll, close on Escape, and keep the tab ring inside the panel while
+  // it is open. A full-screen menu that leaks focus back to the page behind it
+  // strands a keyboard user on links they cannot see.
   useEffect(() => {
     if (!open) return;
+    openerRef.current = document.activeElement as HTMLElement | null;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+
+    const focusables = () =>
+      Array.from(
+        panelRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      );
+
+    focusables()[0]?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const [first, last] = [items[0], items[items.length - 1]];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
+      // Send focus back where it came from, or it lands on <body>.
+      openerRef.current?.focus();
     };
   }, [open]);
 
@@ -147,7 +193,7 @@ export default function Nav() {
 
       <nav
         aria-label="Primary"
-        className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4"
+        className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-4"
       >
         <Link
           href={onHome ? "#main" : "/"}
@@ -214,43 +260,120 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* Mobile menu overlay */}
+      {/* Mobile menu. Rendered after <nav>, which carries `relative z-10`, so
+          the bar and its toggle stay above the panel while it covers the page. */}
       <AnimatePresence>
         {open && (
-          <motion.div
-            id="mobile-menu"
-            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-x-0 top-full border-b border-ink/10 bg-paper/95 backdrop-blur-md sm:hidden"
-          >
-            <ul className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
-              {LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={hrefFor(link.href)}
+          <div className="fixed inset-0 sm:hidden">
+            {/* Coloured layers, arriving first and offset from each other. */}
+            {PRELAYERS.map((surface, i) => (
+              <motion.div
+                key={surface}
+                aria-hidden
+                initial={reduceMotion ? { opacity: 0 } : { x: "100%" }}
+                animate={reduceMotion ? { opacity: 1 } : { x: 0 }}
+                exit={reduceMotion ? { opacity: 0 } : { x: "100%" }}
+                transition={{
+                  duration: 0.5,
+                  ease: EASE,
+                  delay: reduceMotion ? 0 : i * 0.07,
+                }}
+                className={`absolute inset-0 ${surface}`}
+              />
+            ))}
+
+            <motion.div
+              id="mobile-menu"
+              ref={panelRef}
+              initial={reduceMotion ? { opacity: 0 } : { x: "100%" }}
+              animate={reduceMotion ? { opacity: 1 } : { x: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { x: "100%" }}
+              transition={{
+                duration: 0.55,
+                ease: EASE,
+                delay: reduceMotion ? 0 : PRELAYERS.length * 0.07,
+              }}
+              className="absolute inset-0 flex flex-col overflow-y-auto bg-paper px-6 pb-10 pt-28"
+            >
+              <ul className="flex flex-col">
+                {LINKS.map((link, i) => {
+                  const isActive = active === link.href.slice(1);
+                  // The label rises out of a masked box, so it enters from
+                  // behind the line above rather than simply fading.
+                  return (
+                    <li key={link.href} className="overflow-hidden py-1.5">
+                      <motion.div
+                        initial={reduceMotion ? { opacity: 0 } : { y: "115%" }}
+                        animate={reduceMotion ? { opacity: 1 } : { y: 0 }}
+                        transition={{
+                          duration: 0.7,
+                          ease: EASE,
+                          delay: reduceMotion ? 0 : 0.28 + i * 0.09,
+                        }}
+                      >
+                        <Link
+                          href={hrefFor(link.href)}
+                          onClick={() => setOpen(false)}
+                          aria-current={isActive ? "location" : undefined}
+                          className="flex items-baseline gap-4 font-serif text-hero font-normal leading-[1.02] tracking-[-0.03em] text-ink"
+                        >
+                          <span
+                            aria-hidden
+                            className="font-mono text-label tabular-nums text-cobalt-ink"
+                          >
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          {link.label}
+                        </Link>
+                      </motion.div>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <motion.div
+                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.55,
+                  ease: EASE,
+                  delay: reduceMotion ? 0 : 0.55,
+                }}
+                className="mt-auto flex flex-col gap-4 border-t border-ink/12 pt-8"
+              >
+                <span className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
+                  Elsewhere
+                </span>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                  <a
+                    href={LINKEDIN}
+                    target="_blank"
+                    rel="noreferrer"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-between py-3 font-sans text-2xl font-medium text-ink"
+                    className="inline-flex min-h-11 items-center font-sans text-sm text-ink/85"
                   >
-                    {link.label}
-                    <span aria-hidden className="text-cobalt-ink">
-                      →
-                    </span>
-                  </Link>
-                </li>
-              ))}
-              <li className="mt-2 border-t border-ink/10 pt-4">
+                    LinkedIn ↗
+                  </a>
+                  <a
+                    href="/Dilip-Rapaka-CV.pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="inline-flex min-h-11 items-center font-sans text-sm text-ink/85"
+                  >
+                    CV / Résumé ↗
+                  </a>
+                </div>
                 <a
                   href={`mailto:${EMAIL}`}
                   onClick={() => setOpen(false)}
-                  className="font-mono text-label uppercase tracking-[0.16em] text-ink/70"
+                  className="inline-flex min-h-11 items-center font-mono text-label uppercase tracking-[0.14em] text-cobalt-ink"
                 >
                   {EMAIL}
                 </a>
-              </li>
-            </ul>
-          </motion.div>
+              </motion.div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </motion.header>
