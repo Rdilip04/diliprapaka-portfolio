@@ -241,15 +241,11 @@ export default function Hero() {
                     imageSrc="/dilip-hero.jpg"
                     altText="Dilip Rapaka, product designer"
                     captionText="Dilip Rapaka"
-                    containerWidth="280px"
-                    containerHeight="350px"
-                    imageWidth="280px"
-                    imageHeight="350px"
+                    width="280px"
+                    height="350px"
                     rotateAmplitude={9}
                     scaleOnHover={1.04}
                     eager
-                    showMobileWarning={false}
-                    showTooltip
                   />
                 </div>
               </div>

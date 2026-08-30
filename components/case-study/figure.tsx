@@ -14,10 +14,12 @@ const RATIO = {
 // instead of assuming 100vw. Phones cap at ~184px (a max-w-sm/max-w-3xl grid
 // column); banner and wide run the full max-w-6xl reading container, 1104px
 // once its px-6 padding is removed.
+const CONTAINER = "(min-width: 1152px) 1104px, calc(100vw - 48px)";
+
 const SIZES = {
   phone: "200px",
-  banner: "(min-width: 1152px) 1104px, calc(100vw - 48px)",
-  wide: "(min-width: 1152px) 1104px, calc(100vw - 48px)",
+  banner: CONTAINER,
+  wide: CONTAINER,
 } as const;
 
 type Ratio = keyof typeof RATIO;

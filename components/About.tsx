@@ -76,14 +76,10 @@ export default function About() {
                   imageSrc="/dilip-about.jpg"
                   altText="Dilip Rapaka, product designer"
                   captionText="Dilip Rapaka"
-                  containerWidth="220px"
-                  containerHeight="280px"
-                  imageWidth="220px"
-                  imageHeight="280px"
+                  width="220px"
+                  height="280px"
                   rotateAmplitude={8}
                   scaleOnHover={1.03}
-                  showMobileWarning={false}
-                  showTooltip
                 />
               </div>
             </div>

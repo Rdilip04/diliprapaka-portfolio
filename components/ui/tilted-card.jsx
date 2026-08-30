@@ -15,16 +15,10 @@ export default function TiltedCard({
   imageSrc,
   altText = 'Tilted card image',
   captionText = '',
-  containerHeight = '300px',
-  containerWidth = '100%',
-  imageHeight = '300px',
-  imageWidth = '300px',
+  width = '300px',
+  height = '300px',
   scaleOnHover = 1.1,
   rotateAmplitude = 14,
-  showMobileWarning = true,
-  showTooltip = true,
-  overlayContent = null,
-  displayOverlayContent = false,
   eager = false
 }) {
   const ref = useRef(null);
@@ -34,8 +28,8 @@ export default function TiltedCard({
   const { props: imageProps } = getImageProps({
     src: imageSrc,
     alt: altText,
-    width: parseInt(imageWidth, 10),
-    height: parseInt(imageHeight, 10),
+    width: parseInt(width, 10),
+    height: parseInt(height, 10),
     loading: eager ? 'eager' : 'lazy'
   });
 
@@ -92,22 +86,18 @@ export default function TiltedCard({
       ref={ref}
       className="tilted-card-figure"
       style={{
-        height: containerHeight,
-        width: containerWidth
+        height,
+        width
       }}
       onMouseMove={handleMouse}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {showMobileWarning && (
-        <div className="tilted-card-mobile-alert">This effect is not optimized for mobile. Check on desktop.</div>
-      )}
-
       <motion.div
         className="tilted-card-inner"
         style={{
-          width: imageWidth,
-          height: imageHeight,
+          width,
+          height,
           rotateX,
           rotateY,
           scale
@@ -117,29 +107,23 @@ export default function TiltedCard({
           {...imageProps}
           className="tilted-card-img"
           style={{
-            width: imageWidth,
-            height: imageHeight
+            width,
+            height
           }}
         />
-
-        {displayOverlayContent && overlayContent && (
-          <motion.div className="tilted-card-overlay">{overlayContent}</motion.div>
-        )}
       </motion.div>
 
-      {showTooltip && (
-        <motion.figcaption
-          className="tilted-card-caption"
-          style={{
-            x,
-            y,
-            opacity,
-            rotate: rotateFigcaption
-          }}
-        >
-          {captionText}
-        </motion.figcaption>
-      )}
+      <motion.figcaption
+        className="tilted-card-caption"
+        style={{
+          x,
+          y,
+          opacity,
+          rotate: rotateFigcaption
+        }}
+      >
+        {captionText}
+      </motion.figcaption>
     </figure>
   );
 }

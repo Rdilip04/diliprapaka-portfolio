@@ -9,18 +9,7 @@
   justify-content: center;
 }
 
-.tilted-card-mobile-alert {
-  position: absolute;
-  top: 1rem;
-  text-align: center;
-  font-size: 0.875rem;
-  display: none;
-}
-
 @media (max-width: 640px) {
-  .tilted-card-mobile-alert {
-    display: block;
-  }
   .tilted-card-caption {
     display: none;
   }
@@ -39,15 +28,6 @@
   border-radius: 8px;
   will-change: transform;
   transform: translateZ(0);
-}
-
-.tilted-card-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  will-change: transform;
-  transform: translateZ(30px);
 }
 
 .tilted-card-caption {
