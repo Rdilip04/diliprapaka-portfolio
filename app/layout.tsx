@@ -28,14 +28,17 @@ const DESCRIPTION =
   "Dilip Rapaka is a UX & product designer in the UK, designing simple, thoughtful digital experiences for healthcare and everyday complexity. Open to junior UX & product roles.";
 
 // The OG and Twitter cards need absolute URLs, so this has to be the real
-// production origin. Set NEXT_PUBLIC_SITE_URL in the Vercel project once the
-// final domain is known; the fallback is the default Vercel subdomain.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://diliprapaka.vercel.app";
+// production origin. NEXT_PUBLIC_SITE_URL overrides it (set it in the Vercel
+// project if the site moves to a custom domain); the fallback is the live
+// deployment. It used to be `diliprapaka.vercel.app`, which is not where the
+// site is served, so every link preview pointed at the wrong origin.
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://diliprapaka-portfolio.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Dilip Rapaka — Product Designer",
+    default: "Dilip Rapaka, Product Designer",
     template: "%s · Dilip Rapaka",
   },
   description: DESCRIPTION,
@@ -53,12 +56,12 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: "Dilip Rapaka",
-    title: "Dilip Rapaka — Product Designer",
+    title: "Dilip Rapaka, Product Designer",
     description: DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dilip Rapaka — Product Designer",
+    title: "Dilip Rapaka, Product Designer",
     description: DESCRIPTION,
   },
 };
