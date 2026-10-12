@@ -33,13 +33,15 @@ export function Eyebrow({ children }: { children: React.ReactNode }) {
 
 export function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mt-4 max-w-3xl font-serif text-title font-normal leading-[1.05] tracking-[-0.015em]">
+    <h2 className="mt-4 max-w-3xl font-display text-title font-medium leading-[1.05] tracking-[-0.015em]">
       {children}
     </h2>
   );
 }
 
-// Reading column. Capped near 65ch — past that the eye loses the line return.
+// Reading column. Capped near 75 characters (680px), past which the eye loses
+// the line return. 62ch, not 65ch: `ch` is the width of the "0" glyph, which
+// Instrument Sans sets wider than Inter, so 65ch measured 693px.
 export function Body({
   children,
   className,
@@ -49,7 +51,7 @@ export function Body({
 }) {
   return (
     <p
-      className={`max-w-[65ch] font-sans text-base leading-[1.7] text-ink/75 ${
+      className={`max-w-[62ch] font-sans text-base leading-[1.7] text-ink/75 ${
         className ?? ""
       }`}
     >

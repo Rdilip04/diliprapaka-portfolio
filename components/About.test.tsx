@@ -121,10 +121,10 @@ describe("About — colour contrast", () => {
     expect(failures).toEqual([]);
   });
 
-  it("keeps the small-caps meta label above AA — it regressed to 3.32:1 at ink/50", () => {
+  it("keeps the block labels above AA — the old meta label regressed to 3.32:1 at ink/50", () => {
     const { container } = render(<About />);
-    const meta = container.querySelector<HTMLElement>("p.font-mono");
-    expect(meta).toHaveTextContent("Product Designer, UK");
+    const meta = container.querySelector<HTMLElement>("dt");
+    expect(meta).toHaveTextContent("Background");
 
     const alpha = Number(meta?.className.match(/text-ink\/(\d+)/)?.[1]) / 100;
     expect(

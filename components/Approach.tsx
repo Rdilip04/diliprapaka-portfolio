@@ -102,7 +102,7 @@ export default function Approach() {
         <motion.h2
           {...reveal(0)}
           viewport={{ once: true, margin: "-12%" }}
-          className="font-serif text-title font-normal leading-none tracking-[-0.01em]"
+          className="font-display text-title font-medium leading-none tracking-[-0.01em]"
         >
           How I work
         </motion.h2>
@@ -111,7 +111,7 @@ export default function Approach() {
         <motion.p
           {...reveal(0.05)}
           viewport={{ once: true, margin: "-12%" }}
-          className="mt-10 max-w-3xl text-pretty font-serif text-subhead font-normal leading-[1.3] tracking-[-0.01em]"
+          className="mt-10 max-w-3xl text-pretty font-display text-subhead font-medium leading-[1.3] tracking-[-0.01em]"
         >
           I turn <span className="text-cobalt-ink">user insights</span> into{" "}
           <span className="text-cobalt-ink">clean interfaces</span>, keeping my
@@ -122,7 +122,7 @@ export default function Approach() {
         <div className="mt-16 grid gap-10 border-t border-ink/12 pt-10 md:grid-cols-[1.5fr_1fr] md:gap-16">
           {/* Methods — icon list with micro-interactions */}
           <motion.div {...reveal(0.1)} viewport={{ once: true, margin: "-10%" }}>
-            <span className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
+            <span className="font-sans text-sm font-medium text-ink/70">
               Methods
             </span>
             {/* max-w-lg is doing real work: unconstrained, each row spanned
@@ -151,7 +151,7 @@ export default function Approach() {
             viewport={{ once: true, margin: "-10%" }}
             className="md:pl-16"
           >
-            <span className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
+            <span className="font-sans text-sm font-medium text-ink/70">
               Toolkit
             </span>
             {/* Set as a run of names rather than five outlined chips. The

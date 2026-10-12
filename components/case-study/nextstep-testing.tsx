@@ -59,7 +59,7 @@ function Round({
         <span className="font-mono text-label tabular-nums tracking-[0.14em] text-cobalt-ink">
           {index}
         </span>
-        <h3 className="font-serif text-subhead font-normal leading-[1.1] tracking-[-0.01em]">
+        <h3 className="font-display text-subhead font-medium leading-[1.1] tracking-[-0.01em]">
           {title}
         </h3>
       </div>
@@ -71,7 +71,7 @@ function Round({
         <Findings heading="What we changed" items={changed} accent />
       </div>
       {note && (
-        <p className="mt-8 max-w-[62ch] border-t border-ink/12 pt-6 font-serif text-sm italic leading-relaxed text-ink/70">
+        <p className="mt-8 max-w-[62ch] border-t border-ink/12 pt-6 font-sans text-sm italic leading-relaxed text-ink/70">
           {note}
         </p>
       )}

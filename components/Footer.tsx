@@ -35,7 +35,7 @@ function MagneticEmail() {
       onMouseMove={onMove}
       onMouseLeave={reset}
       style={reduce ? undefined : { x, y }}
-      className="group relative inline-block font-serif text-statement font-normal leading-[1.05] tracking-[-0.02em] text-shell-fg"
+      className="group relative inline-block font-display text-statement font-medium leading-[1.05] tracking-[-0.02em] text-shell-fg"
     >
       {EMAIL}
       <span className="absolute -bottom-2 left-0 h-px w-full origin-right scale-x-0 bg-cobalt-lite transition-transform duration-500 ease-out group-hover:origin-left group-hover:scale-x-100" />
@@ -78,9 +78,9 @@ export default function Footer() {
         </Reveal>
 
         <Reveal delay={0.05}>
-          <h2 className="mt-6 max-w-4xl text-balance font-serif text-statement font-normal leading-[1.05] tracking-[-0.02em] text-shell-fg">
+          <h2 className="mt-6 max-w-4xl text-balance font-display text-statement font-medium leading-[1.05] tracking-[-0.02em] text-shell-fg">
             Let&apos;s make something{" "}
-            <em className="font-normal italic text-cobalt-lite">that matters.</em>
+            <em className="italic text-cobalt-lite">that matters.</em>
           </h2>
         </Reveal>
 
@@ -93,7 +93,7 @@ export default function Footer() {
           className="mt-16 grid gap-10 border-t border-shell-fg/12 pt-8 sm:grid-cols-3"
         >
           <div className="flex flex-col gap-3">
-            <span className="font-mono text-label uppercase tracking-[0.16em] text-shell-fg/55">
+            <span className="font-sans text-sm font-medium text-shell-fg/60">
               Elsewhere
             </span>
             <a
@@ -127,7 +127,7 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <span className="font-mono text-label uppercase tracking-[0.16em] text-shell-fg/55">
+            <span className="font-sans text-sm font-medium text-shell-fg/60">
               Availability
             </span>
             <span className="inline-flex w-fit items-center gap-2.5 font-sans text-sm text-shell-fg/85">
@@ -140,7 +140,7 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <span className="font-mono text-label uppercase tracking-[0.16em] text-shell-fg/55">
+            <span className="font-sans text-sm font-medium text-shell-fg/60">
               Navigate
             </span>
             <a
@@ -158,7 +158,7 @@ export default function Footer() {
           </div>
         </Reveal>
 
-        <div className="mt-20 flex flex-col gap-2 border-t border-shell-fg/10 pt-6 font-mono text-label uppercase tracking-[0.14em] text-shell-fg/60 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-20 flex flex-col gap-2 border-t border-shell-fg/10 pt-6 font-sans text-sm text-shell-fg/60 sm:flex-row sm:items-center sm:justify-between">
           <span>© {YEAR} Dilip Rapaka</span>
           <span>Designed &amp; built by Dilip</span>
         </div>

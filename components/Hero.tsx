@@ -151,7 +151,7 @@ export default function Hero() {
             </p>
 
             <h1
-              className="anim-fade-up mt-5 font-serif text-display font-normal leading-[1.1] tracking-[-0.02em] text-ink"
+              className="anim-fade-up mt-5 font-display text-display font-medium leading-[1.1] tracking-[-0.02em] text-ink"
               style={{ animationDelay: "0.12s" }}
             >
               {/* A real space between the words, not just a margin. These are
@@ -165,7 +165,7 @@ export default function Hero() {
                   <Fragment key={i}>
                     <span
                       className={`inline-block transition-[transform,color] duration-300 ease-out hover:-translate-y-0.5 hover:text-cobalt-ink ${
-                        em ? "font-normal italic" : ""
+                        em ? "italic" : ""
                       } ${accent ? "text-cobalt-ink" : ""}`}
                     >
                       {text}

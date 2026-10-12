@@ -308,7 +308,7 @@ export default function Nav() {
                           href={hrefFor(link.href)}
                           onClick={() => setOpen(false)}
                           aria-current={isActive ? "location" : undefined}
-                          className="flex items-baseline gap-4 font-serif text-hero font-normal leading-[1.02] tracking-[-0.03em] text-ink"
+                          className="flex items-baseline gap-4 font-display text-hero font-medium leading-[1.02] tracking-[-0.03em] text-ink"
                         >
                           <span
                             aria-hidden
@@ -334,7 +334,7 @@ export default function Nav() {
                 }}
                 className="mt-auto flex flex-col gap-4 border-t border-ink/12 pt-8"
               >
-                <span className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
+                <span className="font-sans text-sm font-medium text-ink/70">
                   Elsewhere
                 </span>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2">

@@ -21,8 +21,9 @@
   --color-shell-fg: #f7f8fa;
 
   /* Type */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-serif-src), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
+  /* Same family as body; `.font-display` below narrows it for headlines. */
+  --font-display: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-src), ui-monospace, "SFMono-Regular", monospace;
 
   /* Type scale — every size on the site comes from this ladder.
@@ -41,13 +42,12 @@
   --text-heading: clamp(1.5rem, 4vw, 3rem); /* work-index project titles */
   --text-title: clamp(1.75rem, 3.4vw, 2.75rem); /* section headings */
   --text-display: clamp(2rem, 4.6vw, 3.6rem); /* home h1 */
-  /* The floor is load-bearing, and it is the footer email — one unbreakable
-     27-character string — that sets it, not the h2. At 2.25rem it overflowed
-     375px; at 2rem it still overflowed 320px (measured: 315px of email inside a
-     272px box). The string costs ~9.84px of width per px of font-size, so
-     1.65rem lands it at ~260px with room to spare. Tests pin 320, 375 and 390
-     on both routes. */
-  --text-statement: clamp(1.65rem, 5.5vw, 4.5rem); /* footer h2 + email */
+  /* The floor is load-bearing, and it is the footer email (one unbreakable
+     27-character string) that sets it, not the h2. In Instrument Sans the string
+     costs ~11.25px of width per px of font-size; at the old 1.65rem floor it
+     measured 297px inside the 272px box at 320 wide. 1.45rem lands it at ~261px.
+     Tests pin 320, 375 and 390 on both routes. */
+  --text-statement: clamp(1.45rem, 5.5vw, 4.5rem); /* footer h2 + email */
   --text-hero: clamp(3rem, 10vw, 7rem); /* case-study h1, the largest type */
 }
 
@@ -87,6 +87,13 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Display type is the body family on a narrower cut. The width axis keeps the
+   headline measure close to what the old display serif set, so the Hero H1
+   still clears the fold at 1280x720 and the footer email still fits 320px. */
+.font-display {
+  font-stretch: 90%;
 }
 
 body {

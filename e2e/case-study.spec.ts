@@ -382,7 +382,7 @@ test.describe("NextStep case study — readability", () => {
         ].map((p) => p.getBoundingClientRect().width),
       ),
     );
-    // ~680px is roughly 75 characters of 16px Inter — the upper bound before
+    // ~680px is roughly 75 characters of 16px body copy — the upper bound before
     // the eye starts losing the line return.
     expect(widest).toBeLessThanOrEqual(680);
   });

@@ -49,7 +49,7 @@ function Thumb({ project }: { project: Project }) {
     <div className="grid h-full w-full place-items-center bg-mist">
       {/* Steps up with the box: the thumb grew from 76×56 to 128×80 at md, and
           at text-xl the numeral was left floating in it. */}
-      <span className="font-serif text-xl leading-none text-ink/70 md:text-2xl">
+      <span className="font-display text-xl leading-none text-ink/70 md:text-2xl">
         {project.index}
       </span>
     </div>
@@ -109,7 +109,7 @@ function ComingSoonRow({ project }: { project: Project }) {
           <Thumb project={project} />
         </div>
         <div className="flex min-w-0 flex-1 items-baseline justify-between gap-4">
-          <h3 className="font-serif text-subhead font-normal leading-none tracking-[-0.01em] text-ink/70">
+          <h3 className="font-display text-subhead font-medium leading-none tracking-[-0.01em] text-ink/70">
             Coming soon
           </h3>
           <span className="font-mono text-label uppercase tracking-[0.14em] text-ink/70">
@@ -180,7 +180,7 @@ function ProjectRow({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="font-serif text-heading font-normal leading-[1.02] tracking-[-0.015em] text-ink transition-colors duration-300 group-hover:text-cobalt-ink group-focus:text-cobalt-ink">
+            <h3 className="font-display text-heading font-medium leading-[1.02] tracking-[-0.015em] text-ink transition-colors duration-300 group-hover:text-cobalt-ink group-focus:text-cobalt-ink">
               {project.title}
             </h3>
           </div>
@@ -232,7 +232,7 @@ export default function CaseStudies() {
     <section id="work" className="bg-canvas text-ink">
       <div className="mx-auto w-full max-w-7xl px-6 py-24 md:py-32">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-title font-normal leading-none tracking-[-0.01em]">
+          <h2 className="font-display text-title font-medium leading-none tracking-[-0.01em]">
             Selected work
           </h2>
           {/* Count only what exists. "· 4 planned" told a recruiter the

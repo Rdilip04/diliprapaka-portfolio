@@ -1,26 +1,23 @@
 import type { Metadata } from "next";
-import { Inter, Martian_Mono, Instrument_Serif } from "next/font/google";
+import { Instrument_Sans, Martian_Mono } from "next/font/google";
 import SparkLayer from "@/components/SparkLayer";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+// One family for display and body. Instrument Sans carries a real italic (the
+// emphasis on "hard" and "that matters" depends on it) and a width axis, which
+// the display sizes use to tighten the measure. It replaced Inter + Instrument
+// Serif: two families now, not three.
+const sans = Instrument_Sans({
+  variable: "--font-sans-src",
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["wdth"],
   display: "swap",
 });
 
 const mono = Martian_Mono({
   variable: "--font-mono-src",
   subsets: ["latin"],
-  display: "swap",
-});
-
-// Editorial display serif — the contrast axis against the grotesk/mono.
-const serif = Instrument_Serif({
-  variable: "--font-serif-src",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -74,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${mono.variable} ${serif.variable}`}
+      className={`${sans.variable} ${mono.variable}`}
       suppressHydrationWarning
     >
       <head>

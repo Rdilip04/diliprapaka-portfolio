@@ -150,7 +150,7 @@ test.describe("About — vertical rhythm", () => {
 });
 
 test.describe("About — rendered contrast", () => {
-  test("renders the meta label at AA once Tailwind has generated the colour", async ({
+  test("renders the block labels at AA once Tailwind has generated the colour", async ({
     page,
   }) => {
     await showAbout(page);
@@ -181,7 +181,7 @@ test.describe("About — rendered contrast", () => {
         return 0.2126 * ch(rgb[0]) + 0.7152 * ch(rgb[1]) + 0.0722 * ch(rgb[2]);
       };
 
-      const el = document.querySelector("#about p.font-mono") as HTMLElement;
+      const el = document.querySelector("#about dl dt") as HTMLElement;
       const section = document.querySelector("#about") as HTMLElement;
 
       const bgCss = getComputedStyle(section).backgroundColor;

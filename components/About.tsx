@@ -43,15 +43,9 @@ export default function About() {
             viewport={{ once: true, margin: "-12%" }}
             className="md:col-span-3"
           >
-            <h2 className="font-serif text-title font-normal tracking-[-0.01em]">
+            <h2 className="font-display text-title font-medium tracking-[-0.01em]">
               About
             </h2>
-            <p className="mt-4 font-mono text-label uppercase leading-relaxed tracking-[0.16em] text-ink/70">
-              Dilip Rapaka
-              <br />
-              Product Designer, UK
-            </p>
-
             {/* The one place the accent appears as a mark rather than as text.
                 `w-fit` keeps the wrapper the size of the card, and the block is
                 offset down-right into the column gap — offsetting it left would
@@ -92,7 +86,7 @@ export default function About() {
             <motion.p
               {...reveal(0.05)}
               viewport={{ once: true, margin: "-12%" }}
-              className="max-w-3xl text-pretty font-serif text-subhead font-normal leading-[1.28] tracking-[-0.01em] text-ink"
+              className="max-w-3xl text-pretty font-display text-subhead font-medium leading-[1.28] tracking-[-0.01em] text-ink"
             >
               I craft{" "}
               <span className="text-cobalt-ink">
@@ -112,11 +106,11 @@ export default function About() {
                   viewport={{ once: true, margin: "-8%" }}
                   className="grid gap-2 py-8 md:grid-cols-[7rem_1fr] md:gap-6"
                 >
-                  {/* Mono label, matching every other section label on the
-                      site. Term and body were 16px semibold against 14px
-                      regular — two steps apart in size and nothing else, which
-                      is not enough separation once the dividing rule is gone. */}
-                  <dt className="font-mono text-label uppercase leading-relaxed tracking-[0.14em] text-ink/70">
+                  {/* Sentence-case label, not a mono eyebrow: mono caps are
+                      kept to three on the page (Hero, Selected work count,
+                      Contact). Medium weight at /70 against the /80 body keeps
+                      the term a distinct level without the extra typeface. */}
+                  <dt className="font-sans text-sm font-medium leading-relaxed text-ink/70">
                     {block.heading}
                   </dt>
                   <dd className="max-w-xl font-sans text-base leading-relaxed text-ink/80">

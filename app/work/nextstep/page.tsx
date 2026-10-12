@@ -193,7 +193,7 @@ function MetaGrid() {
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <p className="font-serif text-statement font-normal leading-[0.95] tracking-[-0.02em] text-cobalt-ink">
+      <p className="font-display text-statement font-medium leading-[0.95] tracking-[-0.02em] text-cobalt-ink">
         {value}
       </p>
       <p className="mt-3 max-w-[32ch] font-sans text-sm leading-relaxed text-ink/70">
@@ -265,7 +265,7 @@ export default function NextStepCaseStudy() {
                 UX/UI case study · Team project
               </p>
 
-              <h1 className="mt-5 font-serif text-hero font-normal leading-[0.92] tracking-[-0.035em]">
+              <h1 className="mt-5 font-display text-hero font-medium leading-[0.92] tracking-[-0.035em]">
                 NextStep
               </h1>
 
@@ -447,7 +447,7 @@ export default function NextStepCaseStudy() {
                   key={item.q}
                   className="grid gap-x-8 gap-y-2 border-b border-ink/12 py-6 md:grid-cols-[minmax(0,1fr)_14rem]"
                 >
-                  <p className="max-w-[52ch] font-serif text-lead font-normal leading-[1.25] tracking-[-0.01em]">
+                  <p className="max-w-[52ch] font-display text-lead font-medium leading-[1.25] tracking-[-0.01em]">
                     {item.q}
                   </p>
                   <p className="font-mono text-label uppercase leading-relaxed tracking-[0.12em] text-ink/70 md:text-right">
@@ -460,7 +460,7 @@ export default function NextStepCaseStudy() {
               The Homepage answers the first, Community the third, and Exercises
               picks up the second.
             </p>
-            <p className="mt-6 max-w-[62ch] font-serif text-sm italic leading-relaxed text-ink/70">
+            <p className="mt-6 max-w-[62ch] font-sans text-sm italic leading-relaxed text-ink/70">
               The fourth finding (clinicians losing sight of a patient once
               they leave hospital) needed a clinician-side view, which sat
               outside the screens I owned. It is not answered here. A clinician
@@ -517,7 +517,7 @@ export default function NextStepCaseStudy() {
               can use an app independently during a vulnerable time in their
               life.
             </Body>
-            <p className="mt-8 max-w-[46ch] font-serif text-subhead font-normal leading-[1.2] tracking-[-0.01em] text-cobalt-ink">
+            <p className="mt-8 max-w-[46ch] font-display text-subhead font-medium leading-[1.2] tracking-[-0.01em] text-cobalt-ink">
               Joining a health community needs more trust-building than a
               standard social app.
             </p>
@@ -555,7 +555,7 @@ export default function NextStepCaseStudy() {
         <Section surface="mist">
           <Reveal>
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-              <p className="max-w-[40ch] font-serif text-subhead font-normal leading-[1.1] tracking-[-0.015em]">
+              <p className="max-w-[40ch] font-display text-subhead font-medium leading-[1.1] tracking-[-0.015em]">
                 That&apos;s NextStep. More work is on the way.
               </p>
               <Link

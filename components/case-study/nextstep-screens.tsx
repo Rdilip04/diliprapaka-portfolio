@@ -10,7 +10,7 @@ const PROTOTYPE_URL: string =
 
 function ScreenTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="font-serif text-subhead font-normal leading-[1.1] tracking-[-0.01em]">
+    <h3 className="font-display text-subhead font-medium leading-[1.1] tracking-[-0.01em]">
       {children}
     </h3>
   );
@@ -35,7 +35,7 @@ function Screen({
 
 function Points({ items }: { items: { term: string; detail: string }[] }) {
   return (
-    <ul className="flex max-w-[65ch] flex-col gap-3">
+    <ul className="flex max-w-[62ch] flex-col gap-3">
       {items.map((item) => (
         <li key={item.term} className="flex gap-3">
           <span aria-hidden className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-cobalt" />
