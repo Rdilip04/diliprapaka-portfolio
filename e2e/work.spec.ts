@@ -78,7 +78,7 @@ test.describe("Selected work — the thumbnail spans its text block", () => {
     await expect(row).toContainText("NextStep");
     await expect(row).toContainText(/stroke-rehabilitation/i);
     await expect(row).toContainText(/read case study/i);
-    expect(text, "outcome line is desktop-only").not.toMatch(/Outcome —/i);
+    expect(text, "outcome line is desktop-only").not.toMatch(/Outcome:/i);
     expect(text, "tags are desktop-only").not.toMatch(/Usability Testing/i);
 
     const height = (await row.boundingBox())!.height;

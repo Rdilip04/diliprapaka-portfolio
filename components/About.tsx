@@ -13,7 +13,7 @@ const BLOCKS = [
   },
   {
     heading: "Beyond work",
-    body: "I enjoy walking through cities, trying new places, and understanding how things work — whether it's a product, a system, or the people around me.",
+    body: "I enjoy walking through cities, trying new places, and understanding how things work, whether it's a product, a system, or the people around me.",
   },
 ];
 

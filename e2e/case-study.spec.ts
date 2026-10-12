@@ -128,7 +128,7 @@ test.describe("NextStep case study — framing", () => {
   test("numbers its sections in an unbroken sequence", async ({ page }) => {
     const nums = await page.evaluate(() =>
       [...document.querySelectorAll("p")]
-        .map((p) => /^(\d{2}) — /.exec(p.textContent?.trim() ?? "")?.[1])
+        .map((p) => /^(\d{2}) · /.exec(p.textContent?.trim() ?? "")?.[1])
         .filter((n): n is string => Boolean(n))
         .map(Number),
     );
@@ -147,8 +147,8 @@ test.describe("NextStep case study — framing", () => {
     const { froms, findings } = await page.evaluate(() => ({
       froms: [...document.querySelectorAll("p")]
         .map((p) => p.textContent?.trim() ?? "")
-        .filter((t) => t.startsWith("From — "))
-        .map((t) => t.replace("From — ", "")),
+        .filter((t) => t.startsWith("From: "))
+        .map((t) => t.replace("From: ", "")),
       findings: [...document.querySelectorAll("h3")].map(
         (h) => h.textContent?.trim() ?? "",
       ),

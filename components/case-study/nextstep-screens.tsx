@@ -40,7 +40,7 @@ function Points({ items }: { items: { term: string; detail: string }[] }) {
         <li key={item.term} className="flex gap-3">
           <span aria-hidden className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-cobalt" />
           <p className="font-sans text-base leading-[1.7] text-ink/75">
-            <span className="font-medium text-ink">{item.term}</span> —{" "}
+            <span className="font-medium text-ink">{item.term}</span>:{" "}
             {item.detail}
           </p>
         </li>
@@ -53,10 +53,10 @@ export function NextStepScreens() {
   return (
     <Section id="screens" surface="canvas">
       <Reveal>
-        <Eyebrow>05 — Design evolution</Eyebrow>
+        <Eyebrow>05 · Design evolution</Eyebrow>
         <SectionTitle>Three flows, taken end to end</SectionTitle>
         <Body className="mt-6">
-          Each one traces back to a research finding — cognitive load, isolation,
+          Each one traces back to a research finding: cognitive load, isolation,
           motivation. I took all three from wireframe through mid-fidelity to
           final hi-fidelity, alongside the secondary system screens below.
         </Body>
@@ -88,12 +88,12 @@ export function NextStepScreens() {
               {
                 term: "Recovery progress",
                 detail:
-                  "at the top — the streak counter and progress bar give patients a reason to come back daily.",
+                  "at the top, where the streak counter and progress bar give patients a reason to come back daily.",
               },
               {
                 term: "Today's Rehab Plan",
                 detail:
-                  "in the centre — the exercises for today, visible without scrolling.",
+                  "in the centre, with the exercises for today visible without scrolling.",
               },
               {
                 term: "Next appointment",
@@ -103,7 +103,7 @@ export function NextStepScreens() {
             ]}
           />
           <Body>
-            An earlier version led with recovery progress — a large streak
+            An earlier version led with recovery progress, a large streak
             counter at the top. I moved it down after realising the emotional
             weight of &ldquo;you&apos;re on day 12&rdquo; isn&apos;t what
             someone needs when they open the app. They need to know what to do
@@ -147,13 +147,13 @@ export function NextStepScreens() {
             <span className="font-medium text-ink">Next</span> controls.
           </Body>
           <Body>
-            I used large tap targets and a simple linear flow — one exercise at a
-            time, no branching — to reduce cognitive load for users who may be
+            I used large tap targets and a simple linear flow (one exercise at a
+            time, no branching) to reduce cognitive load for users who may be
             fatigued or in discomfort.
           </Body>
           <Body>
             I considered a card-swipe pattern where users flick through
-            exercises like Tinder — it looked good, but it removed the sense of
+            exercises like Tinder. It looked good, but it removed the sense of
             a structured session. A linear list with clear progress felt more
             like a plan and less like a game.
           </Body>
@@ -182,8 +182,8 @@ export function NextStepScreens() {
         <Screen title="Community">
           <Body>
             The community screen addresses the isolation finding from research.
-            Patients browse support groups by category — Mental Wellness, Heart
-            Health, Recovery Fitness, Health Diet, Chronic Illness — and join
+            Patients browse support groups by category (Mental Wellness, Heart
+            Health, Recovery Fitness, Health Diet, Chronic Illness) and join
             conversations with others in similar situations.
           </Body>
           <Body>
@@ -194,9 +194,9 @@ export function NextStepScreens() {
           <Body>
             Worth flagging: the categories here are broad health topics rather
             than stroke-specific ones. In hindsight, stroke patients would
-            benefit more from condition-specific groups — &ldquo;Hand mobility
+            benefit more from condition-specific groups, such as &ldquo;Hand mobility
             recovery,&rdquo; &ldquo;Managing fatigue,&rdquo; &ldquo;Returning to
-            daily activities&rdquo; — where shared experience is more directly
+            daily activities&rdquo;, where shared experience is more directly
             relevant. It&apos;s one of the first things I&apos;d redesign.
           </Body>
           <FigureRow

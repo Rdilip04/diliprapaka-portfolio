@@ -26,7 +26,7 @@ export const PROJECTS: Project[] = [
     duration: "12 weeks",
     description:
       "A stroke-rehabilitation app for the NHS that helps patients see their recovery progress.",
-    why: "1st Place — BCU Innovation Fest 2025. Recognised for innovation and impact in healthcare design.",
+    why: "1st Place, BCU Innovation Fest 2025. Recognised for innovation and impact in healthcare design.",
     // Deliverables only — not industry or role, which the copy already carries.
     tags: ["Mobile App", "Usability Testing", "NHS"],
     href: "/work/nextstep",

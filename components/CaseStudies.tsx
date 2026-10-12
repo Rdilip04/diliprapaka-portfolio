@@ -37,7 +37,7 @@ function Thumb({ project }: { project: Project }) {
     return (
       <Image
         src={project.image}
-        alt={`${project.title} — preview`}
+        alt={`${project.title}, app preview`}
         fill
         // 300px is the expanded width; the row never renders it larger.
         sizes="300px"
@@ -75,7 +75,7 @@ function ExpandedContext({ project }: { project: Project }) {
         </p>
         <p className="mt-3 max-w-md font-sans text-sm leading-relaxed text-ink/70">
           <span className="font-mono text-label uppercase tracking-[0.14em] text-cobalt-ink">
-            Outcome —{" "}
+            Outcome:{" "}
           </span>
           {project.why}
         </p>
@@ -259,11 +259,6 @@ export default function CaseStudies() {
             ),
           )}
         </ul>
-
-        <p className="mt-10 max-w-md font-serif text-sm italic leading-relaxed text-ink/70">
-          The rest are still in the studio — I&apos;d rather show them finished
-          than fast.
-        </p>
       </div>
     </section>
   );

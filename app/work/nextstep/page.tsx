@@ -10,7 +10,7 @@ import { NextStepScreens } from "@/components/case-study/nextstep-screens";
 import { NextStepTesting } from "@/components/case-study/nextstep-testing";
 
 export const metadata: Metadata = {
-  title: "NextStep — Rehabilitation app case study",
+  title: "NextStep: rehabilitation app case study",
   description:
     "Designing core screens for a rehabilitation app that helps outpatients stay on track with recovery after discharge. 1st place, BCU Innovation Fest 2025.",
 };
@@ -18,11 +18,11 @@ export const metadata: Metadata = {
 const META = [
   {
     term: "My role",
-    detail: "UX/UI Designer — core flows: Homepage, Exercises, Community",
+    detail: "UX/UI Designer. Core flows: Homepage, Exercises, Community",
   },
   {
     term: "Team",
-    detail: "Ben, Max, Rafianna, Dilip — four designers across UX and UI",
+    detail: "Ben, Max, Rafianna, Dilip: four designers across UX and UI",
   },
   { term: "Duration", detail: "12 weeks" },
   { term: "Tools", detail: "Figma, Maze, Notion" },
@@ -67,7 +67,7 @@ const CONSTRAINTS = [
   {
     term: "A concept, not a commission",
     detail:
-      "NextStep was grounded in NHS guidance and stroke recovery literature, but it was a university project — not work commissioned by a trust.",
+      "NextStep was grounded in NHS guidance and stroke recovery literature, but it was a university project, not work commissioned by a trust.",
     icon: (
       <svg {...iconProps}>
         <path d="M9.5 18h5" />
@@ -119,7 +119,7 @@ const FINDINGS = [
 const VISUAL_SYSTEM = [
   {
     term: "Typeface",
-    detail: "SF Pro — the iOS system font, chosen for readability and accessibility.",
+    detail: "SF Pro, the iOS system font, chosen for readability and accessibility.",
     icon: (
       <svg {...iconProps}>
         <path d="M4 7V4.5h16V7" />
@@ -131,7 +131,7 @@ const VISUAL_SYSTEM = [
   {
     term: "Primary colour",
     detail:
-      "Shifted from a muted blue to a stronger, more vibrant blue after guerrilla testing — users found the original palette dull and hard to distinguish.",
+      "Shifted from a muted blue to a stronger, more vibrant blue after guerrilla testing. Users found the original palette dull and hard to distinguish.",
     icon: (
       <svg {...iconProps}>
         <path d="M12 2.8 6.9 8.3a7.3 7.3 0 1 0 10.2 0Z" />
@@ -284,7 +284,7 @@ export default function NextStepCaseStudy() {
                 ratio="banner"
                 eager
                 src="/nextstep/hero.webp"
-                label="Hero — key app screens"
+                label="Hero: key app screens"
                 alt="NextStep app key screens"
               />
             </div>
@@ -297,13 +297,13 @@ export default function NextStepCaseStudy() {
             <div className="grid gap-10 sm:grid-cols-2 sm:gap-12">
               <Stat
                 value="1st place"
-                label="BCU Innovation Fest 2025 — recognised for innovation and impact in healthcare design."
+                label="BCU Innovation Fest 2025. Recognised for innovation and impact in healthcare design."
               />
               {/* SUS is a 0–100 score, not a percentage — "84.5%" is a
                   technical error a UX-literate interviewer will catch. */}
               <Stat
                 value="84.5"
-                label="Average SUS score across five participants — two patients and three clinicians — against the 68-point usability benchmark."
+                label="Average SUS score across five participants (two patients and three clinicians) against the 68-point usability benchmark."
               />
             </div>
           </Reveal>
@@ -312,7 +312,7 @@ export default function NextStepCaseStudy() {
         {/* 01 — Problem */}
         <Section surface="paper">
           <Reveal>
-            <Eyebrow>01 — The problem</Eyebrow>
+            <Eyebrow>01 · The problem</Eyebrow>
             <SectionTitle>
               Recovery instructions arrive on paper, then go missing
             </SectionTitle>
@@ -326,7 +326,7 @@ export default function NextStepCaseStudy() {
               <Body>
                 We set out to design a mobile app that gives patients clear daily
                 rehab instructions, connects them with their care team, and
-                tracks their recovery progress — all in one place.
+                tracks their recovery progress, all in one place.
               </Body>
             </div>
           </Reveal>
@@ -344,7 +344,7 @@ export default function NextStepCaseStudy() {
         {/* 02 — Role */}
         <Section surface="canvas">
           <Reveal>
-            <Eyebrow>02 — My contribution</Eyebrow>
+            <Eyebrow>02 · My contribution</Eyebrow>
             <SectionTitle>
               One of four designers, across research and interface
             </SectionTitle>
@@ -384,7 +384,7 @@ export default function NextStepCaseStudy() {
                   {[
                     "Led the end-to-end design of the app's core user flows: Homepage, Exercises and Community, alongside secondary system screens.",
                     "Took each screen from wireframe through mid-fidelity to final hi-fidelity.",
-                    "Created the visual style guide — palette, typography, spacing scale, radius tokens, button states and icon system — following iOS Human Interface Guidelines.",
+                    "Created the visual style guide (palette, typography, spacing scale, radius tokens, button states and icon system), following iOS Human Interface Guidelines.",
                     "Built the interactive Figma prototype used in both rounds of usability testing.",
                   ].map((item) => (
                     <li
@@ -402,7 +402,7 @@ export default function NextStepCaseStudy() {
           <Reveal className="mt-12">
             <Body>
               I&apos;ve focused this case study on the three flows that connect
-              most directly back to research findings — Homepage, Exercises and
+              most directly back to research findings: Homepage, Exercises and
               Community. Notifications and Profile used standard iOS patterns
               and get a lighter treatment below.
             </Body>
@@ -412,7 +412,7 @@ export default function NextStepCaseStudy() {
         {/* 03 — Research */}
         <Section surface="paper">
           <Reveal>
-            <Eyebrow>03 — Research</Eyebrow>
+            <Eyebrow>03 · Research</Eyebrow>
             <SectionTitle>Four problems came up again and again</SectionTitle>
             <Body className="mt-6">
               A patient survey, professional interviews, and a review of NHS
@@ -429,7 +429,7 @@ export default function NextStepCaseStudy() {
             How Might We is a synthesis output, not an opening assumption. */}
         <Section surface="mist">
           <Reveal>
-            <Eyebrow>04 — Framing</Eyebrow>
+            <Eyebrow>04 · Framing</Eyebrow>
             <SectionTitle>
               Outpatients are sent home with a plan they can lose, no direction
               for the day in front of them, and no easy line back to the people
@@ -451,7 +451,7 @@ export default function NextStepCaseStudy() {
                     {item.q}
                   </p>
                   <p className="font-mono text-label uppercase leading-relaxed tracking-[0.12em] text-ink/70 md:text-right">
-                    From — {item.from}
+                    From: {item.from}
                   </p>
                 </li>
               ))}
@@ -461,8 +461,8 @@ export default function NextStepCaseStudy() {
               picks up the second.
             </p>
             <p className="mt-6 max-w-[62ch] font-serif text-sm italic leading-relaxed text-ink/70">
-              The fourth finding — clinicians losing sight of a patient once
-              they leave hospital — needed a clinician-side view, which sat
+              The fourth finding (clinicians losing sight of a patient once
+              they leave hospital) needed a clinician-side view, which sat
               outside the screens I owned. It is not answered here. A clinician
               view would have surfaced adherence at a glance: which patients are
               on plan, which have gone quiet, which need a check-in. It
@@ -478,11 +478,11 @@ export default function NextStepCaseStudy() {
         {/* 05 — Visual system */}
         <Section surface="paper">
           <Reveal>
-            <Eyebrow>06 — Visual system</Eyebrow>
+            <Eyebrow>06 · Visual system</Eyebrow>
             <SectionTitle>Built on iOS conventions, for good reason</SectionTitle>
             <Body className="mt-6">
               We followed the iOS Human Interface Guidelines to create a
-              familiar, trustworthy experience for our target users — many of
+              familiar, trustworthy experience for our target users, many of
               whom are older adults or neurologically impaired. Familiarity is an
               accessibility decision, not an aesthetic one.
             </Body>
@@ -494,7 +494,7 @@ export default function NextStepCaseStudy() {
             <Figure
               ratio="wide"
               src="/nextstep/style-guide.webp"
-              label="Style guide — colour, type, spacing, buttons, icons"
+              label="Style guide: colour, type, spacing, buttons, icons"
               alt="NextStep visual style guide"
             />
           </Reveal>
@@ -506,14 +506,14 @@ export default function NextStepCaseStudy() {
         {/* 07 — Outcome & reflection */}
         <Section surface="paper">
           <Reveal>
-            <Eyebrow>08 — Outcome</Eyebrow>
+            <Eyebrow>08 · Outcome</Eyebrow>
             <SectionTitle>
               1st place at BCU Innovation Fest 2025
             </SectionTitle>
             <Body className="mt-6">
               NextStep was recognised for innovation and impact in healthcare
-              design. The project taught me how small decisions — an icon label,
-              a colour shift, a button position — directly affect whether someone
+              design. The project taught me how small decisions (an icon label,
+              a colour shift, a button position) directly affect whether someone
               can use an app independently during a vulnerable time in their
               life.
             </Body>
@@ -530,7 +530,7 @@ export default function NextStepCaseStudy() {
             <div className="mt-6 grid gap-8 border-t border-ink/12 pt-8 md:grid-cols-2 md:gap-12">
               <Body>
                 <span className="font-medium text-ink">
-                  Test with real patients earlier — and more of them.
+                  Test with real patients earlier, and more of them.
                 </span>{" "}
                 Round one was students, which caught layout and hierarchy issues
                 but missed the accessibility and comprehension gaps. Round two
@@ -543,7 +543,7 @@ export default function NextStepCaseStudy() {
                   Spend more time on community onboarding.
                 </span>{" "}
                 Joining a group was the clearest pain point in round one and
-                never got a dedicated fix — the changes that shipped were about
+                never got a dedicated fix. The changes that shipped were about
                 contrast and labelling. The flow still assumes someone will join
                 a health group as readily as a social one.
               </Body>

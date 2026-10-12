@@ -112,7 +112,7 @@ export function SusScores() {
     <div ref={ref} className="rounded-lg border border-ink/12 p-6 md:p-8">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
         <h3 className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
-          System Usability Scale — Round 2
+          System Usability Scale, round 2
         </h3>
         <p className="font-mono text-label uppercase tracking-[0.14em] text-ink/70">
           Benchmark {BENCHMARK}
@@ -132,7 +132,7 @@ export function SusScores() {
 
       <p className="mt-5 max-w-[58ch] font-sans text-sm leading-relaxed text-ink/70">
         An average of {AVERAGE} against a {BENCHMARK}-point benchmark. One
-        participant scored 65 — below it — so the app still had gaps for some
+        participant scored 65, below it, so the app still had gaps for some
         users. I don&apos;t have the qualitative notes from that session to know
         exactly why.
       </p>

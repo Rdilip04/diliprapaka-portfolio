@@ -83,8 +83,8 @@ export function NextStepTesting() {
   return (
     <Section id="testing" surface="canvas">
       <Reveal>
-        <Eyebrow>07 — Usability testing</Eyebrow>
-        <SectionTitle>We tested twice — scrappy first, then real users</SectionTitle>
+        <Eyebrow>07 · Usability testing</Eyebrow>
+        <SectionTitle>We tested twice: scrappy first, then real users</SectionTitle>
         <Body className="mt-6">
           The first round was fast and informal. The second was with the people
           the app is actually for.
@@ -97,7 +97,7 @@ export function NextStepTesting() {
           title="Guerrilla testing with students"
           meta="We grabbed five students on campus who had no context about the app, gave them tasks, and watched."
           found={[
-            "Users weren't sure what the app was for at first glance — it needed stronger onboarding or a clearer homepage.",
+            "Users weren't sure what the app was for at first glance. It needed stronger onboarding or a clearer homepage.",
             "The navbar didn't clearly show which tab was active.",
             "Joining a community group was confusing.",
             "Doctor contact options were hard to find.",
@@ -109,15 +109,15 @@ export function NextStepTesting() {
             "Moved the contact button to a more prominent position with a recognisable icon.",
             "Changed the “+” to a labelled “Book Appointment” button.",
           ]}
-          note="Worth being straight about one thing: we never directly addressed the comprehension finding. Nothing we changed in this round was an onboarding or first-run fix. Purpose clarity did improve by round two, but as a knock-on effect of the contrast and labelling work — not because we designed for it. If I ran this again, I'd design a first-run onboarding flow specifically for the comprehension finding and test that flow on its own."
+          note="Worth being straight about one thing: we never directly addressed the comprehension finding. Nothing we changed in this round was an onboarding or first-run fix. Purpose clarity did improve by round two, but as a knock-on effect of the contrast and labelling work, not because we designed for it. If I ran this again, I'd design a first-run onboarding flow specifically for the comprehension finding and test that flow on its own."
         />
 
         <Round
           index="R2"
           title="Testing with patients and doctors"
-          meta="Five participants — two patients and three doctors. We ran remote sessions in Maze and asked participants to think aloud."
+          meta="Five participants: two patients and three doctors. We ran remote sessions in Maze and asked participants to think aloud."
           found={[
-            "Purpose clarity improved — users understood the app faster.",
+            "Purpose clarity improved. Users understood the app faster.",
             "Visual elements were easy to understand thanks to iOS conventions.",
             "The “+” symbol for booking was still unclear to some.",
             "The appointment confirmation checkbox was too small.",
@@ -126,7 +126,7 @@ export function NextStepTesting() {
             "Added a text label to the booking button.",
             "Enlarged the confirmation checkbox.",
           ]}
-          note="The sample is the weak point in this round. Three of the five participants were clinicians, so the 84.5 average leans towards people who read interfaces professionally — not towards someone recovering from a stroke, who is the actual user. The score is encouraging, not conclusive."
+          note="The sample is the weak point in this round. Three of the five participants were clinicians, so the 84.5 average leans towards people who read interfaces professionally, not towards someone recovering from a stroke, who is the actual user. The score is encouraging, not conclusive."
         />
       </div>
 
