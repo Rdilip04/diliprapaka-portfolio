@@ -254,25 +254,10 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center gap-2.5 px-6 pb-4 text-ink/70">
-        <span className="font-mono text-label uppercase tracking-[0.2em]">
-          Scroll
-        </span>
-        {!reduce ? (
-          <motion.span
-            aria-hidden
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          >
-            ↓
-          </motion.span>
-        ) : (
-          <span aria-hidden>↓</span>
-        )}
-      </div>
-
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6">
+      {/* The hairline that closes the Hero, and the seam Selected work reads
+          against. No scroll cue above it: a visitor on the first screen
+          already knows the page continues. */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pt-10">
         <div className="h-px w-full bg-ink/12" />
       </div>
     </section>
