@@ -16,75 +16,6 @@ const colorOf = (page: Page, selector: string) =>
     return `#${[r, g, b].map((n) => n.toString(16).padStart(2, "0")).join("")}`;
   }, selector);
 
-test.describe("Nav — clock hierarchy", () => {
-  test("renders the clock lighter than the nav links", async ({ page }) => {
-    await page.goto("/");
-
-    const contrast = await page.evaluate(() => {
-      const lum = (css: string) => {
-        const c = document.createElement("canvas");
-        c.width = c.height = 1;
-        const ctx = c.getContext("2d")!;
-        ctx.fillStyle = getComputedStyle(document.body).backgroundColor;
-        ctx.fillRect(0, 0, 1, 1);
-        ctx.fillStyle = css;
-        ctx.fillRect(0, 0, 1, 1);
-        const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-        const ch = (v: number) => {
-          const n = v / 255;
-          return n <= 0.03928 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
-        };
-        return 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(b);
-      };
-      const nav = document.querySelector('nav[aria-label="Primary"]')!;
-      return {
-        clock: lum(getComputedStyle(nav.querySelector(".tabular-nums")!).color),
-        navLink: lum(getComputedStyle(nav.querySelector("ul a")!).color),
-        page: lum(getComputedStyle(document.body).backgroundColor),
-      };
-    });
-
-    // Light page: higher luminance = closer to the background = more recessive.
-    expect(contrast.clock).toBeGreaterThan(contrast.navLink);
-  });
-
-  test("keeps the dimmed clock above the AA floor", async ({ page }) => {
-    await page.goto("/");
-
-    const ratio = await page.evaluate(() => {
-      const paint = (...layers: string[]) => {
-        const c = document.createElement("canvas");
-        c.width = c.height = 1;
-        const ctx = c.getContext("2d")!;
-        for (const l of layers) {
-          ctx.fillStyle = l;
-          ctx.fillRect(0, 0, 1, 1);
-        }
-        const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-        return [r, g, b] as [number, number, number];
-      };
-      const lum = (c: [number, number, number]) => {
-        const ch = (v: number) => {
-          const n = v / 255;
-          return n <= 0.03928 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
-        };
-        return 0.2126 * ch(c[0]) + 0.7152 * ch(c[1]) + 0.0722 * ch(c[2]);
-      };
-      const clock = document.querySelector(
-        'nav[aria-label="Primary"] .tabular-nums',
-      )!;
-      const bgCss = getComputedStyle(document.body).backgroundColor;
-      const [hi, lo] = [
-        lum(paint(bgCss, getComputedStyle(clock).color)),
-        lum(paint(bgCss)),
-      ].sort((a, b) => b - a);
-      return (hi + 0.05) / (lo + 0.05);
-    });
-
-    expect(ratio).toBeGreaterThanOrEqual(4.5);
-  });
-});
-
 test.describe("Nav — active section", () => {
   test("highlights nothing while the reader is still on the hero", async ({
     page,
@@ -112,9 +43,7 @@ test.describe("Nav — active section", () => {
     });
   }
 
-  test("paints the active link in the same blue as the clock's dot", async ({
-    page,
-  }) => {
+  test("paints the active link in the cobalt accent", async ({ page }) => {
     await page.goto("/");
     await page.evaluate(() => {
       document
@@ -126,21 +55,7 @@ test.describe("Nav — active section", () => {
       "location",
     );
 
-    const dot = await page.evaluate(() => {
-      const el = document.querySelector(
-        'nav[aria-label="Primary"] .tabular-nums span',
-      )!;
-      const c = document.createElement("canvas");
-      c.width = c.height = 1;
-      const ctx = c.getContext("2d")!;
-      ctx.fillStyle = getComputedStyle(el).backgroundColor;
-      ctx.fillRect(0, 0, 1, 1);
-      const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-      return `#${[r, g, b].map((n) => n.toString(16).padStart(2, "0")).join("")}`;
-    });
-
-    expect(dot).toBe("#2f2be6");
-    expect(await colorOf(page, "nav a[aria-current]")).toBe(dot);
+    expect(await colorOf(page, "nav a[aria-current]")).toBe("#2f2be6");
   });
 
   test("leaves inactive links in the neutral ink colour", async ({ page }) => {

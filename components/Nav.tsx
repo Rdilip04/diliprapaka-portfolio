@@ -81,34 +81,6 @@ function useActiveSection() {
   return active;
 }
 
-function Clock() {
-  const [time, setTime] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fmt = new Intl.DateTimeFormat("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-      timeZone: "Europe/London",
-    });
-    const tick = () => setTime(fmt.format(new Date()));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  return (
-    // Recedes behind the nav links as secondary, ambient information. Held at
-    // ink/70 (6.39:1 on paper) — the hierarchy comes from darkening the links,
-    // not from dimming this below the AA floor.
-    <span className="inline-flex items-center gap-2 tabular-nums text-ink/70">
-      <span className="h-1 w-1 rounded-full bg-cobalt" />
-      LDN {time ?? "--:--:--"}
-    </span>
-  );
-}
-
 export default function Nav() {
   const reduceMotion = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
@@ -180,7 +152,7 @@ export default function Nav() {
   const hrefFor = (hash: string) => (onHome ? hash : `/${hash}`);
 
   // Editorial hero is light, so the bar reads dark from the top. Links sit at
-  // /85 (10.8:1) so the /70 clock reads as clearly secondary beside them.
+  // /85 (10.8:1).
   const wordmark = "text-ink";
   const controls = "text-ink/85";
 
@@ -218,7 +190,7 @@ export default function Nav() {
 
         {/* Right-hand group. The toggle sits outside the desktop-only block so
             there is exactly one switch in the DOM at every breakpoint, but
-            inside this wrapper so it stays beside the clock instead of being
+            inside this wrapper so it stays beside the links instead of being
             flung to the window edge by the header's justify-between. */}
         <div className="ml-auto flex items-center gap-6">
           <div
@@ -232,7 +204,6 @@ export default function Nav() {
                     <SwapLink
                       label={link.label}
                       href={hrefFor(link.href)}
-                      // `text-cobalt` is the same token as the clock's dot.
                       className={isActive ? "text-cobalt" : undefined}
                       accent={isActive ? "text-cobalt" : "text-cobalt-ink"}
                       // "location" (not "page") — same document, different section.
@@ -242,7 +213,6 @@ export default function Nav() {
                 );
               })}
             </ul>
-            <Clock />
           </div>
 
           <ThemeToggle />
