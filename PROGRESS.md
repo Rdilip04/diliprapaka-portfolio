@@ -2,8 +2,8 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 98/98 · production build green
-**Last updated:** 2026-08-17
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 96/96 · production build green
+**Last updated:** 2026-10-13
 
 Conventions used below:
 
@@ -108,15 +108,18 @@ Every load starts light. `prefers-color-scheme` is ignored, and the choice is **
 > **Trap — the swap injects a `<style>` tag that kills all transitions for one frame. Do not remove it.**
 > Chrome does not re-resolve `var()` for a property that is mid-transition, so every element carrying `transition-colors` kept the *previous* theme's colour permanently — 15 elements, including "Let's talk" at **1:1 contrast, invisible** on the dark hero. A `.theme-swapping` class in `globals.css` was tried first and could not win the cascade against Tailwind's utilities (verified: `transition-duration` stayed `0.15s`). The injected style plus a forced reflow is the working fix, and a test pins it.
 
-### Typography — two families and one mono
+### Typography — one family and one mono
 
 | Family | Role |
 |---|---|
-| **Instrument Serif** | Display (`font-serif`) |
-| **Inter** | Body and workhorse (`font-sans`) |
-| **Martian Mono** | Labels, eyebrows, meta (`font-mono`) |
+| **Instrument Sans** | Display (`font-display`: width 90%, weight 500) and body (`font-sans`) |
+| **Martian Mono** | The three remaining labels, buttons, nav, meta (`font-mono`) |
 
-Familjen Grotesk was removed to honour the mentor's "two typefaces maximum". Do not add a second sans.
+> **Changed 2026-10-13, Dilip's call** (the §10.4 question, answered). Instrument Serif + Inter were replaced after a taste-skill audit flagged both as reflex choices. **Instrument Sans over Geist** because Geist has no italic, and the italic emphasis (*hard*, *that matters*) is part of the voice. `.font-display` in `globals.css` adds `font-stretch: 90%` on top of the family, so headlines keep a measure close to the old serif.
+>
+> **Trap — `ch` caps moved with the font.** `ch` is the width of the "0" glyph, which Instrument Sans sets wider than Inter: the case-study `max-w-[65ch]` grew to 693px and broke the 680px measure test. It is `62ch` now. Any new `ch` cap needs measuring, not copying.
+
+Two families honours the mentor's "two typefaces maximum". Do not add a second sans or bring a serif back.
 
 ### Type scale
 
@@ -132,14 +135,15 @@ Familjen Grotesk was removed to honour the mentor's "two typefaces maximum". Do 
 | `text-heading` | `clamp(1.5rem, 4vw, 3rem)` | Work-index project titles |
 | `text-title` | `clamp(1.75rem, 3.4vw, 2.75rem)` | Section headings |
 | `text-display` | `clamp(2rem, 4.6vw, 3.6rem)` | Home h1 |
-| `text-statement` | `clamp(1.65rem, 5.5vw, 4.5rem)` | Footer h2 and email |
+| `text-statement` | `clamp(1.45rem, 5.5vw, 4.5rem)` | Footer h2 and email |
 | `text-hero` | `clamp(3rem, 10vw, 7rem)` | Case-study h1 — the largest type |
 
 `text-lg` / `text-xl` / `text-2xl` survive on three one-off pieces of chrome (nav wordmark, placeholder numeral, mobile nav link) where the step is genuinely distinct.
 
 This replaced **23 ad-hoc declarations — 17 rendered sizes and 16 bespoke `clamp()` curves**, several near-identical (`1.4rem/2.6vw/2rem` sat beside `1.4rem/2.6vw/2.15rem`; three variants shared a `1.35rem` floor). Near-duplicates read as drift rather than intent, which is the one thing a minimal design cannot afford. The homepage now renders **11 distinct sizes, down from 17**.
 
-> **Trap — the `--text-statement` floor is set by the footer email, not by the h2.** The email is a single unbreakable 27-character string costing ~9.84px of width per px of font-size. At `2.25rem` it overflowed 375px; at `2rem` it still overflowed **320px** by 19px — 315px of email inside a 272px box — on *both* routes, in *both* themes. `1.65rem` lands it at ~260px. The viewport matrix only ran 390 and 1280, so nothing caught it; 320 is now in the matrix (§5).
+> **Trap — the `--text-statement` floor is set by the footer email, not by the h2.** The email is a single unbreakable 27-character string costing ~9.84px of width per px of font-size. At `2.25rem` it overflowed 375px; at `2rem` it still overflowed **320px** by 19px — 315px of email inside a 272px box — on *both* routes, in *both* themes. `1.65rem` landed it at ~260px. The viewport matrix only ran 390 and 1280, so nothing caught it; 320 is now in the matrix (§5).
+> **Re-measured after the font change:** Instrument Sans costs ~11.25px per px of font-size, and `1.65rem` overflowed 320px by 25px again. The floor is `1.45rem` (~261px). Re-measure whenever the display font or its stretch changes.
 
 ### Motifs
 
@@ -177,7 +181,7 @@ Computed from the real tokens, not assumed:
 
 > **Locked — `text-ink/70` is the standard for secondary text.** It is the only value safe on every surface; even `/60` fails on `mist`.
 
-**Hierarchy comes from size and weight, never from dimming below the floor.** Nav links sit at `/85`, the clock at `/70`.
+**Hierarchy comes from size and weight, never from dimming below the floor.** Nav links sit at `/85`. (The London clock that sat at `/70` beside them was removed on 2026-10-13.)
 
 ### Guarantees, all test-enforced
 
@@ -234,7 +238,7 @@ A full-screen staggered panel below `sm`. Two token surfaces (`bg-mist`, then `b
 Deliberately empty (§2).
 
 - **The award was not lost with the Recognition section.** It still reads in the Selected work outcome line (`lib/projects.ts`) and three times in the case study. What went was the display-size treatment, not the credential.
-- **No separator is needed.** The Hero already closes with a hairline under its scroll cue, so Selected work reads as its own section even though both surfaces are `bg-canvas`. Verified after removal — do not add a `border-t` to `#work` for a seam that already exists.
+- **No separator is needed.** The Hero already closes with a hairline (the scroll cue above it was removed on 2026-10-13), so Selected work reads as its own section even though both surfaces are `bg-canvas`. Verified after removal — do not add a `border-t` to `#work` for a seam that already exists.
 
 ### Selected work (`CaseStudies.tsx`)
 
@@ -252,8 +256,11 @@ A hover-expand row list: NextStep plus three "Coming soon" rows.
 ### About
 
 - **The CV link ends the reading path**, under "Beyond work" in the content column. It briefly sat in the left rail, which forced the eye back across the page.
-- **Block terms are mono labels; block bodies are 16px.** They were 16px semibold against 14px regular — two steps apart in size and nothing else, which stopped reading as a hierarchy once the dividing rules came out (the two blocks' boxes touch at a **0px** gap, so the removed border had been the only marker). The mono term now matches every other label on the site, and the body is the section's main reading content at body size.
-  > **Trap — the `dt` track is 112px and the labels nearly fill it.** Measured at `text-label` with `tracking-[0.14em]`: "Background" 92px, "Beyond work" **102px**. A longer term, more tracking, or a bigger label step will wrap it, and a test fails on exactly that.
+- **Block terms are sentence-case sans labels (14px medium, `/70`); block bodies are 16px at `/80`.** They were 16px semibold against 14px regular, which stopped reading as a hierarchy once the dividing rules came out; they were then mono caps, and since 2026-10-13 they are sans, because mono caps are rationed (below).
+  > **Trap — the `dt` track is 112px.** A longer term or a bigger label step will wrap it, and a test fails on exactly that.
+- **The name/role caption under "About" was removed** (2026-10-13). It repeated the H1 and the image alt.
+
+> **Locked (2026-10-13) — mono caps above content are rationed to three:** the Hero eyebrow `Product Designer`, the Selected work count, and the footer `Contact`. Every other label (About terms, Methods, Toolkit, Elsewhere, Availability, Navigate, the footer strip, the mobile menu's Elsewhere) is sentence-case `font-sans text-sm font-medium`. Buttons, nav links and in-row meta stay mono; they are UI chrome, not labels.
 - **A cobalt block sits offset behind the portrait, at `bg-cobalt/35`.** The one place on the site the accent appears as a *mark* rather than as text, and the only real colour on an otherwise monochrome page. The system already allows `bg-cobalt` for marks.
   > **It was solid until 2026-08-17, and solid was too loud.** A large fully-saturated field pressed straight against a photograph vibrates against the skin and jacket tones rather than framing them — the one place on the site where the accent covers real area instead of marking a word. Dilip called it disturbing and it was taken to `/35`.
   >
@@ -395,16 +402,16 @@ Unit: `components/About.test.tsx` · `lib/contrast.test.ts`.
 
 1. **More real projects.** The single biggest lever, and content-gated rather than design-gated. Add to `PROJECTS` in `lib/projects.ts`; bracketed placeholders render as "Coming soon" rows. Remember Rapshift is out (§1).
 2. **Deploy to Vercel.** Nothing is blocking: `app/icon.svg` and `app/opengraph-image.tsx` already generate the favicon and social card, and the production build is green with every route prerendered as static.
-   - **After the first deploy, set `NEXT_PUBLIC_SITE_URL`** to the real origin. `metadataBase` reads it and falls back to `https://diliprapaka.vercel.app`; until it is set, the OG and Twitter cards point at the wrong domain. This fails silently — the site looks fine, only the link previews are wrong.
+   - **Deployed at `https://diliprapaka-portfolio.vercel.app`**, which is now the `metadataBase` fallback (it used to be `diliprapaka.vercel.app`, so link previews pointed at the wrong origin). If the site moves to a custom domain, set `NEXT_PUBLIC_SITE_URL` in Vercel.
 3. **Push to a remote.** The repository has no remote configured, so the only copy is local.
-4. **Aesthetic-lane question — strategic, Dilip's call.** An `/impeccable` audit scored 14/20 and flagged that the site sits in the currently saturated "editorial-typographic" lane (display serif, mono labels, ruled separators, monochrome), with both typefaces on its reflex-reject list. Identity preservation argues for leaving committed choices alone, and the slop detector returns clean. Worth knowing, given the first build was rejected as generic and this lane has since become the next default.
+4. **Aesthetic-lane question — answered 2026-10-13** by moving to Instrument Sans and rationing mono labels (§4, §6). Original note: An `/impeccable` audit scored 14/20 and flagged that the site sits in the currently saturated "editorial-typographic" lane (display serif, mono labels, ruled separators, monochrome), with both typefaces on its reflex-reject list. Identity preservation argues for leaving committed choices alone, and the slop detector returns clean. Worth knowing, given the first build was rejected as generic and this lane has since become the next default.
 
 ### Ideas raised and not built
 
 Available if wanted, none of them started:
 
 - **Hero display type at 76–84px** (currently 58px). That range is the measured ceiling before the CTA drops below the fold at 1280×720; going larger needs the hero recomposed.
-- **Mono is at 34 instances**, nearly level with Inter at 38, though it is specified as a labels-only font.
+- ~~**Mono is at 34 instances**~~ — addressed 2026-10-13: mono labels above content are down to three (§6).
 - **Nine motion mechanics** on the page. Fewer, better-chosen gestures would be more consistent with the rest of the design.
 - **A large ghosted `DUX` wordmark** in the footer — the brand mark currently only exists at 18px in the nav.
 - **The footer headline and case-study h1** were never given any entrance treatment.
@@ -414,6 +421,20 @@ Available if wanted, none of them started:
 ## 11. Where things stand — session summary
 
 Everything below is committed. `git log` has the detail; this is the shape of it.
+
+**2026-10-13 — taste-skill pass (`design/taste-pass` branch)**
+
+An audit with the taste skill (leonxlnx/taste-skill), then five commits. Dilip reopened two Locked items (the type stack and the mono labels) and kept the rest (featured-card rejection, hero column grid, dark footer, portraits).
+
+| Change | What it was |
+|---|---|
+| **London clock removed** | A locale/time strip in the nav; ambient decoration. Its two tests went with it. |
+| **Scroll cue removed** | The hairline it sat on stays as the Hero/Selected work seam. |
+| **Em-dashes out of visible copy** | Commas, colons, full stops or parentheses instead. Case-study eyebrows read `01 · The problem`; HMW labels `From: …`. |
+| **"Still in the studio" line cut** | It repeated the Coming soon rows in a voice the site does not otherwise use. |
+| **Link-preview origin fixed** | `metadataBase` fallback → the live domain. |
+| **Instrument Sans + Martian Mono** | Replaces Instrument Serif + Inter (§4). |
+| **Mono labels rationed to three** | §6. |
 
 **2026-08-17 — `/impeccable audit`, the fixes it found, and a round of polish**
 
