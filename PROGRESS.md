@@ -2,7 +2,7 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 96/96 · production build green
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 110/110 · production build green
 **Last updated:** 2026-10-13
 
 Conventions used below:
@@ -164,7 +164,7 @@ This replaced **23 ad-hoc declarations — 17 rendered sizes and 16 bespoke `cla
 
 ## 5. Accessibility
 
-All **12 combinations** of route × viewport × theme pass WCAG AA — 320 / 390 / 1280 wide, both themes, both routes. `e2e/a11y.spec.ts` enforces it on every run.
+All **24 combinations** of route × viewport × theme pass WCAG AA: 320 / 375 / 390 / 768 / 1024 / 1280 wide, both themes, both routes (tablet sizes added 2026-10-13). An axe-core scan (WCAG 2.0–2.2 A/AA) over the phone and tablet sizes returned 0 violations; its colour-contrast checks come back "incomplete" because the grain overlay sits above every element, which is why contrast is measured by the canvas probe instead. `e2e/a11y.spec.ts` enforces it on every run.
 
 > **Trap — 320 is in the matrix because 390 was not enough.** The footer email overflowed 320px while both other widths passed (§4). 320 is still live traffic: iPhone SE 1st gen, the Fold's cover screen, and any laptop at 50% browser zoom.
 
@@ -259,6 +259,7 @@ A hover-expand row list: NextStep plus three "Coming soon" rows.
 - **Block terms are sentence-case sans labels (14px medium, `/70`); block bodies are 16px at `/80`.** They were 16px semibold against 14px regular, which stopped reading as a hierarchy once the dividing rules came out; they were then mono caps, and since 2026-10-13 they are sans, because mono caps are rationed (below).
   > **Trap — the `dt` track is 112px.** A longer term or a bigger label step will wrap it, and a test fails on exactly that.
 - **The name/role caption under "About" was removed** (2026-10-13). It repeated the H1 and the image alt.
+- **About goes two-column at `lg`, not `md`** (2026-10-13). At 768 the label column is ~160px but the portrait card is a fixed 220px, so on tablets it overlapped the statement and the "Background" label (this was live). At 1024 the column is exactly 220px. Two tests in `about.spec.ts` pin "no overlap" at 768 and 1024.
 
 > **Locked (2026-10-13) — mono caps above content are rationed to three:** the Hero eyebrow `Product Designer`, the Selected work count, and the footer `Contact`. Every other label (About terms, Methods, Toolkit, Elsewhere, Availability, Navigate, the footer strip, the mobile menu's Elsewhere) is sentence-case `font-sans text-sm font-medium`. Buttons, nav links and in-row meta stay mono; they are UI chrome, not labels.
 - **A cobalt block sits offset behind the portrait, at `bg-cobalt/35`.** The one place on the site the accent appears as a *mark* rather than as text, and the only real colour on an otherwise monochrome page. The system already allows `bg-cobalt` for marks.
@@ -435,6 +436,7 @@ An audit with the taste skill (leonxlnx/taste-skill), then five commits. Dilip r
 | **Link-preview origin fixed** | `metadataBase` fallback → the live domain. |
 | **Instrument Sans + Martian Mono** | Replaces Instrument Serif + Inter (§4). |
 | **Mono labels rationed to three** | §6. |
+| **Tablet accessibility** | Matrix extended to 375/768/1024; About portrait overlap on tablets fixed; footer email tap target 24px → 44px on phones (padding, no layout shift). |
 
 **2026-08-17 — `/impeccable audit`, the fixes it found, and a round of polish**
 

@@ -36,12 +36,16 @@ export default function About() {
   return (
     <section id="about" className="border-t border-ink/10 bg-canvas text-ink">
       <div className="mx-auto w-full max-w-7xl px-6 py-24 md:py-32">
-        <div className="grid gap-12 md:grid-cols-12 md:gap-8">
+        {/* Two columns from lg, not md. At 768 the label column is ~160px but
+            the portrait card is a fixed 220px, so it overlapped the statement
+            and the "Background" label on tablets. At 1024 the column is 220px
+            and the card fits; below that the section stacks like on phones. */}
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Label column */}
           <motion.div
             {...reveal(0)}
             viewport={{ once: true, margin: "-12%" }}
-            className="md:col-span-3"
+            className="lg:col-span-3"
           >
             <h2 className="font-display text-title font-medium tracking-[-0.01em]">
               About
@@ -82,7 +86,7 @@ export default function About() {
           {/* Content column. Starts at column 4, not 5 — leaving column 4 empty
               put 137px of dead space across the middle of the section and made
               the two halves read as unrelated. */}
-          <div className="md:col-span-9 md:col-start-4">
+          <div className="lg:col-span-9 lg:col-start-4">
             <motion.p
               {...reveal(0.05)}
               viewport={{ once: true, margin: "-12%" }}

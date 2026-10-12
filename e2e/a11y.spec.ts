@@ -175,7 +175,13 @@ for (const route of ROUTES) {
     // screen, and any laptop at 50% zoom. The footer email overflowed it by
     // 19px while 390 and 1280 both passed, so the matrix missed it entirely.
     ["narrow", 320, 720],
+    ["phone", 375, 812],
     ["mobile", 390, 844],
+    // Tablet in both orientations: 768 is the md breakpoint (work thumbnails,
+    // About grid) and 1024 sits just under lg (Hero portrait), so each lands
+    // on a different side of a layout switch.
+    ["tablet", 768, 1024],
+    ["tablet-landscape", 1024, 768],
     ["desktop", 1280, 900],
   ] as const) {
     for (const theme of ["light", "dark"] as const) {

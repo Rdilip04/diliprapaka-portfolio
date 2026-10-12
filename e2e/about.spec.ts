@@ -220,3 +220,23 @@ test.describe("About — mobile layout", () => {
     await expect(page.locator('#about a[href$=".pdf"]')).toBeVisible();
   });
 });
+
+test.describe("About — tablet", () => {
+  for (const width of [768, 1024]) {
+    test(`keeps the portrait clear of the copy at ${width}`, async ({ page }) => {
+      await showAbout(page, { width, height: 1024 });
+      const overlap = await page.evaluate(() => {
+        const photo = document.querySelector("#about img")!.getBoundingClientRect();
+        const copy = document.querySelector("#about dl")!.getBoundingClientRect();
+        const statement = document
+          .querySelector("#about dl")!
+          .parentElement!.querySelector("p")!
+          .getBoundingClientRect();
+        const hits = (a: DOMRect, b: DOMRect) =>
+          a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        return hits(photo, copy) || hits(photo, statement);
+      });
+      expect(overlap).toBe(false);
+    });
+  }
+});

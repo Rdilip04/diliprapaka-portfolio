@@ -35,10 +35,13 @@ function MagneticEmail() {
       onMouseMove={onMove}
       onMouseLeave={reset}
       style={reduce ? undefined : { x, y }}
-      className="group relative inline-block font-display text-statement font-medium leading-[1.05] tracking-[-0.02em] text-shell-fg"
+      // `py-2.5 -my-2.5` grows the tap target to 44px on phones (the text box
+      // alone is ~24px at the statement floor) without moving the layout; the
+      // underline still sits 8px under the text, now measured from the padding.
+      className="group relative -my-2.5 inline-block py-2.5 font-display text-statement font-medium leading-[1.05] tracking-[-0.02em] text-shell-fg"
     >
       {EMAIL}
-      <span className="absolute -bottom-2 left-0 h-px w-full origin-right scale-x-0 bg-cobalt-lite transition-transform duration-500 ease-out group-hover:origin-left group-hover:scale-x-100" />
+      <span className="absolute bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-cobalt-lite transition-transform duration-500 ease-out group-hover:origin-left group-hover:scale-x-100" />
     </motion.a>
   );
 }
