@@ -32,7 +32,6 @@ const toastTitle = (id: string) =>
 export function BreakDemo() {
   const [menu, setMenu] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [down, setDown] = useState(false);
   const [run, setRun] = useState(0);
   const btn = useRef<HTMLButtonElement>(null);
   const items = useRef<(HTMLButtonElement | null)[]>([]);
@@ -92,7 +91,7 @@ export function BreakDemo() {
         </div>
         <button
           ref={btn}
-          className={`break-btn${down ? " down" : ""}`}
+          className="break-btn"
           type="button"
           aria-label="Take a break. Hold, or press Shift and Enter, for more choices"
           aria-haspopup="menu"
@@ -100,12 +99,11 @@ export function BreakDemo() {
           onPointerDown={(e) => {
             if (e.button !== 0) return;
             held.current = false;
-            setDown(true);
-            hold.current = window.setTimeout(() => { held.current = true; setDown(false); navigator.vibrate?.(10); openMenu(); }, 500);
+            hold.current = window.setTimeout(() => { held.current = true; navigator.vibrate?.(10); openMenu(); }, 500);
           }}
-          onPointerUp={() => { window.clearTimeout(hold.current); setDown(false); }}
-          onPointerLeave={() => { window.clearTimeout(hold.current); setDown(false); }}
-          onPointerCancel={() => { window.clearTimeout(hold.current); setDown(false); }}
+          onPointerUp={() => window.clearTimeout(hold.current)}
+          onPointerLeave={() => window.clearTimeout(hold.current)}
+          onPointerCancel={() => window.clearTimeout(hold.current)}
           onContextMenu={(e) => e.preventDefault()}
           onKeyDown={(e) => { if (e.key === "ArrowUp") { e.preventDefault(); openMenu(); } }}
           onClick={(e) => {

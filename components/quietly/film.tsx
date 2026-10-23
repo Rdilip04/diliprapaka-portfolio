@@ -50,7 +50,7 @@ export function Film() {
 
   return (
     <figure>
-      <div className={`film-frame${playing ? " playing" : ""}`} ref={frame}>
+      <div className="film-frame" ref={frame}>
         <video
           ref={video}
           playsInline
@@ -65,11 +65,6 @@ export function Film() {
         >
           <source src="/quietly/film.mp4" type="video/mp4" />
         </video>
-        {/* eslint-disable-next-line @next/next/no-img-element -- the poster has to sit exactly under the video, fading as it plays */}
-        <img
-          src="/quietly/film-poster.webp"
-          alt="A frame from the film: the grove at first light on an iPhone, with the caption: Quiet night. A quiet night grows the grove by morning."
-        />
         <div className="film-bar glass-thin">
           <button className="icon-btn gold" type="button" onClick={toggle} aria-label={playing ? "Pause the film" : "Play the film"}>
             <Icon name={playing ? "pause-fill" : "play-fill"} />

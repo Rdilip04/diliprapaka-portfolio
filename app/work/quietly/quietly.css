@@ -33,32 +33,22 @@
   --ink-950: #0E1714;
   --ink-900: #15211C;
   --ink-800: #1E2D27;
-  --ink-700: #2C3D35;
-  --moss-500: #5E7A63;
-  --sage-300: #A9BCA8;
-  --mist-100: #E4EAE3;
-  --mist-50: #F1F4F0;
 
   /* Tint: the one colour for things you can press. Never decoration. */
   --tint: #F2C46B;
   --on-tint: #0E1714;
-  --tint-fg: #F2C46B; /* tint used as text or icon colour, dynamic per appearance */
 
   /* World glow belongs to the scene, never to controls */
-  --glow-day: #F7E4A4;
   --glow-night: #8EF0D6;
 
   /* System colours, meaning only: red = destructive or error, green = success */
-  --system-red: #FF6961; /* iOS red, accessible variant for text on night backgrounds */
   --system-green: #30D158;
 
   /* Semantic, night appearance is the default (most opens happen in the evening) */
-  --bg: var(--ink-950);
   --surface: var(--ink-900);
   --label: #EEF2EC;
   --label-2: #B7C4B9;
   --label-3: #8A9A90;
-  --separator: rgb(255 255 255 / 0.09);
 
   /* Materials: thin for controls, thick for sheets. Neutral, so the world shows through. */
   --glass-thin: rgb(36 38 37 / 0.34);
@@ -69,9 +59,6 @@
   --glass-hi: rgb(255 255 255 / 0.26);
   --glass-shadow: 0 18px 50px -20px rgb(0 0 0 / 0.55);
 
-  /* Story text sits on a scroll edge, so it always meets contrast over a changing sky */
-  --edge-night: linear-gradient(rgb(10 14 22 / 0.66), rgb(10 14 22 / 0.3) 55%, rgb(10 14 22 / 0));
-  --edge-day: linear-gradient(rgb(246 248 244 / 0.86), rgb(246 248 244 / 0.5) 55%, rgb(246 248 244 / 0));
 
   /* Type: SF Pro Rounded for the interface, Outfit Regular only for the grove's story lines. Two weights: 400 and 600 */
   --font-ui: ui-rounded, var(--q-figtree), system-ui, sans-serif;
@@ -83,18 +70,15 @@
   /* Shape rule: pressable = capsule, sheets and widgets = 28, tiles = 20 */
   --r-pill: 999px;
   --r-surface: 28px;
-  --r-tile: 20px;
 
   /* Motion: springs described the Apple way (damping ratio / response), exported as CSS linear() */
   --spring-default: linear(0, 0.0233, 0.0803, 0.1558, 0.2398, 0.3254, 0.4083, 0.4859, 0.5568, 0.6205, 0.6769, 0.7262, 0.769, 0.8059, 0.8374, 0.8642, 0.8869, 0.906, 0.9221, 0.9355, 0.9468, 0.9561, 0.9639, 0.9703, 0.9756, 0.98, 0.9836, 0.9866, 0.9891, 0.9911, 0.9927, 0.9941, 0.9952, 0.9961, 0.9968, 0.9974, 0.9979, 0.9983, 0.9986, 0.9989, 1);
   --spring-default-t: 520ms; /* damping 1.0, response 0.35 */
   --spring-momentum: linear(0, 0.0205, 0.0732, 0.1465, 0.2317, 0.322, 0.4123, 0.4993, 0.5804, 0.6542, 0.72, 0.7776, 0.8271, 0.8689, 0.9036, 0.932, 0.9548, 0.9727, 0.9865, 0.9968, 1.0042, 1.0093, 1.0125, 1.0144, 1.0151, 1.015, 1.0144, 1.0134, 1.0122, 1.0108, 1.0094, 1.0081, 1.0068, 1.0057, 1.0046, 1.0037, 1.0029, 1.0022, 1.0017, 1.0012, 1);
-  --spring-momentum-t: 410ms; /* damping 0.8, response 0.3, only after a flick or drag release */
   --spring-gentle: linear(0, 0.0233, 0.0801, 0.1555, 0.2392, 0.3247, 0.4075, 0.485, 0.5559, 0.6196, 0.676, 0.7254, 0.7682, 0.8051, 0.8367, 0.8636, 0.8863, 0.9055, 0.9216, 0.9351, 0.9464, 0.9558, 0.9636, 0.9701, 0.9754, 0.9798, 0.9835, 0.9865, 0.989, 0.991, 0.9926, 0.994, 0.9951, 0.996, 0.9968, 0.9974, 0.9979, 0.9983, 0.9986, 0.9989, 1);
   --spring-gentle-t: 890ms; /* damping 1.0, response 0.6, for Nori and the world */
   --t-press: 100ms;
   --t-world: 2400ms;
-  --t-breath: 6000ms;
 }
 
 
@@ -147,18 +131,13 @@
   /* Rhythm, built from the app's spacing scale (--s-1 4 to --s-8 64) */
   --sp-section: clamp(64px, 10vw, 128px);
   --sp-block: clamp(48px, 6vw, 64px);
-  --sp-group: var(--s-6);
   --sp-item: var(--s-4);
-  --sp-tight: var(--s-2);
   color-scheme: dark;
 }
 @media (max-width: 640px) { .qcs-main { --gutter: 16px; } }
 
-.qcs-main *, .qcs-main *::before, .qcs-main *::after { box-sizing: border-box; }
-.qcs-main { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scrollbar-color: rgb(255 255 255 / 0.22) var(--page); }
-@media (prefers-reduced-motion: reduce) { .qcs-main { scroll-behavior: auto; } }
+.qcs-main { scrollbar-color: rgb(255 255 255 / 0.22) var(--page); }
 .qcs-main {
-  margin: 0;
   background: var(--page);
   color: var(--label);
   font: 400 17px/1.55 var(--font-ui);
@@ -166,12 +145,9 @@
   overflow-x: hidden;
 }
 .qcs-main ::selection { background: rgb(142 240 214 / 0.3); color: var(--label); }
-.qcs-main img, .qcs-main svg, .qcs-main video { display: block; max-width: 100%; }
-.qcs-main a { color: inherit; text-underline-offset: 3px; }
-.qcs-main p { margin: 0; }
-.qcs-main h1, .qcs-main h2, .qcs-main h3, .qcs-main h4 { margin: 0; font-weight: 600; }
-.qcs-main ul, .qcs-main ol { margin: 0; padding: 0; list-style: none; }
-.qcs-main button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+.qcs-main a { text-underline-offset: 3px; }
+.qcs-main h1, .qcs-main h2, .qcs-main h3, .qcs-main h4 { font-weight: 600; }
+.qcs-main button { cursor: pointer; }
 .qcs-main input { caret-color: var(--tint); }
 .qcs-main :focus-visible { outline: 2px solid var(--tint); outline-offset: 3px; border-radius: 8px; }
 
@@ -218,7 +194,6 @@
 /* ---------- Hero ---------- */
 .qcs-main .hero { position: relative; isolation: isolate; overflow: hidden; }
 .qcs-main .hero-art { position: absolute; inset: 0; z-index: -2; }
-.qcs-main .hero-art svg { width: 100%; height: 100%; }
 .qcs-main .hero::before { /* scroll edge: keeps the headline clear of the sky, like the app's story text */
   content: ""; position: absolute; inset: 0; z-index: -1;
   background: linear-gradient(90deg, rgb(10 14 18 / 0.86) 0%, rgb(10 14 18 / 0.55) 42%, rgb(10 14 18 / 0) 70%),
@@ -242,9 +217,7 @@
 /* ---------- Film ---------- */
 .qcs-main .film { margin-top: calc(var(--s-5) * -1); position: relative; }
 .qcs-main .film-frame { position: relative; border-radius: var(--r-surface); overflow: hidden; background: #000; aspect-ratio: 16 / 9; box-shadow: 0 40px 120px -40px rgb(0 0 0 / 0.8), inset 0 0 0 1px var(--hair); }
-.qcs-main .film-frame video, .qcs-main .film-frame img { width: 100%; height: 100%; object-fit: cover; }
-.qcs-main .film-frame img { position: absolute; inset: 0; transition: opacity 400ms ease; }
-.qcs-main .film-frame.playing img { opacity: 0; pointer-events: none; }
+.qcs-main .film-frame video { width: 100%; height: 100%; object-fit: cover; }
 .qcs-main .film-bar {
   position: absolute; left: var(--s-4); right: var(--s-4); bottom: var(--s-4);
   display: flex; align-items: center; gap: var(--s-2); padding: var(--s-1); border-radius: var(--r-pill);
@@ -510,7 +483,7 @@
 .qcs-main .btn.demo-press { width: auto; padding-inline: var(--s-6); margin: 0; }
 
 .qcs-main .break-btn { width: 64px; height: 64px; border-radius: 50%; background: var(--tint); color: var(--on-tint); display: grid; place-items: center; font-size: 28px; box-shadow: 0 10px 30px -8px rgb(242 196 107 / 0.5); transition: transform var(--t-press) ease-out; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-.qcs-main .break-btn.down { transform: scale(0.92); }
+.qcs-main .break-btn:active { transform: scale(0.92); }
 .qcs-main .break-wrap { position: absolute; right: var(--s-2); bottom: var(--s-2); }
 .qcs-main .menu {
   position: absolute; right: 0; bottom: 76px; width: 210px; border-radius: 20px; padding: var(--s-1);
@@ -720,7 +693,6 @@
 .qcs-main .back-link { display: inline-flex; align-items: center; gap: var(--s-2); min-height: 44px; margin-bottom: var(--s-6); align-self: flex-start; color: var(--tint); font: 600 15px var(--font-ui); text-decoration: none; }
 .qcs-main .back-link i { font-size: 18px; transition: transform var(--t-press) ease-out; }
 .qcs-main .back-link:hover i { transform: translateX(-3px); }
-.qcs-main .phone > img, .qcs-main .phone > span > img { object-fit: cover; }
 .qcs-main .mo-legend .mo-q-key { color: var(--glow-night); }
 .qcs-main .mo-legend .mo-l-key { color: var(--label-3); }
 .qcs-main .toast .bar i.running { animation: q-drain 5s linear forwards; }

@@ -88,29 +88,19 @@ function SectionHead({ n, id, children }: { n: string; id: string; children: Rea
   );
 }
 
-const RAIL: ({ kind: "still"; src: string; alt: string } | { kind: "live"; clip: string; label: string })[] = [
-  { kind: "still", src: "/quietly/screens/the-hatch.webp", alt: "The hatch, hold to hatch Nori." },
-  { kind: "still", src: "/quietly/screens/the-glance.webp", alt: "The glance, the Grove home in the afternoon." },
-  { kind: "still", src: "/quietly/screens/choosing-a-break.webp", alt: "Choosing a break, the menu grown from the break button." },
-  { kind: "live", clip: "/quietly/clips/break", label: "one tap after bedtime starts a break until morning" },
-  { kind: "live", clip: "/quietly/clips/live", label: "the break counting on the Lock Screen" },
-  { kind: "live", clip: "/quietly/clips/firstlight", label: "first light, two new shoots and Nori waking" },
-  { kind: "still", src: "/quietly/screens/home-screen-widgets.webp", alt: "Home Screen widgets in three sizes." },
-  { kind: "still", src: "/quietly/screens/dynamic-island.webp", alt: "Nori in the Dynamic Island." },
-  { kind: "still", src: "/quietly/screens/one-month-together.webp", alt: "One month together, Nori grows a silver frond." },
-  { kind: "still", src: "/quietly/screens/privacy-and-your-data.webp", alt: "Privacy and your data settings." },
-];
-const RAIL_CAPTIONS: [string, string][] = [
-  ["The hatch", "Nori arrives because you held on. Whether that builds a bond is an assumption to test."],
-  ["The glance", "How the day is going in under three seconds, with a plain caption in the first week."],
-  ["Choosing a break", "The menu grows from the button that opened it."],
-  ["Break until morning", "After bedtime a tap always means Until morning. Nori sleeps, and the phone can too."],
-  ["Live Activity", "Nori asleep is a softer brake than a blocked app."],
-  ["First light", "A quiet night becomes new shoots by morning."],
-  ["Widgets", "The answer with zero taps. Refresh at each threshold needs a real build."],
-  ["Dynamic Island", "Says once, gently, that 2 minutes have passed. Needs a real build."],
-  ["One month together", "A change to Nori that can't be lost."],
-  ["Privacy and your data", "Plain lists of what Quietly can and can't see, instead of a policy."],
+type RailItem = { title: string; caption: string } & ({ src: string; alt: string } | { clip: string; label: string });
+
+const RAIL: RailItem[] = [
+  { title: "The hatch", caption: "Nori arrives because you held on. Whether that builds a bond is an assumption to test.", src: "/quietly/screens/the-hatch.webp", alt: "The hatch, hold to hatch Nori." },
+  { title: "The glance", caption: "How the day is going in under three seconds, with a plain caption in the first week.", src: "/quietly/screens/the-glance.webp", alt: "The glance, the Grove home in the afternoon." },
+  { title: "Choosing a break", caption: "The menu grows from the button that opened it.", src: "/quietly/screens/choosing-a-break.webp", alt: "Choosing a break, the menu grown from the break button." },
+  { title: "Break until morning", caption: "After bedtime a tap always means Until morning. Nori sleeps, and the phone can too.", clip: "/quietly/clips/break", label: "one tap after bedtime starts a break until morning" },
+  { title: "Live Activity", caption: "Nori asleep is a softer brake than a blocked app.", clip: "/quietly/clips/live", label: "the break counting on the Lock Screen" },
+  { title: "First light", caption: "A quiet night becomes new shoots by morning.", clip: "/quietly/clips/firstlight", label: "first light, two new shoots and Nori waking" },
+  { title: "Widgets", caption: "The answer with zero taps. Refresh at each threshold needs a real build.", src: "/quietly/screens/home-screen-widgets.webp", alt: "Home Screen widgets in three sizes." },
+  { title: "Dynamic Island", caption: "Says once, gently, that 2 minutes have passed. Needs a real build.", src: "/quietly/screens/dynamic-island.webp", alt: "Nori in the Dynamic Island." },
+  { title: "One month together", caption: "A change to Nori that can't be lost.", src: "/quietly/screens/one-month-together.webp", alt: "One month together, Nori grows a silver frond." },
+  { title: "Privacy and your data", caption: "Plain lists of what Quietly can and can't see, instead of a policy.", src: "/quietly/screens/privacy-and-your-data.webp", alt: "Privacy and your data settings." },
 ];
 
 export default function QuietlyCaseStudy() {
@@ -433,14 +423,14 @@ export default function QuietlyCaseStudy() {
             <p className="foot live-note"><Icon name="play-fill" /> Screens with this mark move: hover, focus or tap them. The motion is cut from the film.</p>
           </div>
           <div className="rail" tabIndex={0} role="region" aria-label="Key screens, scroll sideways">
-            {RAIL.map((s, i) => (
-              <figure key={RAIL_CAPTIONS[i][0]}>
-                {s.kind === "live" ? (
+            {RAIL.map((s) => (
+              <figure key={s.title}>
+                {"clip" in s ? (
                   <LivePhone clip={s.clip} label={s.label} sizes="220px" />
                 ) : (
                   <div className="phone"><Image src={s.src} alt={s.alt} fill sizes="220px" /></div>
                 )}
-                <figcaption><b>{RAIL_CAPTIONS[i][0]}</b><span>{RAIL_CAPTIONS[i][1]}</span></figcaption>
+                <figcaption><b>{s.title}</b><span>{s.caption}</span></figcaption>
               </figure>
             ))}
           </div>
