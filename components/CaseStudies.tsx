@@ -4,13 +4,19 @@ import { useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { Outfit } from "next/font/google";
 import { DrawRule } from "@/components/ui/draw-rule";
+import { Icon } from "@/components/quietly/icon";
+import "@/components/quietly/work-row.css";
 import type { Project } from "@/lib/projects";
 import { PROJECTS } from "@/lib/projects";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const isPlaceholder = (p: Project) => p.title.startsWith("[");
+
+// Quietly's wordmark face, for its row only (one weight).
+const outfitRow = Outfit({ variable: "--q-outfit-row", subsets: ["latin"], weight: "300", display: "swap" });
 
 /* Resting thumbnail size. It is sized to span the title and the description
    sitting beside it — measured at 80px once the description fits on one line,
@@ -32,17 +38,21 @@ const subscribeMd = (cb: () => void) => {
   return () => q.removeEventListener("change", cb);
 };
 
-function Thumb({ project }: { project: Project }) {
+function Thumb({ project, playing = false }: { project: Project; playing?: boolean }) {
   if (project.image) {
     return (
-      <Image
-        src={project.image}
-        alt={`${project.title}, app preview`}
-        fill
-        // 300px is the expanded width; the row never renders it larger.
-        sizes="300px"
-        className="object-cover"
-      />
+      <>
+        <Image
+          src={project.image}
+          alt={`${project.title}, app preview`}
+          fill
+          // 300px is the expanded width; the row never renders it larger.
+          sizes="300px"
+          className="object-cover"
+        />
+        {/* Mounted only while the row is open, so it starts from the first frame each time. */}
+        {playing && project.video && <video src={project.video} autoPlay muted playsInline aria-hidden="true" />}
+      </>
     );
   }
   return (
@@ -58,30 +68,31 @@ function Thumb({ project }: { project: Project }) {
 
 // Shared so the mobile row and the desktop hover panel can't drift apart. It is
 // a span, not an anchor — the whole row is already the link.
-function ReadCta() {
+function ReadCta({ themed = false }: { themed?: boolean }) {
   return (
-    <span className="font-mono text-label uppercase tracking-[0.14em] text-cobalt-ink">
+    <span className={`font-mono text-label uppercase tracking-[0.14em] text-cobalt-ink${themed ? " qrow-cta" : ""}`}>
       Read case study →
     </span>
   );
 }
 
 function ExpandedContext({ project }: { project: Project }) {
+  const themed = project.theme === "quietly";
   return (
     <div className="grid gap-x-8 gap-y-3 pt-4 md:grid-cols-[1fr_auto] md:items-start">
       <div>
-        <p className="font-mono text-label uppercase tracking-[0.14em] text-ink/70">
+        <p className="qrow-meta font-mono text-label uppercase tracking-[0.14em] text-ink/70">
           {project.role} · {project.duration}
         </p>
-        <p className="mt-3 max-w-md font-sans text-sm leading-relaxed text-ink/70">
-          <span className="font-mono text-label uppercase tracking-[0.14em] text-cobalt-ink">
+        <p className="qrow-desc mt-3 max-w-md font-sans text-sm leading-relaxed text-ink/70">
+          <span className="qrow-outcome font-mono text-label uppercase tracking-[0.14em] text-cobalt-ink">
             Outcome:{" "}
           </span>
           {project.why}
         </p>
       </div>
       <div className="flex flex-col gap-3 md:items-end">
-        <ul className="flex flex-wrap gap-2 md:justify-end">
+        <ul className="qrow-tags flex flex-wrap gap-2 md:justify-end">
           {project.tags.map((tag) => (
             <li
               key={tag}
@@ -91,9 +102,31 @@ function ExpandedContext({ project }: { project: Project }) {
             </li>
           ))}
         </ul>
-        <ReadCta />
+        <ReadCta themed={themed} />
       </div>
     </div>
+  );
+}
+
+// The quiet moon wordmark, swapped in for the plain title while the row is open.
+function QuietlyTitle({ title }: { title: string }) {
+  return (
+    <>
+      <span className="qrow-names">
+        <span className="qrow-site">{title}</span>
+        <span className="qrow-logo" aria-hidden="true">
+          qu
+          <span className="i">
+            ı
+            <svg viewBox="-10 -10 20 20">
+              <path d="M3 -8.5 A9 9 0 1 0 8.6 3.2 A7 7 0 1 1 3 -8.5 Z" fill="#F2C46B" />
+            </svg>
+          </span>
+          etly
+        </span>
+      </span>
+      <span className="qrow-badge"><Icon name="moon-fill" />iOS concept</span>
+    </>
   );
 }
 
@@ -141,12 +174,15 @@ function ProjectRow({
     () => false,
   );
   const rest = isMd ? REST.md : REST.sm;
+  const themed = project.theme === "quietly";
+  const playing = themed && open && isMd && !reduce;
 
   return (
     <motion.li
       onHoverStart={onOpen}
       onHoverEnd={onClose}
-      className="group border-b border-ink/12"
+      className={`group border-b border-ink/12${themed ? ` qrow ${outfitRow.variable}` : ""}`}
+      data-on={themed ? open : undefined}
     >
       {/* The whole row is the link — the title alone is a small target for a
           row this tall. Focus drives the same expand that hover does. */}
@@ -156,7 +192,8 @@ function ProjectRow({
         onBlur={onClose}
         className="flex items-start gap-5 py-6 md:gap-8 md:py-8"
       >
-        <span className="hidden w-6 shrink-0 pt-1 font-mono text-label tabular-nums text-ink/70 transition-colors duration-300 group-hover:text-cobalt-ink group-focus:text-cobalt-ink sm:block">
+        {themed && <span className="qrow-plate" aria-hidden="true" />}
+        <span className="qrow-index hidden w-6 shrink-0 pt-1 font-mono text-label tabular-nums text-ink/70 transition-colors duration-300 group-hover:text-cobalt-ink group-focus:text-cobalt-ink sm:block">
           {project.index}
         </span>
 
@@ -173,19 +210,19 @@ function ProjectRow({
           transition={{ duration: 0.5, ease: EASE }}
           className={`relative shrink-0 overflow-hidden rounded-lg border border-ink/10 ${
             reduce || !canGrow ? "h-14 w-[76px] md:h-20 md:w-32" : ""
-          }`}
+          }${themed ? " qrow-thumb" : ""}`}
         >
-          <Thumb project={project} />
+          <Thumb project={project} playing={playing} />
         </motion.div>
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-4">
             <h3 className="font-display text-heading font-medium leading-[1.02] tracking-[-0.015em] text-ink transition-colors duration-300 group-hover:text-cobalt-ink group-focus:text-cobalt-ink">
-              {project.title}
+              {themed ? <QuietlyTitle title={project.title} /> : project.title}
             </h3>
           </div>
 
-          <p className="mt-2 max-w-xl font-sans text-sm leading-relaxed text-ink/70">
+          <p className="qrow-desc mt-2 max-w-xl font-sans text-sm leading-relaxed text-ink/70">
             {project.description}
           </p>
 
@@ -195,7 +232,7 @@ function ProjectRow({
               They stay desktop-only; the case study itself carries every one of
               them within a tap. */}
           <div className="mt-4 md:hidden">
-            <ReadCta />
+            <ReadCta themed={themed} />
           </div>
 
           {/* Desktop: reveal on hover/focus */}

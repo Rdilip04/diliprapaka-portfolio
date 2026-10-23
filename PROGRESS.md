@@ -2,8 +2,10 @@
 
 Reference document for **Dilip Rapaka's UX / Product Designer portfolio**. Written to be handed to a new contributor (human or agent) as the single source of truth for what this site is, why it looks the way it does, and which decisions are settled.
 
-**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 110/110 · production build green
-**Last updated:** 2026-10-13
+**Status:** `tsc` 0 · `eslint` 0 · vitest 21/21 · Playwright 138/138 · production build green
+**Last updated:** 2026-10-24 (the Quietly case study, §8a)
+
+> Seen once, 2026-10-24: `/work/nextstep · narrow · light` failed on the Nav's skip link and wordmark (1.18:1) during a full parallel run, then passed 12 times out of 12 on its own. It looks like the Nav's 300 ms colour transition still running when the probe reads it. NextStep loads none of Quietly's styles (checked). Worth a longer settle if it comes back.
 
 Conventions used below:
 
@@ -370,6 +372,54 @@ A server component; only `Reveal` and `SusScores` are client islands. Primitives
 > **Trap — a filled `<Figure>` drops its label on purpose** (the image replaces it). Any test asserting "every figure contains text" breaks on the first upload. The figure test checks *filled → non-empty `alt`; empty → non-empty label*.
 
 `IMAGES.md` at the repo root is the step-by-step Figma export guide. It describes the *original* workflow (PNG, a combined Notifications + Profile collage) and the shipped setup differs — treat it as the guide for future case studies.
+
+---
+
+## 8a. Case study — `/work/quietly`
+
+Added 2026-10-24. Ported from the approved design mock in the Quietly project (`F:\Websites opus 5.5\quietly\case-study\`, with its decisions in `quietly/LOG.md`). Unlike NextStep, this page is set **in the product's own world**, not the portfolio's: night ink `#0E1714`, lantern gold `#F2C46B`, Outfit for the story voice and the system rounded face (Figtree as fallback) for interface text.
+
+> **Locked (Dilip, 2026-10-23) — the two-typeface and mono-label rules do not apply inside this page or the Quietly work row.** They are Quietly's own type. The rest of the portfolio keeps §4 and §6 unchanged.
+
+**Two page rules**, the same as the app's: gold means you can press it, and a panel means you can touch it (playground tiles, the Nights phone, the threshold demo). Everything else sits on hairlines.
+
+### How it is built
+
+| Piece | Where |
+|---|---|
+| Page (server component) | `app/work/quietly/page.tsx` |
+| Styles | `app/work/quietly/quietly.css`: tokens on `.qcs` (the wrapper), every other rule under `.qcs-main` (the page's own `<main>`) |
+| Interactive parts (client) | `components/quietly/`: `film`, `compare`, `live-phone`, `month`, `story-demos`, `playground` |
+| Icons | `components/quietly/icon.tsx`: the 41 Phosphor icons in use (MIT), inlined as paths. No icon font, no dependency |
+| Art | `lib/quietly/art.js`: a copy of the Quietly art kit. The page draws the hero, the interlude and Nori with it at build time |
+| Assets | `public/quietly/`: screens and the 22 October befores (WebP), film clips with stills, the 2.6 MB web film, `plate.svg` for the work row |
+| Work row | `components/quietly/work-row.css` plus a `theme: "quietly"` project in `lib/projects.ts` |
+
+> **Trap — the stylesheet must stay scoped.** Next keeps a global stylesheet loaded after client navigation (see the Next CSS docs), so a bare selector here would restyle NextStep and the homepage once someone has visited Quietly. Tokens sit on `.qcs`, and every rule sits under `.qcs-main`, which is the page's `<main>` only. The shared Nav and Footer are inside `.qcs` but outside `.qcs-main`. The Nav follows the page because `.qcs` re-maps `--color-ink`, `--color-paper`, `--color-canvas`, `--color-mist` and the cobalt accent to Quietly's night and gold. A test navigates from Quietly to NextStep and checks that nothing is left behind.
+
+> **Trap — class names Tailwind also knows.** Tailwind scans this page too. `ring` and `grid` would have become real utilities (a box-shadow ring on the hatch, `display: grid` on an SVG group). They are `hatch-ring` and `grid-lines`. Check any new class name against Tailwind's utilities.
+
+> **Trap — the a11y probe reads the nearest ancestor background.** Text over art needs a real `background-color` on an ancestor: the interlude has its light colour under the art, and the work row puts the night colour on the link itself rather than on the decorative plate behind it.
+
+### The Selected work row
+
+Quietly is project `02`. On hover or keyboard focus the row becomes a nameplate:
+- a night wash, with the grove (`plate.svg`) sliding in from the right;
+- the quiet moon wordmark in place of the title, and a gold "iOS concept" badge;
+- the grown thumbnail plays a short film loop.
+
+The wash waits 80 ms, so a pointer passing over the list doesn't flash it. Below `md` the row wears a quiet version of the nameplate at rest, and the loop never plays there or under Reduce Motion. NextStep's row is unchanged, and the existing work tests still hold.
+
+### Motion
+
+No entrance animation on scroll. Motion is kept for the moments that mean something:
+- **The film:** plays muted while mostly on screen, with pause and sound always visible. Under Reduce Motion it waits on the still.
+- **Four live phones:** hover or focus plays one moment from the film; a tap toggles.
+- **The demos:** the sheet, the weather crossfade, the break menu, the hatch, Nori's hop and the springs.
+
+### Open
+- The Figma prototype it links to still shows the rules of 22 October. The page says so.
+- **SF Pro Rounded:** rounded text on Apple devices comes from the system (`ui-rounded`). Everywhere else it falls back to Figtree.
 
 ---
 

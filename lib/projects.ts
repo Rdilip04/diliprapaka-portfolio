@@ -13,6 +13,10 @@ export type Project = {
   tags: string[];
   href: string;
   image?: string;
+  // Quietly's row wears its own world on hover (components/quietly/work-row.css).
+  theme?: "quietly";
+  // A short muted loop that plays in the grown thumbnail while the row is open.
+  video?: string;
 };
 
 // NextStep copy is grounded in what's confirmed (stroke-rehab app, NHS).
@@ -33,15 +37,20 @@ export const PROJECTS: Project[] = [
     image: "/nextstep/nextstep-thumb.webp",
   },
   {
-    slug: "project-two",
+    slug: "quietly",
     index: "02",
-    title: "[Project Two]",
-    role: "[Your role]",
-    duration: "[Duration]",
-    description: "[One line — the problem and who it was for.]",
-    why: "[One line — the outcome or result that earns its place.]",
-    tags: ["Add", "Your", "Tags"],
-    href: "/work/project-two",
+    title: "Quietly",
+    role: "Solo concept",
+    duration: "October 2026",
+    description:
+      "An iPhone app concept for putting your phone down at bedtime, with a grove that grows by morning.",
+    // Honest about what it is: nothing here has met a user yet.
+    why: "Not built or tested with people yet. The bet, the trade-offs and the interface craft, with a 60 second film.",
+    tags: ["iOS", "Interaction Design", "Motion"],
+    href: "/work/quietly",
+    image: "/quietly/clips/card.webp",
+    theme: "quietly",
+    video: "/quietly/clips/card.mp4",
   },
   {
     slug: "project-three",
