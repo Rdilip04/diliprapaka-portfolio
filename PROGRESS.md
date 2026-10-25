@@ -421,6 +421,20 @@ No entrance animation on scroll. Motion is kept for the moments that mean someth
 - The Figma prototype it links to still shows the rules of 22 October. The page says so.
 - **SF Pro Rounded:** rounded text on Apple devices comes from the system (`ui-rounded`). Everywhere else it falls back to Figtree.
 
+## 8b. Case study — `/work/cursor`
+
+Added 2026-10-26. A solo concept for Cursor (Product Anatomy capstone): getting a solo designer from their own design to a first visual edit. **Not affiliated with Cursor**, and the page says so in the meta row.
+
+- **Built like NextStep, not like Quietly:** the portfolio's own tokens and type, the shared `Section` / `Eyebrow` / `SectionTitle` / `Body` / `Figure` / `Reveal` primitives, a meta row, three stats on `mist`, then nine numbered sections whose H2s state what happened, not the phase name.
+- **The copy is Dilip's, section by section** (26 October), from the project's own log. Every number on the page traces to it: 3 of 3 testers misread the wait, 1 of 3 used Design Mode, ease 6 or 7 out of 7 even when the task failed.
+
+> **Locked — the honest lines stay.** "A concept, not affiliated with Cursor", "They weren't quite my user.", "I didn't retest this version." and "this one hasn't been tested yet." pre-empt the first interview questions. `e2e/cursor.spec.ts` asserts all four.
+
+- **Images** are prototype screenshots in `public/cursor/` (WebP, ~400KB total): four desktop screens at 2160×1290 (`screen` ratio in `figure.tsx`) and a before/after pair at 12:5 (`pair`). The "before" is Dilip's own screenshot of Cursor's real pen icon.
+- **The prototype link** opens the live HTML prototype (a Claude artifact, shared by link) in a new tab. It is a stand-in: no real build, no real AI.
+- **It ends with a way on**, "Next: NextStep →" plus "← Back to all work". NextStep and Quietly still end at "Back to all work"; worth the same treatment.
+- **Work index:** project `03`, replacing the first "Coming soon" placeholder. The thumbnail is a crop of the final design's page area.
+
 ---
 
 ## 9. Testing
