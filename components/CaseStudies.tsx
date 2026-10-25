@@ -115,7 +115,7 @@ function QuietlyTitle({ title }: { title: string }) {
       <span className="qrow-names">
         <span className="qrow-site">{title}</span>
         <span className="qrow-logo" aria-hidden="true">
-          qu
+          Qu
           <span className="i">
             ı
             <svg viewBox="-10 -10 20 20">

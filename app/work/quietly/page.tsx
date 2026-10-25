@@ -118,7 +118,7 @@ export default function QuietlyCaseStudy() {
             <Link href="/#work" className="back-link"><Icon name="caret-left-bold" />All work</Link>
             <h1 id="title" className="logo" aria-label="Quietly">
               <span aria-hidden="true">
-                qu
+                Qu
                 <span className="i">
                   ı
                   <svg viewBox="-10 -10 20 20" aria-hidden="true">
