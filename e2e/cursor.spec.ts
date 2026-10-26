@@ -64,7 +64,7 @@ test.describe("Cursor case study — structure and honesty", () => {
 
   test("every figure is a real image with alt text, served through next/image", async ({ page }) => {
     const imgs = page.locator("main figure img");
-    expect(await imgs.count()).toBe(6);
+    expect(await imgs.count()).toBe(17);
     for (const img of await imgs.all()) {
       expect((await img.getAttribute("alt"))?.trim()).toBeTruthy();
       await expect(img).toHaveAttribute("src", /\/_next\/image/);

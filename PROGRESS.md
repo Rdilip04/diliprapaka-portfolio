@@ -430,7 +430,9 @@ Added 2026-10-26. A solo concept for Cursor (Product Anatomy capstone): getting 
 
 > **Locked — the honest lines stay.** "A concept, not affiliated with Cursor", "They weren't quite my user.", "I didn't retest this version." and "this one hasn't been tested yet." pre-empt the first interview questions. `e2e/cursor.spec.ts` asserts all four.
 
-- **Images** are prototype screenshots in `public/cursor/` (WebP, ~400KB total): four desktop screens at 2160×1290 (`screen` ratio in `figure.tsx`) and a before/after pair at 12:5 (`pair`). The "before" is Dilip's own screenshot of Cursor's real pen icon.
+- **Expanded 2026-10-26** after Dilip found the first version too thin: about 2,500 words, nine sections (Context, The problem, Research, Ideas, The design, Breaking it on purpose, Testing, What changed, Outcome) and 17 figures. Confirmed lines are kept word for word; the added context is drafted from the log (SCOPE, RESEARCH, BRIEF, STRESS, CRAFT, TEST) for Dilip to review.
+- **Tables** use a local `Table` (real `<table>`, sr-only caption, scrolls inside `overflow-x-auto` on phones). The research tally is a small bar list on `bg-cobalt`.
+- **Images** in `public/cursor/` (WebP): prototype screens at 2160×1290 (`screen`, or `screenPair` two to a row), the self-serve test pages, a before/after pair at 12:5 (`pair`), and real Cursor screens. `panel` (4:3) holds chat crops. **Mac screens with "Caliber" or the nine questions are from a tutorial by a practised user and their captions say so**; only the Windows chat crop and the pen icon are Dilip's own runs. Never caption a tutorial screen as his.
 - **The prototype link** opens the live HTML prototype (a Claude artifact, shared by link) in a new tab. It is a stand-in: no real build, no real AI.
 - **It ends with a way on**, "Next: NextStep →" plus "← Back to all work". NextStep and Quietly still end at "Back to all work"; worth the same treatment.
 - **Work index:** project `03`, replacing the first "Coming soon" placeholder. The thumbnail is a crop of the final design's page area.
