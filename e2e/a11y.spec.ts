@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-const ROUTES = ["/", "/work/nextstep", "/work/quietly"] as const;
+const ROUTES = ["/", "/work/nextstep", "/work/quietly", "/work/cursor"] as const;
 
 /** WCAG 2.2 AA target size (2.5.8). AAA / Apple HIG is 44. */
 const MIN_TARGET = 24;

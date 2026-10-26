@@ -8,6 +8,14 @@ const RATIO = {
   // than the viewport at full container width.
   banner: "aspect-[12/5]",
   wide: "aspect-[16/9]",
+  // Cursor case study: desktop prototype screenshots, captured at 1440x860 (x1.5).
+  screen: "aspect-[2160/1290]",
+  // A before/after pair set side by side at md, each half the container.
+  pair: "aspect-[12/5]",
+  // The same desktop screen, set two to a row at md.
+  screenPair: "aspect-[2160/1290]",
+  // A chat column cropped from a real Cursor screenshot, two to a row at md.
+  panel: "aspect-[4/3]",
 } as const;
 
 // Rendered width per slot, so the browser can pick a candidate from the srcset
@@ -16,10 +24,17 @@ const RATIO = {
 // once its px-6 padding is removed.
 const CONTAINER = "(min-width: 1152px) 1104px, calc(100vw - 48px)";
 
+// Half of the 1104px container less the gap, full width below md.
+const HALF = "(min-width: 1152px) 540px, (min-width: 768px) calc(50vw - 40px), calc(100vw - 48px)";
+
 const SIZES = {
   phone: "200px",
   banner: CONTAINER,
   wide: CONTAINER,
+  screen: CONTAINER,
+  pair: HALF,
+  screenPair: HALF,
+  panel: HALF,
 } as const;
 
 type Ratio = keyof typeof RATIO;

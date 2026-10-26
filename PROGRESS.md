@@ -421,6 +421,25 @@ No entrance animation on scroll. Motion is kept for the moments that mean someth
 - The Figma prototype it links to still shows the rules of 22 October. The page says so.
 - **SF Pro Rounded:** rounded text on Apple devices comes from the system (`ui-rounded`). Everywhere else it falls back to Figtree.
 
+## 8b. Case study — `/work/cursor`
+
+Added 2026-10-26. A solo concept for Cursor (Product Anatomy capstone): getting a solo designer from their own design to a first visual edit. **Not affiliated with Cursor**, and the page says so in the meta row.
+
+- **Built like NextStep, not like Quietly:** the portfolio's own tokens and type, the shared `Section` / `Eyebrow` / `SectionTitle` / `Body` / `Figure` / `Reveal` primitives, a meta row, three stats on `mist`, then nine numbered sections whose H2s state what happened, not the phase name.
+- **The copy is Dilip's, section by section** (26 October), from the project's own log. Every number on the page traces to it: 3 of 3 testers misread the wait, 1 of 3 used Design Mode, ease 6 or 7 out of 7 even when the task failed.
+
+> **Locked — the honest lines stay.** "A concept, not affiliated with Cursor", "They weren't quite my user.", "I didn't retest this version." and "this one hasn't been tested yet." pre-empt the first interview questions. `e2e/cursor.spec.ts` asserts all four.
+
+- **Set in Cursor's own world (2026-10-26), like Quietly, not like NextStep.** Dilip found it looked the same as NextStep. `app/work/cursor/cursor.css` scopes everything under `.ccs` (the wrapper holding Nav, main and Footer): Cursor's dark surface `#141414`, Design Mode blue `#599ce7` as the accent, and Cursor's waiting amber `#f1b467` used **only** for the finding (the wait): the title's second sentence and the "3 of 3" stat. It stays dark in both themes. `.ccs` sets `color` itself because body's inherited colour does not re-resolve (the skip link measured 1.04:1 without it).
+- **Layout differs too:** a sticky left rail on desktop (`components/cursor/rail.tsx`), shaped like Cursor's sidebar, lists the nine sections and lights the one being read; sections run on one surface split by hairlines; tables sit in panels; screenshots lift off the page with a shadow. Tests check the dark world, the rail, and that nothing leaks to Quietly or NextStep after client navigation.
+- **Order:** NextStep 01, Cursor 02, Quietly 03. The Cursor page ends with "Next: Quietly →".
+- **Expanded 2026-10-26** after Dilip found the first version too thin: about 2,500 words, nine sections (Context, The problem, Research, Ideas, The design, Breaking it on purpose, Testing, What changed, Outcome) and 17 figures. Confirmed lines are kept word for word; the added context is drafted from the log (SCOPE, RESEARCH, BRIEF, STRESS, CRAFT, TEST) for Dilip to review.
+- **Tables** use a local `Table` (real `<table>`, sr-only caption, scrolls inside `overflow-x-auto` on phones). The research tally is a small bar list on `bg-cobalt`.
+- **Images** in `public/cursor/` (WebP): prototype screens at 2160×1290 (`screen`, or `screenPair` two to a row), the self-serve test pages, a before/after pair at 12:5 (`pair`), and real Cursor screens. `panel` (4:3) holds chat crops. **Mac screens with "Caliber" or the nine questions are from a tutorial by a practised user and their captions say so**; only the Windows chat crop and the pen icon are Dilip's own runs. Never caption a tutorial screen as his.
+- **The prototype link** opens the live HTML prototype (a Claude artifact, shared by link) in a new tab. It is a stand-in: no real build, no real AI.
+- **It ends with a way on**, "Next: NextStep →" plus "← Back to all work". NextStep and Quietly still end at "Back to all work"; worth the same treatment.
+- **Work index:** project `03`, replacing the first "Coming soon" placeholder. The thumbnail is a crop of the final design's page area.
+
 ---
 
 ## 9. Testing

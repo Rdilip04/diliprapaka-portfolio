@@ -37,8 +37,22 @@ export const PROJECTS: Project[] = [
     image: "/nextstep/nextstep-thumb.webp",
   },
   {
-    slug: "quietly",
+    slug: "cursor",
     index: "02",
+    title: "Cursor",
+    role: "Solo concept",
+    duration: "3 weeks",
+    description:
+      "A concept for Cursor that gets a solo designer from their own design to a first visual edit.",
+    // Honest: tested with three people, and the final version is not retested.
+    why: "Tested with 3 designers: all 3 misread the wait, which reshaped the design. The final version isn't tested yet.",
+    tags: ["Desktop App", "Usability Testing", "Prototype"],
+    href: "/work/cursor",
+    image: "/cursor/cursor-thumb.webp",
+  },
+  {
+    slug: "quietly",
+    index: "03",
     title: "Quietly",
     role: "Solo concept",
     duration: "October 2026",
@@ -51,17 +65,6 @@ export const PROJECTS: Project[] = [
     image: "/quietly/clips/card.webp",
     theme: "quietly",
     video: "/quietly/clips/card.mp4",
-  },
-  {
-    slug: "project-three",
-    index: "03",
-    title: "[Project Three]",
-    role: "[Your role]",
-    duration: "[Duration]",
-    description: "[One line — the problem and who it was for.]",
-    why: "[One line — the outcome or result that earns its place.]",
-    tags: ["Add", "Your", "Tags"],
-    href: "/work/project-three",
   },
   {
     slug: "project-four",
