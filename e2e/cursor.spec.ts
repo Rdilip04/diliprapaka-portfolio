@@ -74,13 +74,13 @@ test.describe("Cursor case study — structure and honesty", () => {
   });
 
   test("ends with a way on, not a dead end", async ({ page }) => {
-    await page.getByRole("link", { name: "Next: NextStep →" }).click();
-    await expect(page).toHaveURL(/\/work\/nextstep$/);
+    await page.getByRole("link", { name: "Next: Quietly →" }).click();
+    await expect(page).toHaveURL(/\/work\/quietly$/);
   });
 });
 
 test.describe("Cursor in Selected work", () => {
-  test("is project 03 and opens the case study", async ({ page }) => {
+  test("is project 02 and opens the case study", async ({ page }) => {
     await page.goto("/");
     const row = page.locator('#work a[href="/work/cursor"]');
     await expect(row).toHaveCount(1);

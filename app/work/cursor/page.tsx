@@ -407,18 +407,17 @@ export default function CursorCaseStudy() {
         <Section surface="paper">
           <Reveal>
             <Eyebrow>01 · Context</Eyebrow>
-            <SectionTitle>A code tool that now has a visual editor</SectionTitle>
+            <SectionTitle>Cursor added a visual editor. I couldn’t reach it</SectionTitle>
             <div className="mt-6 flex flex-col gap-5">
               <Body>
                 Cursor is an AI code editor. You describe what you want, and an
                 agent plans it and writes a real project on your own computer. In
                 April 2026 Cursor added Design Mode: you click part of a page
                 running in Cursor’s built-in browser, describe the change, and the
-                agent edits the code for you. For a designer, that’s the
-                interesting part.
+                agent edits the code for you.
               </Body>
               <Body>
-                I’m a designer who tried it, and I didn’t get there on my own.
+                For a designer, that’s the interesting part. I’m a designer who tried it, and I didn’t get there on my own.
                 That became the project.
               </Body>
             </div>
@@ -513,7 +512,10 @@ export default function CursorCaseStudy() {
               Lovable, Bolt and Replit start you with a prompt in the browser, and
               you never see a file. Cursor is a different kind of tool: it plans
               and builds a real project on your own computer, which is exactly why
-              it asks setup questions. So I kept their prompt-first start, but I
+              it asks setup questions.
+            </Body>
+            <Body className="mt-5">
+              So I kept their prompt-first start, but I
               couldn’t copy their “no files” trick. I had to make the setup
               disappear inside Cursor instead.
             </Body>
@@ -601,7 +603,10 @@ export default function CursorCaseStudy() {
                 The specifics held up in Cursor’s own screens: a “Connect GitHub”
                 step, a tech-stack question, a second window at launch asking to
                 open a project or clone a repo, and the editor only named on
-                hover. But I had to admit one thing: my big idea, “Cursor is a
+                hover.
+              </Body>
+              <Body>
+                But I had to admit one thing: my big idea, “Cursor is a
                 developer tool”, was what I believed before I started. The
                 research backed the details, not the headline.
               </Body>
@@ -613,7 +618,7 @@ export default function CursorCaseStudy() {
         <Section surface="mist">
           <Reveal>
             <Eyebrow>04 · Ideas</Eyebrow>
-            <SectionTitle>16 ideas, and why number 11 won</SectionTitle>
+            <SectionTitle>16 ideas. The winner shows your design before the build</SectionTitle>
             <div className="mt-6 flex flex-col gap-5">
               <Body>
                 I ran four rounds: the obvious ideas, then ideas with the obvious
@@ -766,7 +771,10 @@ export default function CursorCaseStudy() {
           <Reveal className="mt-12">
             <Body>
               I kept it looking exactly like Cursor, down to measuring their text
-              at 13px, because a designer should feel it was always there. I
+              at 13px, because a designer should feel it was always there.
+            </Body>
+            <Body className="mt-5">
+              I
               turned down two separate builds (extra cost), making it everyone’s
               default (it would slow developers down), and a tooltip pointing at
               the icon (a patch, not a fix). Developers, and curious designers,
@@ -819,7 +827,10 @@ export default function CursorCaseStudy() {
                 The outlines that show what’s selected and what’s waiting failed
                 on a light page: 2.70:1 and 1.73:1, against the 3:1 they need. I
                 made them a two-tone ring with a dark inner line, about 17:1 on
-                any light page. Small targets went up to 24px. At 200% zoom the
+                any light page.
+              </Body>
+              <Body>
+                Small targets went up to 24px. At 200% zoom the
                 chat shrank to one line, so the page now scrolls instead.
               </Body>
               <Body>
@@ -977,7 +988,10 @@ export default function CursorCaseStudy() {
             <Body>
               So in the final version your change appears on the page the moment
               you ask, marked “Preview · not saved”, and saves itself when the
-              build finishes. Because Yogesh kept clicking the page, clicking any
+              build finishes.
+            </Body>
+            <Body className="mt-5">
+              Because Yogesh kept clicking the page, clicking any
               part now offers “Change this? · Edit in Design Mode”. I also added
               “Compare with Figma”, since the whole reason she’s editing is that
               the build doesn’t match her design.
@@ -1041,7 +1055,7 @@ export default function CursorCaseStudy() {
         <Section surface="paper">
           <Reveal>
             <Eyebrow>09 · Outcome</Eyebrow>
-            <SectionTitle>What’s proven, and what isn’t yet</SectionTitle>
+            <SectionTitle>The wait was the problem. My fix isn’t tested yet</SectionTitle>
           </Reveal>
 
           <Reveal className="mt-10">
@@ -1121,10 +1135,10 @@ export default function CursorCaseStudy() {
               </p>
               <div className="flex flex-col gap-2 sm:items-end">
                 <Link
-                  href="/work/nextstep"
+                  href="/work/quietly"
                   className="-my-3 inline-flex min-h-11 items-center font-mono text-label uppercase tracking-[0.16em] text-cobalt-ink transition-opacity hover:opacity-70"
                 >
-                  Next: NextStep →
+                  Next: Quietly →
                 </Link>
                 <Link
                   href="/#work"
