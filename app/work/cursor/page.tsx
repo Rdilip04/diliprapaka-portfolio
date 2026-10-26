@@ -3,11 +3,9 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { Body, Eyebrow, Section, SectionTitle } from "@/components/case-study/section";
+import { Body, Section } from "@/components/case-study/section";
 import { Figure } from "@/components/case-study/figure";
 import { Reveal } from "@/components/case-study/reveal";
-import { Rail } from "@/components/cursor/rail";
-import "./cursor.css";
 
 // Copy is Dilip's own where he confirmed it section by section on 26 October
 // 2026 (CASE.md in the Cursor project). The added context is drafted from his
@@ -29,18 +27,6 @@ const META = [
   { term: "Context", detail: "Product Anatomy course capstone. A concept, not affiliated with Cursor" },
   { term: "Duration", detail: "3 weeks, October 2026" },
   { term: "Tested with", detail: "3 designers, in a self-serve test with a built-in click log" },
-];
-
-const RAIL = [
-  { id: "context", label: "Context" },
-  { id: "problem", label: "The problem" },
-  { id: "research", label: "Research" },
-  { id: "ideas", label: "Ideas" },
-  { id: "design", label: "The design" },
-  { id: "breaking", label: "Breaking it" },
-  { id: "testing", label: "Testing" },
-  { id: "changed", label: "What changed" },
-  { id: "result", label: "Outcome" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -216,37 +202,58 @@ const EDGES = [
 // Local building blocks, in the same voice as the NextStep page.
 // ---------------------------------------------------------------------------
 
-function MetaGrid() {
+function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <dl className="grid gap-px overflow-hidden border-t border-ink/12 sm:grid-cols-2 lg:grid-cols-4">
-      {META.map((item) => (
-        <div key={item.term} className="pt-5 sm:pr-6">
-          <dt className="font-mono text-label uppercase tracking-[0.16em] text-ink/70">
-            {item.term}
-          </dt>
-          <dd className="mt-2 max-w-[34ch] font-sans text-sm leading-[1.6] text-ink/75">
-            {item.detail}
-          </dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
-function Stat({ value, label, wait = false }: { value: string; label: string; wait?: boolean }) {
-  return (
-    <div>
-      <p
-        className={`font-display text-statement font-medium leading-[0.95] tracking-[-0.02em] ${
-          wait ? "ccs-wait" : "text-cobalt-ink"
-        }`}
-      >
+    <div className="border-t border-ink/12 pt-5">
+      <p className="font-display text-statement font-medium leading-[0.95] tracking-[-0.02em] text-cobalt-ink">
         {value}
       </p>
       <p className="mt-3 max-w-[32ch] font-sans text-sm leading-relaxed text-ink/70">
         {label}
       </p>
     </div>
+  );
+}
+
+// The Cursor page's own section style, so it doesn't read like NextStep: a
+// split chapter. The number, label and heading sit in a narrow column that
+// stays put while you read; the story, screens and tables run beside it. One
+// surface throughout, chapters split by a rule, not by alternating bands.
+function Chapter({
+  id,
+  n,
+  label,
+  title,
+  children,
+}: {
+  id: string;
+  n: string;
+  label: string;
+  title: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <section id={id} data-chapter={n} className="bg-paper text-ink">
+      <div className="mx-auto w-full max-w-6xl px-6 py-14 md:py-20">
+        <div className="border-t border-ink/12 pt-8 lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16 lg:pt-10">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <p
+              aria-hidden
+              className="font-display text-statement font-medium leading-none tracking-[-0.02em] text-cobalt-ink tabular-nums"
+            >
+              {n}
+            </p>
+            <p className="mt-4 font-mono text-label uppercase tracking-[0.18em] text-ink/70">
+              {label}
+            </p>
+            <h2 className="mt-3 max-w-[18ch] font-display text-subhead font-medium leading-[1.15] tracking-[-0.01em]">
+              {title}
+            </h2>
+          </div>
+          <div className="mt-10 min-w-0 lg:mt-0">{children}</div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -272,7 +279,7 @@ function Steps({ items }: { items: { title: string; detail: string }[] }) {
       {items.map((item, i) => (
         <li
           key={item.title}
-          className="grid gap-x-8 gap-y-2 border-b border-ink/12 py-6 md:grid-cols-[3rem_14rem_minmax(0,1fr)] md:py-7"
+          className="grid gap-x-8 gap-y-2 border-b border-ink/12 py-6 md:grid-cols-[2.5rem_11rem_minmax(0,1fr)] md:py-7"
         >
           <span className="font-mono text-label tabular-nums tracking-[0.14em] text-cobalt-ink">
             {String(i + 1).padStart(2, "0")}
@@ -300,7 +307,7 @@ function Table({
   rows: ReactNode[][];
 }) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-ink/10 bg-mist px-5">
+    <div className="overflow-x-auto">
       <table className="w-full min-w-[36rem] border-collapse text-left font-sans text-sm">
         <caption className="sr-only">{label}</caption>
         <thead>
@@ -363,11 +370,12 @@ export default function CursorCaseStudy() {
   const maxPosts = Math.max(...WALLS.map((w) => w.posts));
 
   return (
-    <div className="ccs">
+    <>
       <Nav />
       <main id="main">
-        {/* Hero */}
-        <section className="ccs-hero bg-paper text-ink">
+        {/* Hero: a split, not NextStep's stacked column. Title and finding on
+            the left, the stand-first and facts on the right, numbers under both. */}
+        <section className="bg-paper text-ink">
           <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-32 md:pb-20 md:pt-40">
             <div className="anim-fade-up">
               <Link
@@ -376,33 +384,52 @@ export default function CursorCaseStudy() {
               >
                 ← All work
               </Link>
-
-              <p className="mt-10 font-mono text-label uppercase tracking-[0.18em] text-ink/70">
-                UX case study · Solo concept
-              </p>
-
-              <h1 className="mt-5 font-display text-hero font-medium leading-[0.92] tracking-[-0.035em]">
-                Cursor
-                <span className="sr-only">: </span>
-                <span className="mt-6 block max-w-[22ch] text-display leading-[1.05] tracking-[-0.02em] text-ink/75">
-                  The problem wasn’t the hidden editor.{" "}
-                  <span className="ccs-wait">It was the wait.</span>
-                </span>
-              </h1>
-
-              <p className="mt-7 max-w-[52ch] font-sans text-lead leading-[1.5] text-ink/75">
-                A concept for getting a designer from their own Figma design to a
-                first visual edit in Cursor. I bet they couldn’t find the editor.
-                Three designers showed me the bigger problem was waiting for their
-                changes, so I redesigned it to remove the wait.
-              </p>
             </div>
 
-            <div className="anim-fade-up mt-14" style={{ animationDelay: "120ms" }}>
-              <MetaGrid />
+            <div className="anim-fade-up mt-10 grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
+              <div>
+                <p className="font-mono text-label uppercase tracking-[0.18em] text-ink/70">
+                  UX case study · Solo concept
+                </p>
+                <h1 className="mt-5 font-display text-hero font-medium leading-[0.92] tracking-[-0.035em]">
+                  Cursor
+                  <span className="sr-only">: </span>
+                  <span className="mt-6 block max-w-[20ch] text-display leading-[1.05] tracking-[-0.02em] text-cobalt-ink">
+                    The problem wasn’t the hidden editor. It was the wait.
+                  </span>
+                </h1>
+              </div>
+
+              <div className="lg:self-end">
+                <p className="max-w-[44ch] font-sans text-lead leading-[1.5] text-ink/75">
+                  A concept for getting a designer from their own Figma design to
+                  a first visual edit in Cursor. I bet they couldn’t find the
+                  editor. Three designers showed me the bigger problem was waiting
+                  for their changes, so I redesigned it to remove the wait.
+                </p>
+                <dl className="mt-8 flex flex-col">
+                  {META.map((item) => (
+                    <div
+                      key={item.term}
+                      className="grid grid-cols-[7.5rem_minmax(0,1fr)] gap-4 border-t border-ink/12 py-3"
+                    >
+                      <dt className="pt-0.5 font-mono text-label uppercase tracking-[0.16em] text-ink/70">
+                        {item.term}
+                      </dt>
+                      <dd className="font-sans text-sm leading-[1.6] text-ink/75">{item.detail}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             </div>
 
-            <div className="anim-fade-up mt-14" style={{ animationDelay: "200ms" }}>
+            <div id="outcome" className="anim-fade-up mt-16 grid gap-8 sm:grid-cols-3 sm:gap-10" style={{ animationDelay: "120ms" }}>
+              <Stat value="3 of 3" label="testers misread the wait for their changes." />
+              <Stat value="1 of 3" label="used Design Mode. The others typed their changes in the chat." />
+              <Stat value="6 or 7" label="out of 7 for ease, even when the task failed." />
+            </div>
+
+            <div className="anim-fade-up mt-16" style={{ animationDelay: "200ms" }}>
               <Figure
                 ratio="screen"
                 eager
@@ -415,26 +442,10 @@ export default function CursorCaseStudy() {
           </div>
         </section>
 
-        {/* What testing showed, surfaced early */}
-        <Section id="outcome" surface="mist">
-          <Reveal>
-            <div className="grid gap-10 sm:grid-cols-3 sm:gap-12">
-              <Stat wait value="3 of 3" label="testers misread the wait for their changes." />
-              <Stat value="1 of 3" label="used Design Mode. The others typed their changes in the chat." />
-              <Stat value="6 or 7" label="out of 7 for ease, even when the task failed." />
-            </div>
-          </Reveal>
-        </Section>
-
-        <div className="mx-auto w-full max-w-[90rem] lg:grid lg:grid-cols-[15rem_minmax(0,1fr)]">
-          <Rail items={RAIL} />
-          <div className="ccs-body min-w-0">
         {/* 01 · Context */}
-        <Section id="context" surface="paper">
+        <Chapter id="context" n="01" label="Context" title={<>Cursor added a visual editor. I couldn’t reach it</>}>
           <Reveal>
-            <Eyebrow>01 · Context</Eyebrow>
-            <SectionTitle>Cursor added a visual editor. I couldn’t reach it</SectionTitle>
-            <div className="mt-6 flex flex-col gap-5">
+            <div className="flex flex-col gap-5">
               <Body>
                 Cursor is an AI code editor: you describe what you want, and an
                 agent writes a real project on your computer. In April 2026 it added
@@ -496,14 +507,12 @@ export default function CursorCaseStudy() {
               </PullQuote>
             </div>
           </Reveal>
-        </Section>
+        </Chapter>
 
         {/* 02 · The problem */}
-        <Section id="problem" surface="canvas">
+        <Chapter id="problem" n="02" label="The problem" title={<>Setup questions first, an editor named only on hover</>}>
           <Reveal>
-            <Eyebrow>02 · The problem</Eyebrow>
-            <SectionTitle>Setup questions first, an editor named only on hover</SectionTitle>
-            <Body className="mt-6">
+            <Body>
               I started where my user would: new accounts, my own design, no
               developer. These are my first runs on 5 October, step by step.
             </Body>
@@ -556,14 +565,12 @@ export default function CursorCaseStudy() {
               start from a picture.
             </p>
           </Reveal>
-        </Section>
+        </Chapter>
 
         {/* 03 · Research */}
-        <Section id="research" surface="paper">
+        <Chapter id="research" n="03" label="Research" title={<>No interviews: 10 posts and my own runs</>}>
           <Reveal>
-            <Eyebrow>03 · Research</Eyebrow>
-            <SectionTitle>No interviews: 10 posts and my own runs</SectionTitle>
-            <div className="mt-6 flex flex-col gap-5">
+            <div className="flex flex-col gap-5">
               <Body>
                 I couldn’t get anyone for interviews, so I worked from three
                 things: 10 public posts from designers using Cursor, my own runs
@@ -637,14 +644,12 @@ export default function CursorCaseStudy() {
               </Body>
             </div>
           </Reveal>
-        </Section>
+        </Chapter>
 
         {/* 04 · Ideas */}
-        <Section id="ideas" surface="paper">
+        <Chapter id="ideas" n="04" label="Ideas" title={<>16 ideas. The winner shows your design before the build</>}>
           <Reveal>
-            <Eyebrow>04 · Ideas</Eyebrow>
-            <SectionTitle>16 ideas. The winner shows your design before the build</SectionTitle>
-            <div className="mt-6 flex flex-col gap-5">
+            <div className="flex flex-col gap-5">
               <Body>
                 I ran four rounds: the obvious ideas, then ideas with the obvious
                 moves banned, then ideas borrowed from a print shop, then ideas
@@ -690,14 +695,12 @@ export default function CursorCaseStudy() {
               </Body>
             </div>
           </Reveal>
-        </Section>
+        </Chapter>
 
         {/* 05 · The design */}
-        <Section id="design" surface="paper">
+        <Chapter id="design" n="05" label="The design" title={<>Your design first, the full build behind it</>}>
           <Reveal>
-            <Eyebrow>05 · The design</Eyebrow>
-            <SectionTitle>Your design first, the full build behind it</SectionTitle>
-            <div className="mt-6 flex flex-col gap-5">
+            <div className="flex flex-col gap-5">
               <Body>
                 The idea: your design shows up first as a preview you can edit,
                 while the full build finishes behind it. Designers skip the
@@ -724,16 +727,16 @@ export default function CursorCaseStudy() {
           </Reveal>
 
           <Reveal className="mt-6">
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-8">
               <Figure
-                ratio="screenPair"
+                ratio="screen"
                 src="/cursor/screen-home.webp"
                 label="Home with a design attached"
                 alt="Cursor's home screen with a Figma frame attached to the prompt box, with no setup questions"
                 caption="1. Attach your design. A designer isn’t asked about a stack."
               />
               <Figure
-                ratio="screenPair"
+                ratio="screen"
                 src="/cursor/screen-building.webp"
                 label="Preview being made"
                 alt="The chat shows three steps: your design added, preview building, full build next"
@@ -804,14 +807,12 @@ export default function CursorCaseStudy() {
               through “Choose setup myself”.
             </Body>
           </Reveal>
-        </Section>
+        </Chapter>
 
         {/* 06 · Breaking it on purpose */}
-        <Section id="breaking" surface="canvas">
+        <Chapter id="breaking" n="06" label="Breaking it on purpose" title={<>I found 12 breaks. I’d predicted 3</>}>
           <Reveal>
-            <Eyebrow>06 · Breaking it on purpose</Eyebrow>
-            <SectionTitle>I found 12 breaks. I’d predicted 3</SectionTitle>
-            <div className="mt-6 flex flex-col gap-5">
+            <div className="flex flex-col gap-5">
               <Body>
                 Before anyone used it, I ran the prototype through four kinds of
                 trouble: nothing there, too much, the wrong thing, and waiting. I
@@ -863,14 +864,12 @@ export default function CursorCaseStudy() {
               </Body>
             </div>
           </Reveal>
-        </Section>
+        </Chapter>
 
         {/* 07 · Testing */}
-        <Section id="testing" surface="paper">
+        <Chapter id="testing" n="07" label="Testing" title={<>3 of 3 testers misread the wait</>}>
           <Reveal>
-            <Eyebrow>07 · Testing</Eyebrow>
-            <SectionTitle>3 of 3 testers misread the wait</SectionTitle>
-            <div className="mt-6 flex flex-col gap-5">
+            <div className="flex flex-col gap-5">
               <Body>
                 Nobody could do a call, and our working hours didn’t line up. So I
                 built a test people could do alone: a few questions about them,
@@ -886,16 +885,16 @@ export default function CursorCaseStudy() {
           </Reveal>
 
           <Reveal className="mt-12">
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-8">
               <Figure
-                ratio="screenPair"
+                ratio="screen"
                 src="/cursor/test-welcome.webp"
                 label="Test welcome page"
                 alt="The self-serve test's welcome page: three short tasks, how it works, and what's recorded"
                 caption="The welcome page says what’s recorded: clicks and timings. No camera, no screen recording."
               />
               <Figure
-                ratio="screenPair"
+                ratio="screen"
                 src="/cursor/test-task.webp"
                 label="Task card"
                 alt="Task 1 card in the corner of the prototype, with numbered steps and a You're done when line"
@@ -949,14 +948,12 @@ export default function CursorCaseStudy() {
               </Body>
             </div>
           </Reveal>
-        </Section>
+        </Chapter>
 
         {/* 08 · What changed */}
-        <Section id="changed" surface="canvas">
+        <Chapter id="changed" n="08" label="What changed" title={<>I stopped explaining the wait and removed it</>}>
           <Reveal>
-            <Eyebrow>08 · What changed</Eyebrow>
-            <SectionTitle>I stopped explaining the wait and removed it</SectionTitle>
-            <Body className="mt-6">
+            <Body>
               My first fix explained the wait: a card, a progress bar, “Not
               applied yet”. Then I looked at how v0 and Figma Make handle it, and
               they don’t explain it at all. They show you the change straight
@@ -1016,16 +1013,16 @@ export default function CursorCaseStudy() {
           </Reveal>
 
           <Reveal className="mt-12">
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-8">
               <Figure
-                ratio="screenPair"
+                ratio="screen"
                 src="/cursor/screen-change-this.webp"
                 label="Change this? offer"
                 alt="Clicking the heading with Design Mode off shows a small bar: Change this? Edit in Design Mode"
                 caption="Clicking the heading with Design Mode off offers a way in."
               />
               <Figure
-                ratio="screenPair"
+                ratio="screen"
                 src="/cursor/screen-compare.webp"
                 label="Compare with Figma"
                 alt="The browser panel showing the designer's Figma frame in place of the page, labelled for comparing, not editable"
@@ -1066,16 +1063,11 @@ export default function CursorCaseStudy() {
               proven.
             </Body>
           </Reveal>
-        </Section>
+        </Chapter>
 
         {/* 09 · Outcome */}
-        <Section id="result" surface="paper">
+        <Chapter id="result" n="09" label="Outcome" title={<>The wait was the problem. My fix isn’t tested yet</>}>
           <Reveal>
-            <Eyebrow>09 · Outcome</Eyebrow>
-            <SectionTitle>The wait was the problem. My fix isn’t tested yet</SectionTitle>
-          </Reveal>
-
-          <Reveal className="mt-10">
             <div>
                 <SubHead>Not proven yet</SubHead>
                 <ul className="mt-4 flex flex-col gap-3 font-sans text-sm leading-[1.7] text-ink/75">
@@ -1131,10 +1123,7 @@ export default function CursorCaseStudy() {
               Open the prototype ↗
             </a>
           </Reveal>
-        </Section>
-
-          </div>
-        </div>
+        </Chapter>
 
         {/* Way out: back to the index, or straight on to the next project */}
         <Section surface="mist">
@@ -1162,6 +1151,6 @@ export default function CursorCaseStudy() {
         </Section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

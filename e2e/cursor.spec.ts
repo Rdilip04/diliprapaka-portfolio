@@ -13,10 +13,9 @@ test.describe("Cursor case study — structure and honesty", () => {
   });
 
   test("runs its nine sections in order", async ({ page }) => {
-    const eyebrows = await page.locator("main section p.font-mono").allTextContents();
-    const nums = eyebrows
-      .map((t) => t.match(/^(\d{2}) ·/)?.[1])
-      .filter((n): n is string => Boolean(n));
+    const nums = await page
+      .locator("main section[data-chapter]")
+      .evaluateAll((els) => els.map((e) => e.getAttribute("data-chapter")));
     expect(nums).toEqual(["01", "02", "03", "04", "05", "06", "07", "08", "09"]);
   });
 
@@ -90,30 +89,26 @@ test.describe("Cursor in Selected work", () => {
   });
 });
 
-test.describe("Cursor styles stay on the Cursor page", () => {
-  test("is set in Cursor's dark world in both themes", async ({ page }) => {
-    await page.goto(URL);
-    const bg = await page.locator(".ccs").evaluate((el) => getComputedStyle(el).backgroundColor);
-    expect(bg).toBe("rgb(20, 20, 20)");
-  });
 
-  test("moving on to Quietly, then NextStep, leaves no dark styling behind", async ({ page }) => {
-    await page.goto(URL);
-    await page.getByRole("link", { name: "Next: Quietly →" }).click();
-    await expect(page).toHaveURL(/\/work\/quietly$/);
-    await page.getByRole("link", { name: /next case study/i }).click();
-    await expect(page).toHaveURL(/\/work\/nextstep$/);
-    const bg = await page.locator("main section").first().evaluate((el) => getComputedStyle(el).backgroundColor);
-    expect(bg).toBe("rgb(247, 248, 250)");
-  });
-
-  test("the section rail follows the reader on desktop", async ({ page }) => {
+test.describe("Cursor's own section style", () => {
+  test("keeps each chapter heading beside its story on desktop", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(URL);
-    const rail = page.getByRole("navigation", { name: "Case study sections" });
-    await expect(rail).toBeVisible();
-    await page.locator("#testing").scrollIntoViewIfNeeded();
-    await page.evaluate(() => window.scrollBy(0, 200));
-    await expect(rail.locator('a[aria-current="location"]')).toHaveAttribute("href", "#testing");
+    const testing = page.locator("#testing");
+    const heading = testing.getByRole("heading", { level: 2 });
+    await testing.scrollIntoViewIfNeeded();
+    await page.evaluate(() => {
+      const el = document.getElementById("testing")!;
+      window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + 900);
+    });
+    const box = await heading.boundingBox();
+    expect(box!.y).toBeGreaterThan(0);
+    expect(box!.y).toBeLessThan(400);
+  });
+
+  test("follows the site theme instead of forcing its own colours", async ({ page }) => {
+    await page.goto(URL);
+    const light = await page.locator("main section").first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(light).toBe("rgb(247, 248, 250)");
   });
 });
