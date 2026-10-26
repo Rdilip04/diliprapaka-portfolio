@@ -365,13 +365,17 @@ export default function CursorCaseStudy() {
 
               <h1 className="mt-5 font-display text-hero font-medium leading-[0.92] tracking-[-0.035em]">
                 Cursor
+                <span className="sr-only">: </span>
+                <span className="mt-6 block max-w-[22ch] text-display leading-[1.05] tracking-[-0.02em] text-cobalt-ink">
+                  The problem wasn’t the hidden editor. It was the wait.
+                </span>
               </h1>
 
               <p className="mt-7 max-w-[52ch] font-sans text-lead leading-[1.5] text-ink/75">
-                Getting a designer from their own Figma design to their first
-                visual edit in Cursor. I bet designers couldn’t find the visual
-                editor. Three designers showed me the real problem was the wait,
-                and that most of them would rather type.
+                A concept for getting a designer from their own Figma design to a
+                first visual edit in Cursor. I bet they couldn’t find the editor.
+                Three designers showed me the bigger problem was waiting for their
+                changes, so I redesigned it to remove the wait.
               </p>
             </div>
 
@@ -410,11 +414,10 @@ export default function CursorCaseStudy() {
             <SectionTitle>Cursor added a visual editor. I couldn’t reach it</SectionTitle>
             <div className="mt-6 flex flex-col gap-5">
               <Body>
-                Cursor is an AI code editor. You describe what you want, and an
-                agent plans it and writes a real project on your own computer. In
-                April 2026 Cursor added Design Mode: you click part of a page
-                running in Cursor’s built-in browser, describe the change, and the
-                agent edits the code for you.
+                Cursor is an AI code editor: you describe what you want, and an
+                agent writes a real project on your computer. In April 2026 it added
+                Design Mode. You click part of your running page, describe the
+                change, and the agent edits the code.
               </Body>
               <Body>
                 For a designer, that’s the interesting part. I’m a designer who tried it, and I didn’t get there on my own.
@@ -658,11 +661,10 @@ export default function CursorCaseStudy() {
                 the problem at once: the wait and the hidden editor.
               </Body>
               <Body>
-                Opening on the finished page (12) only helps after the whole build,
-                so the questions and the wait stay. Explaining changes first (13)
-                adds a step right where designers already stall. The open question
-                I carried forward was cost: a second build on a free plan is a
-                guess.
+                Idea 12 (open on the finished page) only helps after the whole
+                build, so the wait stays. Idea 13 (explain changes first) adds a
+                step where designers already stall. One question stayed open: what a
+                second build costs on a free plan.
               </Body>
             </div>
           </Reveal>
@@ -675,10 +677,10 @@ export default function CursorCaseStudy() {
             <SectionTitle>Your design first, the full build behind it</SectionTitle>
             <div className="mt-6 flex flex-col gap-5">
               <Body>
-                The idea: your own design shows up first as a preview you can
-                already edit, while the full build finishes behind it. Designers
-                skip the tech-stack question, the browser opens by itself, and the
-                pen icon becomes a button that says “Edit in Design Mode”.
+                The idea: your design shows up first as a preview you can edit,
+                while the full build finishes behind it. Designers skip the tech-
+                stack question, the browser opens by itself, and the pen icon
+                becomes a button: “Edit in Design Mode”.
               </Body>
               <Body>
                 No new screens. It changes three that already exist: Home, the
@@ -774,11 +776,10 @@ export default function CursorCaseStudy() {
               at 13px, because a designer should feel it was always there.
             </Body>
             <Body className="mt-5">
-              I
-              turned down two separate builds (extra cost), making it everyone’s
-              default (it would slow developers down), and a tooltip pointing at
-              the icon (a patch, not a fix). Developers, and curious designers,
-              still get the stack question back through “Choose setup myself”.
+              I turned down two separate builds (extra cost), making it everyone’s
+              default (it would slow developers down), and a tooltip on the icon
+              (a patch, not a fix). Developers still get the stack question
+              through “Choose setup myself”.
             </Body>
           </Reveal>
         </Section>
@@ -850,10 +851,9 @@ export default function CursorCaseStudy() {
             <div className="mt-6 flex flex-col gap-5">
               <Body>
                 Nobody could do a call, and our working hours didn’t line up. So I
-                built a test people could do on their own: a welcome page, four
-                questions about them, three tasks with a card that says what to
-                do, a few questions after each task, then one button to copy their
-                answers and send them to me.
+                built a test people could do alone: a few questions about them,
+                three tasks with a card saying what to do, questions after each,
+                then one button to send me their answers.
               </Body>
               <Body>
                 The page also logged what they clicked and how long each task
@@ -905,17 +905,10 @@ export default function CursorCaseStudy() {
           <Reveal className="mt-12">
             <div className="flex flex-col gap-5">
               <Body>
-                Three designers tried it: Vishwa, Yogesh and Ben. All three got
-                stuck on the same moment, the wait. Yogesh pressed “done” while
-                both his changes were still waiting, then told me the page
-                “changed straight away”. Ben said he couldn’t see any loading
-                indicator.
-              </Body>
-              <Body>
-                Only Vishwa used Design Mode; Yogesh kept clicking the page
-                itself, as if he expected it to respond. They still rated the task
-                6 or 7 out of 7, which taught me to trust what people did over
-                what they said.
+                All three got stuck on the wait. Only Vishwa used
+                Design Mode; Yogesh kept clicking the page itself, as if he expected
+                it to respond. Yet they rated the task 6 or 7 out of 7, which taught
+                me to trust what people did over what they said.
               </Body>
               <Body>
                 I also had a bug: Ben asked for both changes in one message, and
@@ -924,11 +917,13 @@ export default function CursorCaseStudy() {
                 never explored it. I prefer typing changes.”
               </Body>
               <Body>
-                They weren’t quite my user. All three had built pages with AI
-                tools before. And I said no to one popular request: bringing back
-                Cursor’s style sliders. Cursor removed them on purpose, and they
-                help people who are already past setup, not the people I designed
-                for.
+                They weren’t quite my user. All three had built pages with AI tools
+                before.
+              </Body>
+              <Body>
+                I also said no to one popular request: bringing back Cursor’s style
+                sliders. Cursor removed them on purpose, and they help people
+                already past setup, not the people I designed for.
               </Body>
             </div>
           </Reveal>
@@ -1059,25 +1054,14 @@ export default function CursorCaseStudy() {
           </Reveal>
 
           <Reveal className="mt-10">
-            <div className="grid gap-10 md:grid-cols-2">
-              <div>
-                <SubHead>Shown by the test</SubHead>
-                <ul className="mt-4 flex flex-col gap-3 font-sans text-sm leading-[1.7] text-ink/75">
-                  <li>The wait was the problem: 3 of 3 misread it.</li>
-                  <li>2 of 3 typed their changes instead of using Design Mode.</li>
-                  <li>Ease ratings stayed at 6 or 7 when the task failed.</li>
-                  <li>Task wording decides what a self-serve test measures.</li>
-                </ul>
-              </div>
-              <div>
-                <SubHead>Not proven</SubHead>
+            <div>
+                <SubHead>Not proven yet</SubHead>
                 <ul className="mt-4 flex flex-col gap-3 font-sans text-sm leading-[1.7] text-ink/75">
                   <li>That the preview ends the confusion. Nobody has used it yet.</li>
                   <li>The metric. I never measured first edits in real sessions.</li>
                   <li>That my user behaves the same. The testers had used AI tools before.</li>
                   <li>That Design Mode is hard to find. That rests on two runs.</li>
                 </ul>
-              </div>
             </div>
           </Reveal>
 
@@ -1085,11 +1069,10 @@ export default function CursorCaseStudy() {
             <SubHead>What I’d do differently</SubHead>
             <div className="mt-4 flex flex-col gap-5">
               <Body>
-                I’d try my test tasks on one person before sending them out. The
-                first round was lost to my wording, and recruiting is the slow
-                part. I’d also look harder for designers who have never used a
-                code tool, because that’s who the design is for, and nobody in my
-                test was.
+                Next time I’d try my tasks on one person before sending them out. My
+                first round was lost to my wording, and recruiting is the slow part.
+                I’d also look harder for designers who’ve never used a code tool:
+                that’s my user, and nobody in my test was.
               </Body>
               <Body>
                 <span className="font-medium text-ink">Next:</span> I’d test this
@@ -1109,10 +1092,12 @@ export default function CursorCaseStudy() {
               </Body>
               <Body>
                 What’s faked: there’s no real build (it’s a timer), no real AI
-                (whatever you type, the heading gets bigger, the button turns
-                black, or the cards get rounder), and the Figma frame is a
-                stand-in. Three people tested an earlier version; this one
-                hasn’t been tested yet.
+                (whatever you type, the heading gets bigger, the button turns black,
+                or the cards get rounder), and the Figma frame is a stand-in.
+              </Body>
+              <Body>
+                Three people tested an earlier version; this one hasn’t been tested
+                yet.
               </Body>
             </div>
             <a

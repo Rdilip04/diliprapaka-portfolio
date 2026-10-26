@@ -9,7 +9,7 @@ test.describe("Cursor case study — structure and honesty", () => {
 
   test("names the product as the only h1", async ({ page }) => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cursor");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/^Cursor: The problem wasn’t the hidden editor\. It was the wait\.$/);
   });
 
   test("runs its nine sections in order", async ({ page }) => {
@@ -86,6 +86,6 @@ test.describe("Cursor in Selected work", () => {
     await expect(row).toHaveCount(1);
     await row.click();
     await expect(page).toHaveURL(/\/work\/cursor$/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cursor");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/^Cursor:/);
   });
 });
