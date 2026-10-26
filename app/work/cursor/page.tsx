@@ -37,17 +37,17 @@ const FIRST_RUN = [
   {
     title: "I picked “Designer”",
     detail:
-      "Web sign-up, 17:41. Cursor asks for your role, so it knows I’m a designer. The next screen was an ad for a different product, then “Start your Pro plan to continue”.",
+      "Minute 0 of the web sign-up. Cursor asks for your role, so it knows I’m a designer. The next screen was an ad for a different product, then “Start your Pro plan to continue”.",
   },
   {
     title: "“Connect GitHub to finish setup”",
     detail:
-      "17:45. The reasons given were about codebases, code review and pull requests. “Maybe later” was there, but small, and the title said I needed it to finish.",
+      "Minute 4. The reasons given were about codebases, code review and pull requests. “Maybe later” was there, but small, and the title said I needed it to finish.",
   },
   {
     title: "Still no prompt sent",
     detail:
-      "17:47. Four routes to pick from, then a prompt box under “Cloud Agents requires a Pro Account”. Six minutes, seven screens, and I hadn’t asked for anything yet.",
+      "Minute 6. Four routes to pick from, then a prompt box under “Cloud Agents requires a Pro Account”. Six minutes, seven screens, and I hadn’t asked for anything yet.",
   },
   {
     title: "The desktop app asked about code",
