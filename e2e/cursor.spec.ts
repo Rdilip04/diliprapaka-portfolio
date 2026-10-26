@@ -89,3 +89,31 @@ test.describe("Cursor in Selected work", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(/^Cursor:/);
   });
 });
+
+test.describe("Cursor styles stay on the Cursor page", () => {
+  test("is set in Cursor's dark world in both themes", async ({ page }) => {
+    await page.goto(URL);
+    const bg = await page.locator(".ccs").evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe("rgb(20, 20, 20)");
+  });
+
+  test("moving on to Quietly, then NextStep, leaves no dark styling behind", async ({ page }) => {
+    await page.goto(URL);
+    await page.getByRole("link", { name: "Next: Quietly →" }).click();
+    await expect(page).toHaveURL(/\/work\/quietly$/);
+    await page.getByRole("link", { name: /next case study/i }).click();
+    await expect(page).toHaveURL(/\/work\/nextstep$/);
+    const bg = await page.locator("main section").first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe("rgb(247, 248, 250)");
+  });
+
+  test("the section rail follows the reader on desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(URL);
+    const rail = page.getByRole("navigation", { name: "Case study sections" });
+    await expect(rail).toBeVisible();
+    await page.locator("#testing").scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.scrollBy(0, 200));
+    await expect(rail.locator('a[aria-current="location"]')).toHaveAttribute("href", "#testing");
+  });
+});

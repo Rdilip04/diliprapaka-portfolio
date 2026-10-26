@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import { Body, Eyebrow, Section, SectionTitle } from "@/components/case-study/section";
 import { Figure } from "@/components/case-study/figure";
 import { Reveal } from "@/components/case-study/reveal";
+import { Rail } from "@/components/cursor/rail";
+import "./cursor.css";
 
 // Copy is Dilip's own where he confirmed it section by section on 26 October
 // 2026 (CASE.md in the Cursor project). The added context is drafted from his
@@ -27,6 +29,18 @@ const META = [
   { term: "Context", detail: "Product Anatomy course capstone. A concept, not affiliated with Cursor" },
   { term: "Duration", detail: "3 weeks, October 2026" },
   { term: "Tested with", detail: "3 designers, in a self-serve test with a built-in click log" },
+];
+
+const RAIL = [
+  { id: "context", label: "Context" },
+  { id: "problem", label: "The problem" },
+  { id: "research", label: "Research" },
+  { id: "ideas", label: "Ideas" },
+  { id: "design", label: "The design" },
+  { id: "breaking", label: "Breaking it" },
+  { id: "testing", label: "Testing" },
+  { id: "changed", label: "What changed" },
+  { id: "result", label: "Outcome" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -219,10 +233,14 @@ function MetaGrid() {
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+function Stat({ value, label, wait = false }: { value: string; label: string; wait?: boolean }) {
   return (
     <div>
-      <p className="font-display text-statement font-medium leading-[0.95] tracking-[-0.02em] text-cobalt-ink">
+      <p
+        className={`font-display text-statement font-medium leading-[0.95] tracking-[-0.02em] ${
+          wait ? "ccs-wait" : "text-cobalt-ink"
+        }`}
+      >
         {value}
       </p>
       <p className="mt-3 max-w-[32ch] font-sans text-sm leading-relaxed text-ink/70">
@@ -282,7 +300,7 @@ function Table({
   rows: ReactNode[][];
 }) {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-lg border border-ink/10 bg-mist px-5">
       <table className="w-full min-w-[36rem] border-collapse text-left font-sans text-sm">
         <caption className="sr-only">{label}</caption>
         <thead>
@@ -345,11 +363,11 @@ export default function CursorCaseStudy() {
   const maxPosts = Math.max(...WALLS.map((w) => w.posts));
 
   return (
-    <>
+    <div className="ccs">
       <Nav />
       <main id="main">
         {/* Hero */}
-        <section className="bg-paper text-ink">
+        <section className="ccs-hero bg-paper text-ink">
           <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-32 md:pb-20 md:pt-40">
             <div className="anim-fade-up">
               <Link
@@ -366,8 +384,9 @@ export default function CursorCaseStudy() {
               <h1 className="mt-5 font-display text-hero font-medium leading-[0.92] tracking-[-0.035em]">
                 Cursor
                 <span className="sr-only">: </span>
-                <span className="mt-6 block max-w-[22ch] text-display leading-[1.05] tracking-[-0.02em] text-cobalt-ink">
-                  The problem wasn’t the hidden editor. It was the wait.
+                <span className="mt-6 block max-w-[22ch] text-display leading-[1.05] tracking-[-0.02em] text-ink/75">
+                  The problem wasn’t the hidden editor.{" "}
+                  <span className="ccs-wait">It was the wait.</span>
                 </span>
               </h1>
 
@@ -400,15 +419,18 @@ export default function CursorCaseStudy() {
         <Section id="outcome" surface="mist">
           <Reveal>
             <div className="grid gap-10 sm:grid-cols-3 sm:gap-12">
-              <Stat value="3 of 3" label="testers misread the wait for their changes." />
+              <Stat wait value="3 of 3" label="testers misread the wait for their changes." />
               <Stat value="1 of 3" label="used Design Mode. The others typed their changes in the chat." />
               <Stat value="6 or 7" label="out of 7 for ease, even when the task failed." />
             </div>
           </Reveal>
         </Section>
 
+        <div className="mx-auto w-full max-w-[90rem] lg:grid lg:grid-cols-[15rem_minmax(0,1fr)]">
+          <Rail items={RAIL} />
+          <div className="ccs-body min-w-0">
         {/* 01 · Context */}
-        <Section surface="paper">
+        <Section id="context" surface="paper">
           <Reveal>
             <Eyebrow>01 · Context</Eyebrow>
             <SectionTitle>Cursor added a visual editor. I couldn’t reach it</SectionTitle>
@@ -477,7 +499,7 @@ export default function CursorCaseStudy() {
         </Section>
 
         {/* 02 · The problem */}
-        <Section surface="canvas">
+        <Section id="problem" surface="canvas">
           <Reveal>
             <Eyebrow>02 · The problem</Eyebrow>
             <SectionTitle>Setup questions first, an editor named only on hover</SectionTitle>
@@ -537,7 +559,7 @@ export default function CursorCaseStudy() {
         </Section>
 
         {/* 03 · Research */}
-        <Section surface="paper">
+        <Section id="research" surface="paper">
           <Reveal>
             <Eyebrow>03 · Research</Eyebrow>
             <SectionTitle>No interviews: 10 posts and my own runs</SectionTitle>
@@ -618,7 +640,7 @@ export default function CursorCaseStudy() {
         </Section>
 
         {/* 04 · Ideas */}
-        <Section surface="mist">
+        <Section id="ideas" surface="paper">
           <Reveal>
             <Eyebrow>04 · Ideas</Eyebrow>
             <SectionTitle>16 ideas. The winner shows your design before the build</SectionTitle>
@@ -671,15 +693,15 @@ export default function CursorCaseStudy() {
         </Section>
 
         {/* 05 · The design */}
-        <Section surface="paper">
+        <Section id="design" surface="paper">
           <Reveal>
             <Eyebrow>05 · The design</Eyebrow>
             <SectionTitle>Your design first, the full build behind it</SectionTitle>
             <div className="mt-6 flex flex-col gap-5">
               <Body>
                 The idea: your design shows up first as a preview you can edit,
-                while the full build finishes behind it. Designers skip the tech-
-                stack question, the browser opens by itself, and the pen icon
+                while the full build finishes behind it. Designers skip the
+                tech-stack question, the browser opens by itself, and the pen icon
                 becomes a button: “Edit in Design Mode”.
               </Body>
               <Body>
@@ -785,7 +807,7 @@ export default function CursorCaseStudy() {
         </Section>
 
         {/* 06 · Breaking it on purpose */}
-        <Section surface="canvas">
+        <Section id="breaking" surface="canvas">
           <Reveal>
             <Eyebrow>06 · Breaking it on purpose</Eyebrow>
             <SectionTitle>I found 12 breaks. I’d predicted 3</SectionTitle>
@@ -844,7 +866,7 @@ export default function CursorCaseStudy() {
         </Section>
 
         {/* 07 · Testing */}
-        <Section surface="paper">
+        <Section id="testing" surface="paper">
           <Reveal>
             <Eyebrow>07 · Testing</Eyebrow>
             <SectionTitle>3 of 3 testers misread the wait</SectionTitle>
@@ -930,7 +952,7 @@ export default function CursorCaseStudy() {
         </Section>
 
         {/* 08 · What changed */}
-        <Section surface="canvas">
+        <Section id="changed" surface="canvas">
           <Reveal>
             <Eyebrow>08 · What changed</Eyebrow>
             <SectionTitle>I stopped explaining the wait and removed it</SectionTitle>
@@ -1047,7 +1069,7 @@ export default function CursorCaseStudy() {
         </Section>
 
         {/* 09 · Outcome */}
-        <Section surface="paper">
+        <Section id="result" surface="paper">
           <Reveal>
             <Eyebrow>09 · Outcome</Eyebrow>
             <SectionTitle>The wait was the problem. My fix isn’t tested yet</SectionTitle>
@@ -1111,6 +1133,9 @@ export default function CursorCaseStudy() {
           </Reveal>
         </Section>
 
+          </div>
+        </div>
+
         {/* Way out: back to the index, or straight on to the next project */}
         <Section surface="mist">
           <Reveal>
@@ -1137,6 +1162,6 @@ export default function CursorCaseStudy() {
         </Section>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

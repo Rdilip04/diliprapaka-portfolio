@@ -1,0 +1,47 @@
+/* The Cursor case study is set in the product's own world, the way Quietly is:
+   Cursor's dark app surfaces (#141414), its Design Mode blue (#599ce7), and its
+   waiting amber (#f1b467), all measured from Cursor's screens for the
+   prototype (LANGUAGE.md). Amber means one thing here, as in the product:
+   waiting. It marks the finding, nothing else.
+
+   Scoping: Next keeps a global stylesheet loaded after client navigation, so a
+   bare selector here would restyle other pages. Tokens sit on `.ccs` (the
+   page wrapper, which also holds Nav and Footer) and every rule sits under it.
+   It stays dark in both themes, so it beats the `.dark` re-map on <html>. */
+.ccs {
+  color-scheme: dark;
+  background: #141414;
+  color: var(--color-ink); /* body sets colour from the site tokens; inherited values do not re-resolve */
+  --color-ink: #e6e6e6;
+  --color-paper: #141414;
+  --color-canvas: #141414;
+  --color-mist: #1f1f1f;
+  --color-cobalt: #599ce7;
+  --color-cobalt-ink: #7db4ef; /* 8.1:1 on #141414 */
+  --ccs-wait: #f1b467; /* 10.3:1 on #141414 */
+}
+
+/* Sections run on as one surface, split by a hairline, like panes in the app. */
+.ccs .ccs-body > section + section {
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+.ccs .ccs-body > section {
+  border-bottom: 0;
+}
+
+/* The hero sits on the faint dot grid of an empty canvas. Decorative only. */
+.ccs .ccs-hero {
+  background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -12px -12px;
+}
+
+.ccs .ccs-wait {
+  color: var(--ccs-wait);
+}
+
+/* Screenshots sit on the dark page like windows: a lifted edge, no glow. */
+.ccs .ccs-body figure > div,
+.ccs .ccs-hero figure > div {
+  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.8);
+}
